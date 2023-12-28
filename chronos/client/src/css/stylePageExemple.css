@@ -1,0 +1,13 @@
+/* 
+Ici c'est le css de la page, c'est comme quand vous faites de 
+l'HTML classique. 
+*/
+
+.cardsCont {
+    display: flex;
+    gap: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
