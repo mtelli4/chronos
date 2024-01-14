@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "seed": "node seeders/seeder.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "sequelize-cli": "^6.6.2"
   },
   "devDependencies": {
+    "mysql-db-seed": "^0.0.4",
     "nodemon": "^3.0.1"
   },
   "description": ""
