@@ -1,10 +1,7 @@
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Button from './components/Button';
 import React, {useEffect,useState} from 'react';
-import PageExemple from './pages/pageExemple';
-import ClassSquare from './components/ClassSquare';
-import Calendar from './components/Calendar';
+import PageEdt from './pages/pageEdt';
 
 function App() {
   const [backendData, setBackendData] = useState([{}])
@@ -24,8 +21,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/" element={<Calendar />} exact /> */}
-        <Route path="/" element={<ClassSquare height={300} />} exact />
+        <Route path="/" element={<PageEdt />} exact />
+        {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
       </Routes>
     </Router>
   );

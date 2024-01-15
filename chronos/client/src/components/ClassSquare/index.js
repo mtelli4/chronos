@@ -1,7 +1,7 @@
 import React from 'react';
 import { ClassSquareCont, ClassSquareTitle, ClassSquareRoom, ClassSquareBorder, ClassSquareTextCont } from './classSquareElements'; 
 
-const ClassSquare = ({ color, height }) => {
+const ClassSquare = ({ color, title, room, startTopPercent, duration }) => {
 
     function ajusterCouleur(hexCode, versChaud = true) {
         // Conversion du code hexadécimal en valeurs R, G, B
@@ -106,17 +106,17 @@ const ClassSquare = ({ color, height }) => {
     }
     
     // Exemple d'utilisation
-    const couleurOriginale = "#4549B5";
-    const couleurFroid = ajusterCouleur(couleurOriginale, false);
+    const couleurOriginale = "#31888E";
+    const couleurFroid = ajusterCouleur(color, false);
     const couleurChaud = ajusterCouleur(couleurFroid, true);
-    const couleurOriginaleRGB = hexToRgb(couleurOriginale);
+    const couleurOriginaleRGB = hexToRgb(color);
     
   return (
-    <ClassSquareCont h={height} r={couleurOriginaleRGB.r} g={couleurOriginaleRGB.g} b={couleurOriginaleRGB.b}>
+    <ClassSquareCont duration={duration} starttoppercent={startTopPercent} r={couleurOriginaleRGB.r} g={couleurOriginaleRGB.g} b={couleurOriginaleRGB.b}>
         <ClassSquareBorder clr1={couleurChaud} clr2={couleurFroid} />
         <ClassSquareTextCont color={couleurFroid}>
-            <ClassSquareTitle>Optimisation mes couilles</ClassSquareTitle>
-            <ClassSquareRoom>IUC - 255</ClassSquareRoom>
+            <ClassSquareTitle>{title}</ClassSquareTitle>
+            <ClassSquareRoom>{room}</ClassSquareRoom>
         </ClassSquareTextCont>
     </ClassSquareCont>
   )
