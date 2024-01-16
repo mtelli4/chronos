@@ -9,27 +9,36 @@ const PageEdt = () => {
         day: "Lundi",
         classes: [
           {
-            title: "Optimisation mes couilles", // Recup depuis la bdd
+            title: "Dépression", // Recup depuis la bdd
             room: "IUC - 255 / 256", // Recup depuis la bdd
             // autres infos
             startHour: "08h00", // Recup depuis la bdd
-            duration: 2, // en heures
-          },
-          {
-            title: "Optimisation mes couilles 2", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
-            // autres infos
-            startHour: "10h45", // Recup depuis la bdd
-            duration: 2, // en heures
-          },
-          {
-            title: "Optimisation mes couilles", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
-            // autres infos
-            startHour: "15h45", // Recup depuis la bdd
-            duration: 2, // en heures
+            duration: 1, // en heures
           },
         ],
+        // classes: [
+        //   {
+        //     title: "Optimisation mes couilles", // Recup depuis la bdd
+        //     room: "IUC - 255 / 256", // Recup depuis la bdd
+        //     // autres infos
+        //     startHour: "08h00", // Recup depuis la bdd
+        //     duration: 2, // en heures
+        //   },
+        //   {
+        //     title: "Optimisation mes couilles 2", // Recup depuis la bdd
+        //     room: "IUC - 255 / 256", // Recup depuis la bdd
+        //     // autres infos
+        //     startHour: "10h45", // Recup depuis la bdd
+        //     duration: 2, // en heures
+        //   },
+        //   {
+        //     title: "Optimisation mes couilles", // Recup depuis la bdd
+        //     room: "IUC - 255 / 256", // Recup depuis la bdd
+        //     // autres infos
+        //     startHour: "15h45", // Recup depuis la bdd
+        //     duration: 2, // en heures
+        //   },
+        // ],
       },
       {
         day: "Mardi",
