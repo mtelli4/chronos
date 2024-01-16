@@ -13,6 +13,8 @@ db.sequelize.sync().then(()=>{
         console.log("listening on port 5000")
     })
 })
+const moduleCoursRouter = require('./routes/ModuleCours')
+app.use("/modules", moduleCoursRouter)
 
 const coursRouter = require('./routes/Cours')
 app.use("/cours", coursRouter)
