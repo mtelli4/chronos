@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'BlocCompetence',
+    tableName: 'BLOC_COMPETENCE'
   });
   return BlocCompetence;
 };

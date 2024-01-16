@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Cours.init({
     libelle: DataTypes.STRING,
-    debutCours: DataTypes.DATETIME,
+    debutCours: DataTypes.DATE,
     duree: DataTypes.INTEGER,
     moduleId: {
       type: DataTypes.INTEGER,
@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Cours',
+    tableName: 'COURS'
   });
   return Cours;
 };
