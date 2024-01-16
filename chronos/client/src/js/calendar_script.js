@@ -21,14 +21,21 @@ export function trouverHeuresExtremes(semaine) {
             // Convertir les heures au format "8h15" en minutes
             const dureeFin = cours.duration;
             const heureActuelle = cours.startHour;
-
             // Mettre à jour l'heure de début la plus tôt
             if (heureComp(heureActuelle, heureDebutPlusTot)) {
+                console.log("plustot");
                 heureDebutPlusTot = heureActuelle;
             }
             
+            console.log("-------------");
+            console.log({heureActuelle});
+            console.log(ajouterDuree(heureFinPlusTard, dureeFinPlusTard));
+            console.log(ajouterDuree(heureActuelle, dureeFin));
+            console.log({heureFinPlusTard});
+            console.log(dureeFinPlusTard);
             // Mettre à jour l'heure de fin la plus tard
             if (heureComp(ajouterDuree(heureFinPlusTard, dureeFinPlusTard), ajouterDuree(heureActuelle, dureeFin))) {
+                console.log("plustard");
                 heureFinPlusTard = heureActuelle;
                 dureeFinPlusTard = dureeFin;
             }
@@ -55,24 +62,21 @@ export function createDaysLst(schedule) {
     return daysList;
 };
 
-// Ajoute la durée à l'heure et arrondis à l'heure pile supérieure si besoin
+// Ajoute la durée à l'heure et arrondis à l'heure pile supérieure
 function ajouterDuree(heureString, dureeEnHeures) {
     // Convertir la chaîne d'heure en objet Date
-    let heureFormat = heureString.replace("h", ":")
-    const heureActuelle = new Date('1970-01-01T' + heureFormat + 'Z');
+    let heureFormat;
+    if (heureString.split("h")[1] != "00") {
+        heureFormat = (parseInt(heureString.split("h")[0]) + dureeEnHeures + 1).toString() + "h00";
+    } else {
+        heureFormat = (parseInt(heureString.split("h")[0]) + dureeEnHeures).toString() + "h" + heureString.split("h")[1];
+    }
 
-    // Ajouter la durée en heures
-    const nouvelleHeure = new Date(heureActuelle.getTime() + dureeEnHeures * 60 * 60 * 1000);
+    if (heureFormat.split("h")[0].length == 1) {
+        heureFormat = "0" + heureFormat;
+    }
 
-    // Arrondir à l'heure supérieure
-    nouvelleHeure.setMinutes(0);
-    nouvelleHeure.setSeconds(0);
-    nouvelleHeure.setMilliseconds(0);
-
-    // Formater l'heure au format HH:mm
-    const heureFinale = nouvelleHeure.toTimeString().substring(0, 5);
-
-    return heureFinale.replace(":", "h");
+    return heureFormat;
 }
 
 
@@ -83,6 +87,8 @@ export function createHoursLst(heure1, heure2, duree) {
     let heureFinale = ajouterDuree(heure2, duree);
     let heureEnMinutes;
     while (heureActuelle.split("h")[0] !== heureFinale.split("h")[0]) {
+        console.log(heureFinale);
+        console.log(heureActuelle);
         // Convertir l'heure actuelle au format "8h00" en minutes
         const [heure, minute] = heureActuelle.split('h').map(Number);
         heureEnMinutes = heure * 60 + minute;
@@ -95,11 +101,15 @@ export function createHoursLst(heure1, heure2, duree) {
             'h' +
             (heureEnMinutes % 60).toString().padStart(2, '0');
 
+        const nouvelleHeure2 = (parseInt(heureActuelle.split("h")[0]) + 1).toString() + "h" + heureActuelle.split("h")[1];
+
         // Ajouter l'heure à la liste
         heures.push(nouvelleHeure);
 
         // Mettre à jour l'heure actuelle
         heureActuelle = nouvelleHeure;
     }
+
+    console.log(heures);
     return heures;
-}
+};
