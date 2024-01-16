@@ -1,20 +1,23 @@
 import styled from "styled-components";
 
 export const ClassSquareCont = styled.div`
-    margin: 20px; // ATTENTION C'est juste pour tester faut l'enlever une fois implémenté dans le calendar
-    width: 275px;
-    height: ${props => props.h}px;
-    border-radius: 15px;
+    width: 95%;
+    /* height: ${props => props.h}px; */
+    height: ${props => props.duration}%;
+    border-radius: 10px;
     background: rgba(215, 65, 110, 0.5);
     background: ${props => "rgba(" + props.r + "," + props.g + "," + props.b + ", 0.5)"};
 
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    position: relative;
+    position: absolute;
+    top: ${props => props.starttoppercent}%;
 
     cursor: pointer;
     transition: all 0.25s;
+    /* position: absolute;
+    top: ${props => (100 / props.hoursSize) * props.index + "%"}; */
 
     &:hover {
         transform: scale(1.01);
@@ -23,7 +26,7 @@ export const ClassSquareCont = styled.div`
 `;
 
 export const ClassSquareBorder = styled.div`
-    width: 20px;
+    width: 15px;
     height: 100%;
     background: #000;
     position: absolute;
@@ -32,13 +35,13 @@ export const ClassSquareBorder = styled.div`
 
 export const ClassSquareTitle = styled.h2`
     font-weight: normal;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 `;
 
 export const ClassSquareTextCont = styled.div`
-    margin-left: 35px;
+    margin-left: 25px;
     margin-right: 10px;
-    margin-top: 20px;
+    margin-top: 15px;
 
     display: flex;
     flex-direction: column;
