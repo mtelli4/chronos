@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
 export const CalendarCont = styled.div`
-    border: 2px solid blue;
     width: 100%;
-    min-height: 100vh; // TODO mettre en %
+    min-height: 100%; // TODO mettre en %
 
     display: grid;
     grid-template-columns: 10% 90%;
@@ -12,10 +11,8 @@ export const CalendarCont = styled.div`
 `;
 
 export const CalendarDays = styled.div`
-    grid-column: 2;
-    grid-row: 1;
-
     display: flex;
+    width: 100%;
 `;
 
 export const CalendarDay = styled.span`
@@ -70,5 +67,29 @@ export const CalendarMainCol = styled.div`
     flex-direction: column;
     align-items: center;
 
+    position: relative;
+`;
+
+export const CalendarButton = styled.img`
+    width: 20px;
+    aspect-ratio: 1;
+    cursor: pointer;
+    ${props => props.type == "after" ? "right" : "left"}: 0px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.25s;
+
+    &:hover {
+        transform: scale(1.1) translateY(-50%);
+    }
+`;
+
+export const CalendarWeek = styled.div`
+    grid-column: 2;
+    grid-row: 1;
+
+    display: flex;
+    justify-content: center;
     position: relative;
 `;

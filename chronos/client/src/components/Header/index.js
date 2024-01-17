@@ -1,21 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 import ChronosLogo from '../ChronosLogo';
-import { HeaderCont, HeaderNav, HeaderLinks, HeaderLink } from "./HeaderElements.js";
+import { HeaderCont, HeaderNav, HeaderLinks, HeaderLink, HeaderProfile, HeaderLinkText, HeaderLinkBorder } from "./HeaderElements.js";
 import ProfilePic from '../ProfilePic/index.js';
 import pic from "../../images/test.jpg";
  
 const Header = ({ links }) => { // links = [{title : string, to : string}]
+
+  const [selected, setSelected] = useState(0);
+
+  function handleClick(index) {
+    setSelected(index);
+  }
+
   return (
     <HeaderCont>
         <ChronosLogo fontsize={3} />
 
         <HeaderNav>
-            <ProfilePic src={pic} size={10} /> 
             <HeaderLinks>
-                {links.map((item) => (
-                    <HeaderLink key={item.id} to={item.to}>{item.title}</HeaderLink>
+                {links.map((item, index) => (
+                    <HeaderLink key={item.id}>
+                      <HeaderLinkText selected={selected == index} to={item.to} onClick={() => handleClick(index)}>
+                        {item.title}
+                      </HeaderLinkText>
+
+                      <HeaderLinkBorder selected={selected == index}></HeaderLinkBorder>
+                    </HeaderLink>
                 ))}
             </HeaderLinks>
+            <HeaderProfile src={pic} />
         </HeaderNav>
     </HeaderCont>
   )

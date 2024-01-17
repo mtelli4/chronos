@@ -3,7 +3,7 @@ import { Link as LinkR } from 'react-router-dom';
 
 const appearAnimImg = keyframes`
     0% {
-        transform: translateY(-9%) scale(0.1) rotate(-420deg);
+        transform: translateY(-9%) scale(0.1) rotate(-360deg);
     }
 
     100% {
@@ -35,7 +35,7 @@ export const ChronosLogoCont = styled(LinkR)`
 export const ChronosC = styled.img`
     height: ${props => props.fontsize}rem;
     transform: translateY(-9%);
-    animation: ${appearAnimImg} 1s cubic-bezier(.76,1.65,0,1) forwards;
+    animation: ${appearAnimImg} 0.5s cubic-bezier(.76,1.65,0,1) forwards;
 `;
 
 export const ChronosTextCont = styled.div`

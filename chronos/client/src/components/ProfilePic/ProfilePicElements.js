@@ -3,7 +3,7 @@ import { Link, Link as LinkR } from "react-router-dom";
 
 export const ProfilePicCont = styled(LinkR)`
     display: block;
-    max-width: ${props => props.size}%;
+    width: ${props => props.size}%;
     aspect-ratio: 1;
     border: 5px solid black;
     border-radius: 10px;
@@ -13,8 +13,7 @@ export const ProfilePicCont = styled(LinkR)`
 
     &:hover {
         transform: scale(1.01);
-        box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-    }
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;    }
 `;
 
 export const ProfilePicImg = styled.img`
