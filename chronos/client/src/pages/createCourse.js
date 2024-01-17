@@ -6,14 +6,14 @@ import axios from 'axios';
 function CreateCourse() {
     const initialValues = {
         libelle:"",
-        horaire:"",
+        debutCours:"",
         duree:0,
         moduleId:0
     }
 
     const validationSchema = Yup.object().shape({
         libelle: Yup.string().min(5).max(25).required("Ce champ est obligatoire."),
-        horaire: Yup.string().required("Ce champ est obligatoire."),
+        debutCours: Yup.date().required("Ce champ est obligatoire."),
         duree: Yup.number().required("Ce champ est obligatoire."),
         moduleId: Yup.number().required("Ce champ est obligatoire.")
     })
@@ -64,11 +64,11 @@ function CreateCourse() {
                         placeholder="Veuillez saisir un libellé pour votre cours"
                     />
                     <br></br>
-                    <label>Horaire</label>
-                    <ErrorMessage name="horaire" component="span"/>
+                    <label>debutCours</label>
+                    <ErrorMessage name="debutCours" component="span"/>
                     <Field 
                         id="inputCreateCourse" 
-                        name="horaire"
+                        name="debutCours"
                         type="datetime-local"
                         placeholder="Veuillez sélectionner la date et l'heure de début de vote cours"
                     />
