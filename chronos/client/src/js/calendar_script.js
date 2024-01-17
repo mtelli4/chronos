@@ -7,11 +7,28 @@ function heureComp(heure1, heure2) {
     return date1 <= date2;
 }
 
+export function couleurAleatoire() {
+    // Générer trois composantes de couleur (R, G, B) au hasard
+    const composanteR = Math.floor(Math.random() * 256);
+    const composanteG = Math.floor(Math.random() * 256);
+    const composanteB = Math.floor(Math.random() * 256);
+
+    // Convertir les composantes en code hexadécimal
+    const codeHexa = '#' +
+        composanteR.toString(10).padStart(2, '0') +
+        composanteG.toString(10).padStart(2, '0') +
+        composanteB.toString(10).padStart(2, '0');
+
+    return codeHexa;
+}
+
 // Renvoie l'heure la plus tot et l'heure la plus tard d'une semaine
+// (l'heure la plus tot est arrondis à l'heure pile inférieur la plus proche)
+// l'heure minimum est de 08h00 max et la plus tard est de 18h minimum
 export function trouverHeuresExtremes(semaine) {
     // Initialiser les heures extrêmes
-    let heureDebutPlusTot = '23h59';
-    let heureFinPlusTard = '00h00';
+    let heureDebutPlusTot = '08h00';
+    let heureFinPlusTard = '18h00';
     let dureeFinPlusTard = 0;
 
     // Parcourir les jours de la semaine
@@ -43,7 +60,7 @@ export function trouverHeuresExtremes(semaine) {
     });
 
     return {
-        heureDebutPlusTot,
+        heureDebutPlusTot : heureDebutPlusTot.split("h")[0] + "h" + "00",
         heureFinPlusTard,
         dureeFinPlusTard
     };
@@ -87,8 +104,6 @@ export function createHoursLst(heure1, heure2, duree) {
     let heureFinale = ajouterDuree(heure2, duree);
     let heureEnMinutes;
     while (heureActuelle.split("h")[0] !== heureFinale.split("h")[0]) {
-        console.log(heureFinale);
-        console.log(heureActuelle);
         // Convertir l'heure actuelle au format "8h00" en minutes
         const [heure, minute] = heureActuelle.split('h').map(Number);
         heureEnMinutes = heure * 60 + minute;
