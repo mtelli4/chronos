@@ -7,11 +7,28 @@ function heureComp(heure1, heure2) {
     return date1 <= date2;
 }
 
+export function couleurAleatoire() {
+    // Générer trois composantes de couleur (R, G, B) au hasard
+    const composanteR = Math.floor(Math.random() * 256);
+    const composanteG = Math.floor(Math.random() * 256);
+    const composanteB = Math.floor(Math.random() * 256);
+
+    // Convertir les composantes en code hexadécimal
+    const codeHexa = '#' +
+        composanteR.toString(10).padStart(2, '0') +
+        composanteG.toString(10).padStart(2, '0') +
+        composanteB.toString(10).padStart(2, '0');
+
+    return codeHexa;
+}
+
 // Renvoie l'heure la plus tot et l'heure la plus tard d'une semaine
+// (l'heure la plus tot est arrondis à l'heure pile inférieur la plus proche)
+// l'heure minimum est de 08h00 max et la plus tard est de 18h minimum
 export function trouverHeuresExtremes(semaine) {
     // Initialiser les heures extrêmes
-    let heureDebutPlusTot = '23h59';
-    let heureFinPlusTard = '00h00';
+    let heureDebutPlusTot = '08h00';
+    let heureFinPlusTard = '18h00';
     let dureeFinPlusTard = 0;
 
     // Parcourir les jours de la semaine
@@ -21,12 +38,11 @@ export function trouverHeuresExtremes(semaine) {
             // Convertir les heures au format "8h15" en minutes
             const dureeFin = cours.duration;
             const heureActuelle = cours.startHour;
-
             // Mettre à jour l'heure de début la plus tôt
             if (heureComp(heureActuelle, heureDebutPlusTot)) {
                 heureDebutPlusTot = heureActuelle;
             }
-            
+
             // Mettre à jour l'heure de fin la plus tard
             if (heureComp(ajouterDuree(heureFinPlusTard, dureeFinPlusTard), ajouterDuree(heureActuelle, dureeFin))) {
                 heureFinPlusTard = heureActuelle;
@@ -36,7 +52,7 @@ export function trouverHeuresExtremes(semaine) {
     });
 
     return {
-        heureDebutPlusTot,
+        heureDebutPlusTot : heureDebutPlusTot.split("h")[0] + "h" + "00",
         heureFinPlusTard,
         dureeFinPlusTard
     };
@@ -55,24 +71,21 @@ export function createDaysLst(schedule) {
     return daysList;
 };
 
-// Ajoute la durée à l'heure et arrondis à l'heure pile supérieure si besoin
+// Ajoute la durée à l'heure et arrondis à l'heure pile supérieure
 function ajouterDuree(heureString, dureeEnHeures) {
     // Convertir la chaîne d'heure en objet Date
-    let heureFormat = heureString.replace("h", ":")
-    const heureActuelle = new Date('1970-01-01T' + heureFormat + 'Z');
+    let heureFormat;
+    if (heureString.split("h")[1] != "00") {
+        heureFormat = (parseInt(heureString.split("h")[0]) + dureeEnHeures + 1).toString() + "h00";
+    } else {
+        heureFormat = (parseInt(heureString.split("h")[0]) + dureeEnHeures).toString() + "h" + heureString.split("h")[1];
+    }
 
-    // Ajouter la durée en heures
-    const nouvelleHeure = new Date(heureActuelle.getTime() + dureeEnHeures * 60 * 60 * 1000);
+    if (heureFormat.split("h")[0].length == 1) {
+        heureFormat = "0" + heureFormat;
+    }
 
-    // Arrondir à l'heure supérieure
-    nouvelleHeure.setMinutes(0);
-    nouvelleHeure.setSeconds(0);
-    nouvelleHeure.setMilliseconds(0);
-
-    // Formater l'heure au format HH:mm
-    const heureFinale = nouvelleHeure.toTimeString().substring(0, 5);
-
-    return heureFinale.replace(":", "h");
+    return heureFormat;
 }
 
 
@@ -95,6 +108,8 @@ export function createHoursLst(heure1, heure2, duree) {
             'h' +
             (heureEnMinutes % 60).toString().padStart(2, '0');
 
+        const nouvelleHeure2 = (parseInt(heureActuelle.split("h")[0]) + 1).toString() + "h" + heureActuelle.split("h")[1];
+
         // Ajouter l'heure à la liste
         heures.push(nouvelleHeure);
 
@@ -102,4 +117,4 @@ export function createHoursLst(heure1, heure2, duree) {
         heureActuelle = nouvelleHeure;
     }
     return heures;
-}
+};

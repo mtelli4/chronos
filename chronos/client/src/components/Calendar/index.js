@@ -1,9 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import { CalendarCont, CalendarDays, CalendarDay, CalendarMain, CalendarHours, CalendarHour, CalendarMainCol} from './calendarElements';
+import React, {useState, useEffect, useRef} from 'react';
+import { CalendarCont, CalendarDays, CalendarDay, CalendarMain, CalendarHours, CalendarHour, CalendarMainCol, CalendarButton, CalendarWeek} from './calendarElements';
 import ClassSquare from '../ClassSquare';
 import { createDaysLst, createHoursLst, trouverHeuresExtremes } from '../../js/calendar_script';
+import buttonPrev from "../../images/buttonPrev.svg";
+import buttonAft from "../../images/buttonAft.svg";
+import Popup from '../Popup';
+import ClassDetails from '../../pages/classDetails';
 
-const Calendar = ({ weekdata }) => { // days, jours = lst / classes = [{}]
+const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classes = [{}]
+
+    const [isActive, setIsActive] = useState(false);
 
     // Fonction pour calculer le top de départ
     function getStartTop(startHourOfClass) {
@@ -27,16 +33,52 @@ const Calendar = ({ weekdata }) => { // days, jours = lst / classes = [{}]
 
     let days = createDaysLst(weekdata);
     let extremeHours = trouverHeuresExtremes(weekdata);
-    console.log(extremeHours);
     let hours = createHoursLst(extremeHours.heureDebutPlusTot, extremeHours.heureFinPlusTard, extremeHours.dureeFinPlusTard);
+
+    const touchStart = useRef(null);
+    const touchEnd = useRef(null);
+  
+    // the required distance between touchStart and touchEnd to be detected as a swipe
+    const minSwipeDistance = 50;
+  
+    const onTouchStart = (e) => {
+      touchEnd.current = null;
+      touchStart.current = e.targetTouches[0].clientX;
+    };
+  
+    const onTouchMove = (e) => {
+      touchEnd.current = e.targetTouches[0].clientX;
+    };
+  
+    const onTouchEnd = () => {
+      if (!touchStart.current || !touchEnd.current) return;
+      const distance = touchStart.current - touchEnd.current;
+      const isLeftSwipe = distance > minSwipeDistance;
+      const isRightSwipe = distance < -minSwipeDistance;
+      if (isLeftSwipe) {
+        onWeekChange("after");
+      } 
+      
+      else if (isRightSwipe) {
+        onWeekChange("prev");
+      }
+    };
+
+    function handleClick() {
+        setIsActive(true);
+    }
 
   return (
     <CalendarCont>
-        <CalendarDays>
-            {days.map((item) => (
-                <CalendarDay dayssize={days.length} key={item.id}>{item}</CalendarDay>
-            ))}
-        </CalendarDays>
+        <CalendarWeek>
+            <CalendarButton onClick={() => onWeekChange("prev")} type={"prev"} src={buttonPrev} />
+            <CalendarDays>
+                {days.map((item) => (
+                    <CalendarDay dayssize={days.length} key={item.id}>{item}</CalendarDay>
+                ))}
+            </CalendarDays>
+            <CalendarButton onClick={() => onWeekChange("after")} type={"after"} src={buttonAft} />
+        </CalendarWeek>
 
         <CalendarHours id="calendarhours">
             {hours.map((item) => (
@@ -44,15 +86,17 @@ const Calendar = ({ weekdata }) => { // days, jours = lst / classes = [{}]
             ))}
         </CalendarHours>
 
-        <CalendarMain id='calendarmain'>
+        <CalendarMain id='calendarmain' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
             {weekdata.map((item) => (
                 <CalendarMainCol dayssize={days.length}>
                     {item.classes.map((item2) => (
-                        <ClassSquare title={item2.title} room={item2.room} color="#ab4c6e" duration={item2.duration * (100 / hours.length)} startTopPercent={getStartTop(item2.startHour)} />
+                        <ClassSquare title={item2.title} room={item2.room} color={item2.color} duration={item2.duration * (100 / hours.length)} startTopPercent={getStartTop(item2.startHour)} onSelect={() => handleClick()} />
                     ))}
                 </CalendarMainCol>
             ))}
         </CalendarMain>
+
+        <Popup html={<ClassDetails />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
     </CalendarCont>
   )
 }
