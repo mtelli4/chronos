@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       ModuleCours.belongsTo(models.BlocCompetence, { foreignKey: 'blocCompetenceId', onDelete: 'SET NULL' });
+     
+      const { Formation,FormationModule } = models
+      ModuleCours.belongsToMany(Formation, {through:FormationModule, foreignKey:'ModuleCoursId'});
     }
   }
   ModuleCours.init({

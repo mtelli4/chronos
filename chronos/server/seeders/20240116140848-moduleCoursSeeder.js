@@ -17,7 +17,7 @@ module.exports = {
         {
           libelle: faker.lorem.word(),
           codeApogee: faker.random.alphaNumeric(8),
-          blocCompetenceId: blocCompetences[0][Math.floor(Math.random() * blocCompetences[0].length)].id,
+          blocCompetenceId: blocCompetences[0][Math.floor(Math.random() * (blocCompetences[0].length - 1))].id,
         }
       )
     }
