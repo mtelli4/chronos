@@ -10,7 +10,7 @@ router.get("/", async (req,res)=>{
     const evaluationsParameters = {}
 
     if (parameters.hasOwnProperty('moduleId')) {
-        notesParameters['$Evaluation.moduleId$'] = parseInt(parameters.moduleId)
+      notesParameters['$Evaluation.moduleId$'] = parseInt(parameters.moduleId)
         evaluationsParameters['moduleId'] = parseInt(parameters.moduleId)
     }
     
@@ -30,70 +30,32 @@ router.get("/", async (req,res)=>{
           required: true
             }
         ],
-        // where:notesParameters
+        where:notesParameters
       })
-      // console.log('notes')
-      // console.log(listNotes)
 
     const result = {};
     result["eleves"] = await db.Eleve.findAll(
-      // {
-      //   // where:eleveParameters
-      // }
+      {
+        where:eleveParameters
+      }
     )
-    // console.log('eleves')
-    // console.log(result["eleves"])
-    // result["eleves"] = []
-    // result["evaluations"] = []
     result["evaluations"] = await db.Evaluation.findAll(
-      // {
-      //   // where:evaluationsParameters
-      // }
+      {
+        where:evaluationsParameters
+      }
     )
-    // console.log('evaluations')
-    // console.log(result["evaluations"])
-
-    // console.log(listNotes)
 
     listNotes.forEach(item => {
-        eleveId = item.Eleve.id;
-        evaluationId = item.Evaluation.libelle;
-
-        // if (!result["eleves"].includes(eleveId)){
-        //     result["eleves"].push(eleveId)
-        // }
-        // if (!result["evaluations"].includes(evaluationId)){
-        //     result["evaluations"].push(evaluationId)
-        // }
-
-        if (!result[eleveId]) {
-            result[eleveId] = {};
-          }
-
+        const eleveNom = item.Eleve.id;
+        const evaluationLibelle = item.Evaluation.id;
         const note = parseFloat(item.note);
-        result[eleveId][evaluationId] = note;
 
+        if (!result[eleveNom]) {
+            result[eleveNom] = {};
+        }
+        
+        result[eleveNom][evaluationLibelle] = note;
     });
     res.json(result);
-})
-
-router.post("/test", async (req,res)=>{
-    const listNotes = await db.Note.findAll({
-        include: [
-            {
-          model: db.Evaluation,
-          required: true
-            },
-            {
-          model: db.Eleve,
-          required: true
-            }
-        ],
-        where:{
-            '$Eleve.nom$': "Goyette"
-        }
-      })
-
-    res.json(listNotes);
 })
 module.exports = router

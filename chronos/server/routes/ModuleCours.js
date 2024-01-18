@@ -9,7 +9,6 @@ router.get("/", async (req, res) => {
 })
 
 router.get("/byFormation", async (req, res) => {
-    // console.log(req.query)
     const id = parseInt(req.query.id)
     const modules = await db.ModuleCours.findAll(
         {
