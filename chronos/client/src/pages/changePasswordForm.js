@@ -8,36 +8,36 @@ const ChangePasswordForm = () => {
   const navigate = useNavigate();
 
   const initialValues = {
-    mail: '',
-    mdp: '',
-    confirmMdp: ''
+    email: '',
+    password: '',
+    confirmPassword: ''
   };
 
   const validationSchema = Yup.object().shape({
-    mail: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
-    mdp: Yup.string()
+    email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
+    password: Yup.string()
       .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
         'Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial'
       )
       .required('Le mot de passe est requis'),
-    confirmMdp: Yup.string()
+    confirmPassword: Yup.string()
       .required('Confirmer le mot de passe est requis'),
   });
 
   const handleSubmit = (values, { setSubmitting, setErrors }) => {
-    console.log('Email:', values.mail, 'Mot de passe:', values.mdp, 'Mot de passe réécrit:', values.confirmMdp);
+    console.log('Email:', values.email, 'Mot de passe:', values.password, 'Mot de passe réécrit:', values.confirmPassword);
   
     // Si le mot de passe n'a pas bien été confirmé
-    if (values.mdp !== values.confirmMdp) {
-      setErrors({ confirmMdp: 'Les mots de passe ne correspondent pas' });
+    if (values.password !== values.confirmPassword) {
+      setErrors({ confirmPassword: 'Les mots de passe ne correspondent pas' });
       setSubmitting(false);
       return;
     }
 
     // Envoyer les données au serveur pour authentification
-    axios.post("http://localhost:5000/newPsw", { 'mail': values.mail, 'password': values.mdp })
+    axios.post("http://localhost:5000/newPsw", { 'email': values.email, 'password': values.password })
       .then((response) => {
         console.log("Succès");
         console.log(response);
@@ -61,19 +61,19 @@ const ChangePasswordForm = () => {
     >
       <Form>
         <div>
-          <label htmlFor="mail">Email :</label>
-          <Field type="email" id="inputEmail" name="mail"/>
+          <label htmlFor="email">Email :</label>
+          <Field type="email" id="inputEmail" name="email"/>
           <ErrorMessage name="password" component="div" />
         </div>
         <div>
-          <label htmlFor="mdp">Nouveau mot de passe :</label>
-          <Field type="password" id="inputPassword" name="mdp"/>
-          <ErrorMessage name="mdp" component="div" />
+          <label htmlFor="password">Nouveau mot de passe :</label>
+          <Field type="password" id="inputPassword" name="password"/>
+          <ErrorMessage name="password" component="div" />
         </div>
         <div>
-          <label htmlFor="confirmMdp">Réécrivez votre mot de passe :</label>
-          <Field type="password" id="inputPassword2" name="confirmMdp"/>
-          <ErrorMessage name="confirmMdp" component="div" />
+          <label htmlFor="confirmPassword">Réécrivez votre mot de passe :</label>
+          <Field type="password" id="inputPassword2" name="confirmPassword"/>
+          <ErrorMessage name="confirmPassword" component="div" />
         </div>
 
         <div>

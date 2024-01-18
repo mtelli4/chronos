@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
     const hashedPassword = hashPassword(identifiants.password);
     const result = await Utilisateur.findOne({
         where: { 
-            mail: identifiants.mail, 
+            email: identifiants.email, 
             mdp: hashedPassword 
         }
 
@@ -33,7 +33,9 @@ router.post("/", async (req, res) => {
     })
 
     // res.json(result); // pour renvoyer un objet JSON
-
+    console.log("COUCOU :");
+    console.log(result);
+    console.log("\n");
     if (result === null) { // Si il y a une erreur (email ou mdp incorrecte)
         res.send("0");
     }
