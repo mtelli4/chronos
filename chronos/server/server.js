@@ -9,7 +9,7 @@ app.use(express.json())
 
 const db = require('./models')
 
-const sequelize = new Sequelize('ingrid', 'root', 'toto', {
+const sequelize = new Sequelize('ingrid', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
 });
