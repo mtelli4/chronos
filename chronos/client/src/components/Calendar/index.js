@@ -1,11 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { CalendarCont, CalendarDays, CalendarDay, CalendarMain, CalendarHours, CalendarHour, CalendarMainCol, CalendarButton, CalendarWeek} from './calendarElements';
 import ClassSquare from '../ClassSquare';
-import { createDaysLst, createHoursLst, trouverHeuresExtremes, couleurAleatoire } from '../../js/calendar_script';
+import { createDaysLst, createHoursLst, trouverHeuresExtremes } from '../../js/calendar_script';
 import buttonPrev from "../../images/buttonPrev.svg";
 import buttonAft from "../../images/buttonAft.svg";
+import Popup from '../Popup';
 
 const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classes = [{}]
+
+    const [isActive, setIsActive] = useState(false);
 
     // Fonction pour calculer le top de départ
     function getStartTop(startHourOfClass) {
@@ -60,6 +63,10 @@ const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classe
       }
     };
 
+    function handleClick() {
+        setIsActive(true);
+    }
+
   return (
     <CalendarCont>
         <CalendarWeek>
@@ -82,11 +89,13 @@ const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classe
             {weekdata.map((item) => (
                 <CalendarMainCol dayssize={days.length}>
                     {item.classes.map((item2) => (
-                        <ClassSquare title={item2.title} room={item2.room} color={couleurAleatoire()} duration={item2.duration * (100 / hours.length)} startTopPercent={getStartTop(item2.startHour)} />
+                        <ClassSquare title={item2.title} room={item2.room} color={item2.color} duration={item2.duration * (100 / hours.length)} startTopPercent={getStartTop(item2.startHour)} onSelect={() => handleClick()} />
                     ))}
                 </CalendarMainCol>
             ))}
         </CalendarMain>
+
+        <Popup format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
     </CalendarCont>
   )
 }
