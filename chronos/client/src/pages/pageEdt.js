@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
 
@@ -12,20 +13,12 @@ const PageEdt = () => {
         day: "Lundi",
         classes: [
           {
-            title: "Dépression", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
-            // autres infos
-            startHour: "08h15", // Recup depuis la bdd
-            duration: 2, // en heures
-            color: "#000000",
-          },
-          {
             title: "Maintenance applicative", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
+            room: "IUC - Blaise Pascal", // Recup depuis la bdd
             // autres infos
             startHour: "13h30", // Recup depuis la bdd
             duration: 4, // en heures
-            color: "#000000",
+            color: "#2D8F4E",
           },
         ],
       },
@@ -33,33 +26,49 @@ const PageEdt = () => {
         day: "Mardi",
         classes: [
           {
-            title: "Optimisation d'application", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
+            title: "Virtualisation avancée", // Recup depuis la bdd
+            room: "IUC - 255/256", // Recup depuis la bdd
             // autres infos
             startHour: "08h15", // Recup depuis la bdd
-            duration: 4.5, // en heures
+            duration: 4, // en heures
+            color: "#BD2727",
+          },
+          {
+            title: "Communication : organisation et diffusion de l'information", // Recup depuis la bdd
+            room: "IUC - 203", // Recup depuis la bdd
+            // autres infos
+            startHour: "13h30", // Recup depuis la bdd
+            duration: 2, // en heures
             color: "#000000",
           },
           {
-            title: "Développement d'application", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
+            title: "Projet personnel et professionnel", // Recup depuis la bdd
+            room: "IUC - 203", // Recup depuis la bdd
             // autres infos
-            startHour: "13h30", // Recup depuis la bdd
-            duration: 4, // en heures
-            color: "#000000",
-          }
+            startHour: "15h45", // Recup depuis la bdd
+            duration: 2, // en heures
+            color: "#7D3099",
+          },
         ],
       },
       {
         day: "Mercredi",
         classes: [
           {
-            title: "Optimisation mes couilles 2", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
+            title: "Virtualisation avancée", // Recup depuis la bdd
+            room: "IUC - 255/256", // Recup depuis la bdd
+            // autres infos
+            startHour: "08h15", // Recup depuis la bdd
+            duration: 4, // en heures
+            color: "#BD2727",
+          },
+          {
+            title: "Initialisation à l'entrepreunariat", // Recup depuis la bdd
+            room: "IUC - 255/256", // Recup depuis la bdd
             // autres infos
             startHour: "13h30", // Recup depuis la bdd
-            duration: 0.5, // en heures
-            color: "#000000",
+            duration: 4, // en heures
+            color: "#3275B0",
           },
         ],
       },
@@ -67,28 +76,20 @@ const PageEdt = () => {
         day: "Jeudi",
         classes: [
           {
-            title: "Optimisation mes couilles", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
+            title: "Virtualisation avancée", // Recup depuis la bdd
+            room: "IUC - 255/256", // Recup depuis la bdd
             // autres infos
             startHour: "08h15", // Recup depuis la bdd
-            duration: 2, // en heures
-            color: "#000000",
+            duration: 4, // en heures
+            color: "#BD2727",
           },
           {
-            title: "Optimisation mes couilles 2", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
+            title: "Droit du numérique et de la propriété intellectuelle", // Recup depuis la bdd
+            room: "IUC - 255/256", // Recup depuis la bdd
             // autres infos
-            startHour: "10h30", // Recup depuis la bdd
-            duration: 1.25, // en heures
-            color: "#000000",
-          },
-          {
-            title: "Optimisation mes couilles", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
-            // autres infos
-            startHour: "15h45", // Recup depuis la bdd
-            duration: 2.5, // en heures
-            color: "#000000",
+            startHour: "13h30", // Recup depuis la bdd
+            duration: 4, // en heures
+            color: "#192C6D",
           },
         ],
       },
@@ -96,20 +97,12 @@ const PageEdt = () => {
         day: "Vendredi",
         classes: [
           {
-            title: "Optimisation mes couilles 2", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
+            title: "SAE : Soutenance - Développement avancé suivi", // Recup depuis la bdd
+            room: "IUC - 161", // Recup depuis la bdd
             // autres infos
-            startHour: "07h45", // Recup depuis la bdd
-            duration: 2.5, // en heures
-            color: "#000000",
-          },
-          {
-            title: "Optimisation mes couilles", // Recup depuis la bdd
-            room: "IUC - 255 / 256", // Recup depuis la bdd
-            // autres infos
-            startHour: "15h45", // Recup depuis la bdd
-            duration: 1.5, // en heures
-            color: "#000000",
+            startHour: "10h30", // Recup depuis la bdd
+            duration: 2, // en heures
+            color: "#CA630E",
           },
         ],
       },
@@ -120,6 +113,14 @@ const PageEdt = () => {
     function handleWeekChange(type) {
       console.log("%c" + type, "color: red; font-size: 40px;");
     }
+
+    const [listCours, setListCours] = useState([]);
+
+    useEffect(() => {
+      axios.get("http://localhost:5000/cours").then((response) => {
+        setListCours(response.data)
+      })
+    }, []);
 
     return (
         <>

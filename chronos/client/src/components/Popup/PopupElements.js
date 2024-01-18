@@ -6,12 +6,13 @@ export const PopupCont = styled.div`
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;    
     width: ${props => props.format == "landscape" ? "90%" : "50%"};
     height: 90%;
-    transition: all 0.5s cubic-bezier(.76,1.65,0,1) 0.05s;
+    transition: all ${props => props.isActive ? "0.5s cubic-bezier(.76,1.65,0,1)" : "0.25s ease-out"} 0.05s;
     transform: ${props => props.isActive ? "scale(1)" : "scale(0)"};
     position: relative;
     overflow: ${props => props.overflow};
     max-width: 1400px;
     max-height: 750px;
+    scrollbar-gutter: unset;
 `;
 
 export const PopupScreen = styled.div`
