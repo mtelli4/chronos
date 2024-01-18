@@ -8,18 +8,18 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const initialValues = {
-    mail: '',
-    mdp: '',
+    email: '',
+    password: '',
   };
 
   const validationSchema = Yup.object().shape({
-    mail: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
-    mdp: Yup.string().required('Le mot de passe est requis'),
+    email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
+    password: Yup.string().required('Le mot de passe est requis'),
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
     // Envoyer les données au serveur pour authentification
-    axios.post('http://localhost:5000/login',  { 'mail': values.mail, 'password': values.mdp })
+    axios.post('http://localhost:5000/login',  { 'email': values.email, 'password': values.password })
       .then((response) => {
         console.log('Succès');
         console.log(response);
@@ -52,14 +52,14 @@ const LoginForm = () => {
     >
       <Form>
         <div>
-          <label htmlFor="mail">Email :</label>
-          <Field type="email" id="inputEmail" name="mail" />
-          <ErrorMessage name="mail" component="div" />
+          <label htmlFor="email">Email :</label>
+          <Field type="email" id="inputEmail" name="email" />
+          <ErrorMessage name="email" component="div" />
         </div>
         <div>
-          <label htmlFor="mdp">Mot de passe :</label>
-          <Field type="password" id="inputPassword" name="mdp" />
-          <ErrorMessage name="mdp" component="div" />
+          <label htmlFor="password">Mot de passe :</label>
+          <Field type="password" id="inputPassword" name="password" />
+          <ErrorMessage name="password" component="div" />
         </div>
 
         <div>

@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
     const hashedPassword = hashPassword(identifiants.password);
     const [rowCount, updatedUsers] = await Utilisateur.update({ mdp: hashedPassword, premiereConnexion: 0 }, {
         where: { 
-            mail: identifiants.mail 
+            email: identifiants.email 
         }
     });
     
