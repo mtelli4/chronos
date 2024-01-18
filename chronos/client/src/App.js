@@ -10,6 +10,7 @@ import CreateCourse from './pages/createCourse';
 import Agenda from './pages/agenda';
 import PageEdt from './pages/pageEdt';
 import Header from './components/Header';
+import FileImport from './pages/fileImport';
 
 function App() {
 
@@ -28,10 +29,11 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<Calendar />} exact /> */}
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
-        {/* <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
-        <Route path="/createcourse" element={<CreateCourse />} exact /> */}
+        {/* <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />*/}
+        <Route path="/createcourse" element={<CreateCourse />} exact />
         {/* test branch nidal */}
         <Route path="/" element={<PageEdt />} exact /> 
+        <Route path="/importStudents" element={<FileImport />} exact />
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
       </Routes>
     </Router>

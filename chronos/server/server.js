@@ -9,8 +9,8 @@ app.use(express.json())
 
 const db = require('./models')
 
-const sequelize = new Sequelize('ingrid', 'root', 'azerty', {
-  host: '127.0.0.1',
+const sequelize = new Sequelize('ingrid', 'root', '', {
+  host: 'localhost',
   dialect: 'mysql',
 });
 
@@ -34,12 +34,17 @@ sequelize
 app.listen(5000, () => {
           console.log("listening on port 5000")
     })
-// const moduleCoursRouter = require('./routes/ModuleCours')
-// app.use("/modules", moduleCoursRouter)
+const moduleCoursRouter = require('./routes/ModuleCours')
+app.use("/modules", moduleCoursRouter)
 
-// const coursRouter = require('./routes/Cours')
-// app.use("/cours", coursRouter)
+const coursRouter = require('./routes/Cours')
+app.use("/cours", coursRouter)
 
+const elevesRouter = require('./routes/Eleve')
+app.use("/eleves", elevesRouter)
+
+const formationsRouter = require('./routes/Formation')
+app.use("/formations", formationsRouter)
 
 app.get("/api", (request, response) => {
     response.json({"usersTest": ["user1", "user2", "user3"]})
