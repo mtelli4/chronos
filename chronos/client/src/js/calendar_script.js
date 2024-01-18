@@ -40,19 +40,11 @@ export function trouverHeuresExtremes(semaine) {
             const heureActuelle = cours.startHour;
             // Mettre à jour l'heure de début la plus tôt
             if (heureComp(heureActuelle, heureDebutPlusTot)) {
-                console.log("plustot");
                 heureDebutPlusTot = heureActuelle;
             }
-            
-            console.log("-------------");
-            console.log({heureActuelle});
-            console.log(ajouterDuree(heureFinPlusTard, dureeFinPlusTard));
-            console.log(ajouterDuree(heureActuelle, dureeFin));
-            console.log({heureFinPlusTard});
-            console.log(dureeFinPlusTard);
+
             // Mettre à jour l'heure de fin la plus tard
             if (heureComp(ajouterDuree(heureFinPlusTard, dureeFinPlusTard), ajouterDuree(heureActuelle, dureeFin))) {
-                console.log("plustard");
                 heureFinPlusTard = heureActuelle;
                 dureeFinPlusTard = dureeFin;
             }
@@ -124,7 +116,5 @@ export function createHoursLst(heure1, heure2, duree) {
         // Mettre à jour l'heure actuelle
         heureActuelle = nouvelleHeure;
     }
-
-    console.log(heures);
     return heures;
 };
