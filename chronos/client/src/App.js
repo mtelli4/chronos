@@ -12,6 +12,9 @@ import PageEdt from './pages/pageEdt';
 import Header from './components/Header';
 import FileImport from './pages/fileImport';
 
+import LoginForm from './pages/loginForm';
+import ChangePasswordForm from './pages/changePasswordForm';
+
 function App() {
 
   /* const [listCours, setListCours] = useState([]);
@@ -34,6 +37,12 @@ function App() {
         {/* test branch nidal */}
         <Route path="/" element={<PageEdt />} exact /> 
         <Route path="/importStudents" element={<FileImport />} exact />
+
+
+        <Route path="/login" element={<LoginForm />} exact />
+        <Route path="/psw" element={<ChangePasswordForm />} exact />
+
+
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
       </Routes>
     </Router>
