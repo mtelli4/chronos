@@ -13,8 +13,6 @@ module.exports = {
         {
           nom: faker.name.lastName(),
           prenom: faker.name.firstName(),
-          mdp: faker.internet.password(),
-          email: faker.internet.email(),
         }
       )
     }
