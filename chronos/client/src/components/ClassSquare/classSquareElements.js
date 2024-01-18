@@ -25,6 +25,8 @@ export const ClassSquareCont = styled.div`
         transform: scale(0.9);
         box-shadow: none;
     }
+
+    user-select: none;
 `;
 
 export const ClassSquareBorder = styled.div`

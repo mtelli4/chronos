@@ -1,0 +1,44 @@
+.leftBorder {
+    width: 35px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.classDetailsCont {
+    display: flex;
+    flex-direction: column;
+    padding-left: 60px;
+    padding-top: 40px;
+    padding: 40px 60px 40px 60px;
+    gap: 40px;
+    height: 100%;
+}
+
+.classDetailsTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.classDetailsTitle h2 {
+    font-size: 2.5rem;
+    font-weight: normal;
+}
+
+.classDetailsTitle p {
+    margin-left: 5px;
+    font-size: 1.25rem;
+}
+
+.classDetailsInfo {
+    width: 100%;
+    height: 100%;
+    border: 1px solid red;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+    font-size: 1.25rem;
+    list-style: none;
+}

@@ -5,6 +5,7 @@ import { createDaysLst, createHoursLst, trouverHeuresExtremes } from '../../js/c
 import buttonPrev from "../../images/buttonPrev.svg";
 import buttonAft from "../../images/buttonAft.svg";
 import Popup from '../Popup';
+import ClassDetails from '../../pages/classDetails';
 
 const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classes = [{}]
 
@@ -95,7 +96,7 @@ const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classe
             ))}
         </CalendarMain>
 
-        <Popup format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
+        <Popup html={<ClassDetails />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
     </CalendarCont>
   )
 }

@@ -9,12 +9,15 @@ export const PopupCont = styled.div`
     transition: all 0.5s cubic-bezier(.76,1.65,0,1) 0.05s;
     transform: ${props => props.isActive ? "scale(1)" : "scale(0)"};
     position: relative;
+    overflow: ${props => props.overflow};
+    max-width: 1400px;
+    max-height: 750px;
 `;
 
 export const PopupScreen = styled.div`
     position: fixed;
     background: ${props => props.isActive ? "rgba(0, 0, 0, 0.15)" : "rgba(0, 0, 0, 0)"};
-    backdrop-filter: blur(2px);
+    backdrop-filter: ${props => props.isActive ? "blur(2px)" : "blur(0px)"};
     width: 100%;
     height: 100vh;
     top: 0;
@@ -23,7 +26,7 @@ export const PopupScreen = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.25s, background 0s;
+    transition: transform ${props => props.isActive ? "0s" : "0.25s linear 0.55s"}, background 0.25s, backdrop-filter 0.25s;
     transform: ${props => props.isActive ? "scale(1)" : "scale(0)"};
 `;
 
