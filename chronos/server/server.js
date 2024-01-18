@@ -49,11 +49,11 @@ app.use("/eleves", elevesRouter)
 const formationsRouter = require('./routes/Formation')
 app.use("/formations", formationsRouter)
 
-app.get("/api", (request, response) => {
-    response.json({"usersTest": ["user1", "user2", "user3"]})
-})
 
-app.get("/test", async (request, response) => {
-  const eleves = await db.Eleve.findAll();
-  response.json(eleves)
-})
+// Redirection/route pour backend Login (analyse email et mdp)
+const loginRouter = require('./routes/Login')
+app.use("/login", loginRouter)
+
+// Redirection/route pour backend newPassword (changement de mot de passe)
+const newPasswordRouter = require('./routes/newPassword')
+app.use("/newPsw", newPasswordRouter)

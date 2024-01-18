@@ -24,9 +24,9 @@ module.exports = {
       toInsert.push(
         {
           type: faker.lorem.word(),
-          eleveId: eleves[0][Math.floor(Math.random() * eleves[0].length)].id,
-          absenceId: absences[0][Math.floor(Math.random() * absences[0].length)].id,
-          evaluationId: evaluations[0][Math.floor(Math.random() * evaluations[0].length)].id
+          eleveId: eleves[0][Math.floor(Math.random() * (eleves[0].length - 1))].id,
+          absenceId: absences[0][Math.floor(Math.random() * (absences[0].length - 1))].id,
+          evaluationId: evaluations[0][Math.floor(Math.random() * (evaluations[0].length - 1))].id
         }
       )
     }

@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const ClassSquareCont = styled.div`
     width: 95%;
-    /* height: ${props => props.h}px; */
     height: ${props => props.duration}%;
     border-radius: 10px;
     background: rgba(215, 65, 110, 0.5);
@@ -16,12 +15,18 @@ export const ClassSquareCont = styled.div`
 
     cursor: pointer;
     transition: all 0.25s;
-    /* position: absolute;
-    top: ${props => (100 / props.hoursSize) * props.index + "%"}; */
 
     &:hover {
         transform: scale(1.01);
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;    }
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;    
+    }
+
+    &:active {
+        transform: scale(0.9);
+        box-shadow: none;
+    }
+
+    user-select: none;
 `;
 
 export const ClassSquareBorder = styled.div`

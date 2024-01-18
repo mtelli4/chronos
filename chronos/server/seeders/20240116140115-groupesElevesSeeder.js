@@ -19,8 +19,8 @@ module.exports = {
     for (let i = 0; i < 30; i++) {
       toInsert.push(
         {
-          groupeId: groupes[0][Math.floor(Math.random() * groupes[0].length)].id,
-          eleveId: eleves[0][Math.floor(Math.random() * eleves[0].length)].id
+          groupeId: groupes[0][Math.floor(Math.random() * (groupes[0].length - 1))].id,
+          eleveId: eleves[0][Math.floor(Math.random() * (eleves[0].length - 1))].id
         }
       )
     }

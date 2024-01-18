@@ -24,8 +24,6 @@ module.exports = (sequelize, DataTypes) => {
   Eleve.init({
     nom: DataTypes.STRING,
     prenom: DataTypes.STRING,
-    mdp: DataTypes.STRING,
-    email: DataTypes.STRING,
     numeroEtudiant: DataTypes.STRING,
     trombinoscope: DataTypes.STRING,
     tiersTemps: DataTypes.BOOLEAN,
