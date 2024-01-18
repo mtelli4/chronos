@@ -19,8 +19,8 @@ module.exports = {
     for (let i = 0; i < 30; i++) {
       toInsert.push(
         {
-          formationId: formations[0][Math.floor(Math.random() * formations[0].length)].id,
-          secretaireId: secretaires[0][Math.floor(Math.random() * secretaires[0].length)].id
+          formationId: formations[0][Math.floor(Math.random() * (formations[0].length - 1))].id,
+          secretaireId: secretaires[0][Math.floor(Math.random() * (secretaires[0].length - 1))].id
         }
       )
     }

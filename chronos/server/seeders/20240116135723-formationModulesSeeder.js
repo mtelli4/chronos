@@ -19,8 +19,8 @@ module.exports = {
     for (let i = 0; i < 30; i++) {
       toInsert.push(
         {
-          formationId: formations[0][Math.floor(Math.random() * formations[0].length)].id,
-          moduleId: modules[0][Math.floor(Math.random() * modules[0].length)].id
+          formationId: formations[0][Math.floor(Math.random() * (formations[0].length - 1))].id,
+          moduleId: modules[0][Math.floor(Math.random() * (modules[0].length - 1))].id
         }
       )
     }
