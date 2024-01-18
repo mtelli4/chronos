@@ -20,8 +20,8 @@ module.exports = {
       toInsert.push(
         {
           presences: faker.random.number({ min: 0, max: 20, precision: 1 }),
-          professeurId: professeurs[0][Math.floor(Math.random() * professeurs[0].length)].id,
-          moduleId: modules[0][Math.floor(Math.random() * modules[0].length)].id,
+          professeurId: professeurs[0][Math.floor(Math.random() * (professeurs[0].length - 1))].id,
+          moduleId: modules[0][Math.floor(Math.random() * (modules[0].length - 1))].id,
         }
       )
     }

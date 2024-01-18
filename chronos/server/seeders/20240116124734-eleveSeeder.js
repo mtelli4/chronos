@@ -17,8 +17,6 @@ module.exports = {
         {
           nom: faker.name.lastName(),
           prenom: faker.name.firstName(),
-          mdp: faker.internet.password(),
-          email: faker.internet.email(),
           numeroEtudiant: faker.lorem.word(),
           trombinoscope: null,
           tiersTemps: faker.random.boolean(),
