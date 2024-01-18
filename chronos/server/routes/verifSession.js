@@ -1,20 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { Utilisateur } = require('../models')
-const { hashPassword } = require('../librairies/utils');
 
 
 router.post("/", async (req, res) => {
     const identifiants =  req.body; // obtient le corps de la requête (format json)
     // faire requête SQL
     console.log(identifiants);
-
-    const hashedPassword = hashPassword(identifiants.password);
-    const [rowCount, updatedUsers] = await Utilisateur.update({ mdp: hashedPassword, premiereConnexion: 0 }, {
-        where: { 
-            email: identifiants.email 
-        }
-    });
     
     console.log(`Nombre de lignes mises à jour : ${rowCount}`);
     console.log('Utilisateurs mis à jour :', updatedUsers);

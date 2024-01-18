@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Utilisateur } = require('../models')
-const { hashPassword } = require('../librairies/hashs');
+const { hashPassword } = require('../librairies/utils');
 
 // router.get("/", async (req, res) => {/cours/ate
 //    const listCours = await Cours.findAll()

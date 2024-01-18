@@ -19,6 +19,19 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'utilisateurId',
         onDelete: 'SET NULL',
       });
+
+
+
+
+      Eleve.belongsToMany(models.Cours, {
+        through: 'eleve_cours',
+        foreignKey: 'coursId',
+        otherKey: 'eleveId',
+      });
+
+
+
+
     }
   }
   Eleve.init({

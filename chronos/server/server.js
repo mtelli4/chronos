@@ -54,3 +54,10 @@ app.use("/login", loginRouter)
 // Redirection/route pour backend newPassword (changement de mot de passe)
 const newPasswordRouter = require('./routes/newPassword')
 app.use("/newPsw", newPasswordRouter)
+
+
+
+
+// Redirection/route pour backend newPassword (changement de mot de passe)
+const newPasswordRouter = require('./routes/newPassword')
+app.use("/newPsw", newPasswordRouter)
