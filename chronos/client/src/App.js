@@ -11,6 +11,7 @@ import Agenda from './pages/agenda';
 import PageEdt from './pages/pageEdt';
 import Header from './components/Header';
 import FileImport from './pages/fileImport';
+import Notes from './pages/notes';
 
 function App() {
 
@@ -35,6 +36,10 @@ function App() {
         <Route path="/" element={<PageEdt />} exact /> 
         <Route path="/importStudents" element={<FileImport />} exact />
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
+
+
+        {/* test branch notes lucas */}
+        <Route path="/notes" element={<Notes />} exact />
       </Routes>
     </Router>
   );

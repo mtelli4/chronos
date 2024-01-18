@@ -1,15 +1,24 @@
 const express = require('express');
 const router = express.Router();
 
-const { ModuleCours } = require('../models')
+const db = require('../models')
 
-// router.get("/:coursId", async (req, res) => {
-//     const coursId = req.params.coursId
-//     const module = await ModuleCours.findByPk(coursId)
-//     res.json(module);
-// })
 router.get("/", async (req, res) => {
-    const modules = await ModuleCours.findAll()
+    const modules = await db.ModuleCours.findAll()
+    res.json(modules);
+})
+
+router.get("/byFormation", async (req, res) => {
+    // console.log(req.query)
+    const id = parseInt(req.query.id)
+    const modules = await db.ModuleCours.findAll(
+        {
+            include: db.Formation,
+            where: {
+                '$Formations.id$': id
+            }
+        }
+    )
     res.json(modules);
 })
 

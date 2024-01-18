@@ -9,7 +9,7 @@ app.use(express.json())
 
 const db = require('./models')
 
-const sequelize = new Sequelize('ingrid', 'root', '', {
+const sequelize = new Sequelize('ingrid', 'root', 'toto', {
   host: 'localhost',
   dialect: 'mysql',
 });
@@ -39,6 +39,9 @@ app.use("/modules", moduleCoursRouter)
 
 const coursRouter = require('./routes/Cours')
 app.use("/cours", coursRouter)
+
+const notesRouter = require('./routes/Notes')
+app.use("/notes", notesRouter)
 
 const elevesRouter = require('./routes/Eleve')
 app.use("/eleves", elevesRouter)
