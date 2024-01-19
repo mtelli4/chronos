@@ -44,7 +44,7 @@ export function trouverHeuresExtremes(semaine) {
             }
 
             // Mettre à jour l'heure de fin la plus tard
-            if (heureComp(ajouterDuree(heureFinPlusTard, dureeFinPlusTard), ajouterDuree(heureActuelle, dureeFin))) {
+            if (heureComp(ajouterDuree(heureFinPlusTard, dureeFinPlusTard, true), ajouterDuree(heureActuelle, dureeFin, true))) {
                 heureFinPlusTard = heureActuelle;
                 dureeFinPlusTard = dureeFin;
             }
@@ -71,11 +71,11 @@ export function createDaysLst(schedule) {
     return daysList;
 };
 
-// Ajoute la durée à l'heure et arrondis à l'heure pile supérieure
-function ajouterDuree(heureString, dureeEnHeures) {
+// Ajoute la durée à l'heure et arrondis à l'heure pile supérieure si flag = true
+export function ajouterDuree(heureString, dureeEnHeures, flag) {
     // Convertir la chaîne d'heure en objet Date
     let heureFormat;
-    if (heureString.split("h")[1] != "00") {
+    if (heureString.split("h")[1] != "00" && flag) {
         heureFormat = (parseInt(heureString.split("h")[0]) + dureeEnHeures + 1).toString() + "h00";
     } else {
         heureFormat = (parseInt(heureString.split("h")[0]) + dureeEnHeures).toString() + "h" + heureString.split("h")[1];
@@ -93,7 +93,7 @@ export function createHoursLst(heure1, heure2, duree) {
     const heures = [heure1];
     let heureActuelle = heure1;
 
-    let heureFinale = ajouterDuree(heure2, duree);
+    let heureFinale = ajouterDuree(heure2, duree, true);
     let heureEnMinutes;
     while (heureActuelle.split("h")[0] !== heureFinale.split("h")[0]) {
         // Convertir l'heure actuelle au format "8h00" en minutes
@@ -117,4 +117,12 @@ export function createHoursLst(heure1, heure2, duree) {
         heureActuelle = nouvelleHeure;
     }
     return heures;
+};
+
+function getDayLabel(dateTimeString) {
+    const date = new Date(dateTimeString);
+    const day = date.getDay();
+    const dayNames = ["Dimanche", "Lundi", "Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+  
+    return dayNames[day];
 };
