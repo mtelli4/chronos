@@ -37,7 +37,7 @@ const ChangePasswordForm = () => {
     }
 
     // Envoyer les données au serveur pour authentification
-    axios.post("http://localhost:5000/newPsw", { 'email': values.email, 'password': values.password })
+    axios.post("http://localhost:5000/newpsw", { 'email': values.email, 'password': values.password })
       .then((response) => {
         console.log("Succès");
         console.log(response);

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const AppelForm = () => {
+const CallForm = () => {
   const navigate = useNavigate();
 
   const initialValues = {
@@ -16,6 +16,33 @@ const AppelForm = () => {
     email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
     password: Yup.string().required('Le mot de passe est requis'),
   });
+
+
+
+
+
+
+
+
+
+  const [modules, setModules] = useState([])
+    
+  useEffect(() => {
+      axios.get("http://localhost:5000/modules").then((response) => {
+          console.log(response)
+          setModules(response.data)
+      })
+  }, [])
+
+
+
+
+
+
+
+
+
+
 
   const handleSubmit = (values, { setSubmitting }) => {
     // Envoyer les données au serveur pour authentification
@@ -78,22 +105,10 @@ const AppelForm = () => {
 
 
 
-const appelComponent = ({ data }) => {
+const studentComponent = ({ data }) => {
     // Sous-composant d'appel qui utilise les données SQL pour afficher les élèves
-    const [students, setStudents] = useState([])
 
-
-
-    useEffect(() => {
-        axios.get("http://localhost:5000/eleves").then((response) => {
-            console.log(response)
-            setModules(response.data)
-        })
-    }, [])
-
-
-
-
+    
 
 
 
@@ -118,4 +133,4 @@ const appelComponent = ({ data }) => {
 
 
 
-export default AppelForm;
+export default CallForm;
