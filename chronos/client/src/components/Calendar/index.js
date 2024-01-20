@@ -10,6 +10,7 @@ import ClassDetails from '../../pages/classDetails';
 const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classes = [{}]
 
     const [isActive, setIsActive] = useState(false);
+    const [selectedSquare, setSelectedSquare] = useState({color: "#000000", title: "", duration: 0, startHour: "00h00", informations: []});
 
     // Fonction pour calculer le top de départ
     function getStartTop(startHourOfClass) {
@@ -64,8 +65,9 @@ const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classe
       }
     };
 
-    function handleClick() {
+    function handleClick(item) {
         setIsActive(true);
+        setSelectedSquare(item);
     }
 
   return (
@@ -90,13 +92,13 @@ const Calendar = ({ weekdata, onWeekChange }) => { // days, jours = lst / classe
             {weekdata.map((item) => (
                 <CalendarMainCol dayssize={days.length}>
                     {item.classes.map((item2) => (
-                        <ClassSquare title={item2.title} room={item2.room} color={item2.color} duration={item2.duration * (100 / hours.length)} startTopPercent={getStartTop(item2.startHour)} onSelect={() => handleClick()} />
+                        <ClassSquare title={item2.title} room={item2.room} color={item2.color} duration={item2.duration * (100 / hours.length)} startTopPercent={getStartTop(item2.startHour)} onSelect={() => handleClick(item2)} />
                     ))}
                 </CalendarMainCol>
             ))}
         </CalendarMain>
 
-        <Popup html={<ClassDetails />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
+        <Popup html={<ClassDetails color={selectedSquare.color} title={selectedSquare.title} informations={[selectedSquare.room]} heureDebut={selectedSquare.startHour} duree={selectedSquare.duration} />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
     </CalendarCont>
   )
 }
