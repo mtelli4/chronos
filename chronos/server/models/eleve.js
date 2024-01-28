@@ -21,6 +21,14 @@ module.exports = (sequelize, DataTypes) => {
         through: 'eleve_cours',
         foreignKey: 'coursId',
         otherKey: 'eleveId',
+        timestamps: false
+      });
+
+      Eleve.belongsToMany(models.Cours, {
+        through: 'groupe_eleve',
+        foreignKey: 'eleveId',
+        otherKey: 'groupeId',
+        timestamps: false
       });
     }
   }
@@ -54,6 +62,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'ELEVE',
     // Désactive les timestamps
     timestamps: false,
+    freezeTableName: true,
   });
   return Eleve;
 };

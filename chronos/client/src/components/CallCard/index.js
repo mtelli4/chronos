@@ -9,8 +9,6 @@ const CallCard = ({student, number}) => {
     function handleClick() {
         setIsAbsent(!isAbsent);
     }
-    console.log("bonjour");
-    console.log(number);
 
     return (
         <CallCardCont onClick={() => handleClick()}>

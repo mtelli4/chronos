@@ -13,9 +13,11 @@ module.exports = (sequelize, DataTypes) => {
 
       // Lien associatif à la table COURS passant à travers la table COURS_GROUPE
       Groupe.belongsToMany(models.Cours, {
-        through: 'cours_groupe',
-        foreignKey: 'groupeId', 
-        otherKey: 'coursId', 
+        through: {
+          model: models.CoursGroupe,
+        },
+        foreignKey: 'groupeId',
+        otherKey: 'coursId',
       });
     }
   }
@@ -31,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'GROUPE',
     // Désactive les timestamps
     timestamps: false,
+    freezeTableName: true,
   });
   return Groupe;
 };

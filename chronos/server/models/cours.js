@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
 
       // Lien associatif à la table GROUPE passant à travers la table COURS_GROUPE
       Cours.belongsToMany(models.Groupe, {
-        through: 'cours_groupe',
+        through: {
+          model: models.CoursGroupe,
+        },
         foreignKey: 'coursId',
         otherKey: 'groupeId',
       });

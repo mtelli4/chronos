@@ -20,18 +20,12 @@ const CallForm = () => {
   //   password: Yup.string().required('Le mot de passe est requis'),
   // });
 
-
-
-
-
   const [studentList, setStudentList] = useState([])
     
   useEffect(() => {
-    axios.post("http://localhost:5000/eleve-cours", { 'id': 1 })
+    axios.get("http://localhost:5000/eleve-cours", { 'id': 1 })
       .then((response) => {
-        console.log("Test: ");
-        console.log(response)
-        setStudentList(response.data)
+        setStudentList(response.data.Groupes[0].Eleves)
       })
   }, [])
 
