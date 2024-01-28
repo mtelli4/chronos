@@ -50,6 +50,12 @@ const formationsRouter = require('./routes/Formation')
 app.use("/formations", formationsRouter)
 
 
+
+
+
+
+
+
 // Redirection/route pour backend Login (analyse email et mdp)
 const loginRouter = require('./routes/Login')
 app.use("/login", loginRouter)
@@ -63,4 +69,4 @@ app.use("/newpsw", newPasswordRouter)
 
 // Redirection/route pour backend newPassword (changement de mot de passe)
 const getEleveCoursRouter = require('./routes/getEleveCours')
-app.use("/elevecours", getEleveCoursRouteur)
+app.use("/eleve-cours", getEleveCoursRouter)

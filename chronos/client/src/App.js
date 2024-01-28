@@ -15,6 +15,7 @@ import Notes from './pages/notes';
 
 import LoginForm from './pages/loginForm';
 import ChangePasswordForm from './pages/changePasswordForm';
+import CallForm from './pages/call';
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
 
         <Route path="/login" element={<LoginForm />} exact />
         <Route path="/psw" element={<ChangePasswordForm />} exact />
+        <Route path="/call" element={<CallForm />} exact />
 
 
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
