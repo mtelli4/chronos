@@ -23,14 +23,25 @@ const CallForm = () => {
   const [studentList, setStudentList] = useState([])
     
   useEffect(() => {
-    axios.get("http://localhost:5000/eleve-cours", { 'id': 1 })
+    axios.get("http://localhost:5000/eleve-cours/1") // 1 correspond à l'id du cours envoyé
       .then((response) => {
-        setStudentList(response.data.Groupes[0].Eleves)
+        console.log("Réponse :");
+        console.log(response);
+        // Utilise la méthode reduce pour concaténer les listes des étudiants afin d'obtenir une liste contenant tous les étudiants du cours actuel
+        setStudentList(
+          response.data.Groupes.reduce((accumulator, currentList) => {
+            console.log("Liste :");
+            console.log(currentList.Eleves);
+            return accumulator.concat(currentList.Eleves);
+          }, [])
+        );
+
+        // setStudentList(response.data.Groupes[0].Eleves)
       })
   }, [])
 
 
-  console.log("Test: ");
+  console.log("Liste de tous les étudiants");
   console.log(studentList);
 
   const handleSubmit = (values, { setSubmitting }) => {

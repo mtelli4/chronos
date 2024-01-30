@@ -31,9 +31,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Groupe',
     // Nom de la table dans mysql
     tableName: 'GROUPE',
-    // Désactive les timestamps
-    timestamps: false,
-    freezeTableName: true,
   });
   return Groupe;
 };
