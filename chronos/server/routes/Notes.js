@@ -36,26 +36,104 @@ router.get("/", async (req,res)=>{
     const result = {};
     result["eleves"] = await db.Eleve.findAll(
       {
-        where:eleveParameters
+        where:eleveParameters,
+        order: [
+          ['nom', 'ASC'],
+          ['prenom', 'ASC'],
+      ],
       }
     )
     result["evaluations"] = await db.Evaluation.findAll(
       {
-        where:evaluationsParameters
+        where:evaluationsParameters,
+        order: [
+          ['id', 'ASC'],
+      ],
       }
     )
 
+    tmpLstEleveMoyenne = {}
+    tmpLstEvalMoyenne = {}
+
     listNotes.forEach(item => {
-        const eleveNom = item.Eleve.id;
-        const evaluationLibelle = item.Evaluation.id;
+        const eleveId = item.Eleve.id;
+        const evaluationId = item.Evaluation.id;
         const note = parseFloat(item.note);
 
-        if (!result[eleveNom]) {
-            result[eleveNom] = {};
+        if (!result[eleveId]) {
+            result[eleveId] = {};
+        }
+
+        if (!tmpLstEleveMoyenne[eleveId]){
+          tmpLstEleveMoyenne[eleveId] = {note:0, coefficient:0};
+        }
+        if (!tmpLstEvalMoyenne[evaluationId]){
+          tmpLstEvalMoyenne[evaluationId] = {note:0, coefficient:0};
         }
         
-        result[eleveNom][evaluationLibelle] = note;
+        result[eleveId][evaluationId] = note;
+
+        tmpLstEleveMoyenne[eleveId].note += Number.parseFloat(item.note)*Number.parseFloat(item.Evaluation.coefficient);
+        tmpLstEleveMoyenne[eleveId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
+
+        tmpLstEvalMoyenne[evaluationId].note += Number.parseFloat(item.note);
+        tmpLstEvalMoyenne[evaluationId].coefficient += 1;
     });
+    result["eleves"].forEach(item=>{
+      if(tmpLstEleveMoyenne.hasOwnProperty(item.id)){
+        item.dataValues["moyenne"] = (tmpLstEleveMoyenne[item.id].note / tmpLstEleveMoyenne[item.id].coefficient).toFixed(2)
+      }else{
+        item.dataValues["moyenne"] = '...'
+      }
+    })
+    result["evaluations"].forEach(item=>{
+      if(tmpLstEvalMoyenne.hasOwnProperty(item.id)){
+        item.dataValues["moyenne"] = (tmpLstEvalMoyenne[item.id].note / tmpLstEvalMoyenne[item.id].coefficient).toFixed(2)
+      }else{
+        item.dataValues["moyenne"] = '...'
+      }
+    })
     res.json(result);
+})
+
+
+router.post("/insertNotes", async (req, res) => {
+  const eval =  req.body.evalId
+  const eleve =  req.body.eleveId
+  const note = req.body.note
+
+  const dbNote = await db.Note.findOne(
+    {
+      where: {
+        evaluationId:eval,
+        eleveId:eleve
+      }
+    }
+  )
+  if (dbNote == null){
+    db.Note.create({evaluationId:eval, eleveId:eleve, note:note})
+  }else{
+    await db.Note.update({ note: note }, {
+      where: {
+        id: dbNote.id,
+      },
+    });
+  }
+  res.json("Succès")
+})
+
+router.post("/deleteNote", async (req, res) => {
+  const eval =  req.body.evalId
+  const eleve =  req.body.eleveId
+
+  const countDelete = await db.Note.destroy(
+    {
+      where: {
+        evaluationId:eval,
+        eleveId:eleve
+      }
+    }
+  )
+  res.json({"hasBeenDeleted":countDelete>0})
 })
 module.exports = router

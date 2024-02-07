@@ -5,11 +5,14 @@ import * as Yup from "yup";
 
 
 function Notes() {
+    const [roles, setRoles] = useState(1);
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [] })
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
 
     const [currentFormation, setCurrentFormation] = useState([""])
+
+    const formRef = useRef();
 
     const FormObserver = () => {
         const { values } = useFormikContext();
@@ -34,8 +37,7 @@ function Notes() {
         return null;
     };
 
-    const initialValues = {
-    }
+    const initialValues = {}
 
     const onSubmit = (data) => {
         Object.keys(data).forEach(key => {
@@ -88,9 +90,84 @@ function Notes() {
         })
     }, [])
 
+    function handleChange(e,eleveId,evalId){
+        console.log(e)
+        if(e.key === 'Enter') {
+            if (e.target.value == ""){
+                axios.post("http://localhost:5000/notes/deleteNote", {evalId:evalId,eleveId:eleveId}).then((response) => {
+                    //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
+                    if(response.data.hasBeenDeleted){
+                        alert("Suppression réussie, cliquer pour mettre à jour");
+                        onSubmit(formRef.current.values)
+                    }
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                      // The request was made and the server responded with a status code
+                      // that falls out of the range of 2xx
+                      console.log(error.response.data);
+                      console.log(error.response.status);
+                      console.log(error.response.headers);
+                    } else if (error.request) {
+                      // The request was made but no response was received
+                      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                      // http.ClientRequest in node.js
+                      console.log(error.request);
+                    } else {
+                      // Something happened in setting up the request that triggered an Error
+                      console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                    alert("UpsertError");
+                });
+            }else{
+                axios.post("http://localhost:5000/notes/insertNotes", {evalId:evalId,eleveId:eleveId,note:e.target.value}).then((response) => {
+                    //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
+                    alert("Upsert réussi, cliquer pour mettre à jour");
+                    onSubmit(formRef.current.values)
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                      // The request was made and the server responded with a status code
+                      // that falls out of the range of 2xx
+                      console.log(error.response.data);
+                      console.log(error.response.status);
+                      console.log(error.response.headers);
+                    } else if (error.request) {
+                      // The request was made but no response was received
+                      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                      // http.ClientRequest in node.js
+                      console.log(error.request);
+                    } else {
+                      // Something happened in setting up the request that triggered an Error
+                      console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                    alert("UpsertError");
+                });
+
+            }
+            console.log(e.target.value)
+        }
+    }
+
     return (
         <>
-            <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+        <h1> Role actuel : {['Secrétaire','Professeurs','Eleves'].at(roles)}
+        </h1>
+        <button className="" onClick={() => {setRoles(0)}}>Secrétaire</button>
+        <button className="" onClick={() => {setRoles(1)}}>Professeurs</button>
+        <button className="" onClick={() => {setRoles(2)}}>Eleves</button>
+        {
+        roles==0 &&
+        <>
+
+        </> 
+        }
+
+        {roles==1 && 
+        <>
+            <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema} innerRef={formRef}>
                 <Form>
                     <label>Formation</label>
                     <ErrorMessage name="formationId" component="span" />
@@ -119,12 +196,14 @@ function Notes() {
             <table>
                 <tr>
                     <td style={{ border: "1pt solid black" }}>
-                        .
+                    </td> 
+                    <td style={{ border: "1pt solid black" }}>
+                        Moyenne Eleve
                     </td>
                     {
                         notes.evaluations.map((evals) => {
                             return (
-                                <td style={{ border: "1pt solid black" }}>{evals.libelle}</td>
+                                <td style={{ border: "1pt solid black" }}>{evals.libelle}<br/>Coeff:{evals.coefficient}</td>
                             )
                         })
                     }
@@ -133,6 +212,7 @@ function Notes() {
                     return (
                         <tr>
                             <td style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
+                            <td style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
                             {notes.evaluations.map((evals) => {
                                 let val = ""
                                 if (notes.hasOwnProperty(eleve.id)) {
@@ -142,7 +222,8 @@ function Notes() {
                                 }
                                 return (
                                     <td style={{ border: "1pt solid black" }}>
-                                        {val}
+                                        <input className="" type="number"  defaultValue={val} onKeyDown={event => handleChange(event,eleve.id,evals.id)} /> 
+                                        
                                     </td>
                                 )
                             })}
@@ -150,7 +231,31 @@ function Notes() {
                         </tr>
                     )
                 })}
+                <tr>
+                    <td style={{ border: "1pt solid black" }}>
+                    </td> 
+                    <td style={{ border: "1pt solid black" }}>
+                        Moyenne Pour note
+                    </td>
+                    {
+                        notes.evaluations.map((evals) => {
+                            return (
+                                <td style={{ border: "1pt solid black" }}>{evals.moyenne}</td>
+                            )
+                        })
+                    }
+                </tr>
             </table>
+        
+        </>
+        }
+        
+        {
+        roles==2 &&
+        <>
+
+        </> 
+        }
         </>
     )
 }

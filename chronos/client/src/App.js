@@ -27,27 +27,31 @@ function App() {
     axios.get("http://localhost:5000/cours").then((response) => {
       setListCours(response.data)
     })
-  }, []) 
+  }, [])
 
   return (
+    <Router>
+      {/* <Link to="/createcourse"> Créer un cours</Link>
+      <Link to="/"> Accueil</Link> */}
+      <Header links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/notes"}]} />
       <Routes>
         <Route exact path='/' element={<PrivateRoute/>}>
           <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
           <Route path="/createcourse" element={<CreateCourse />} exact />
-          <Route path="/" element={<PageEdt />} exact /> 
+          <Route path="/" element={<PageEdt />} exact />
           <Route path="/importStudents" element={<FileImport />} exact />
           <Route path="/call" element={<CallForm />} exact />
           <Route path="/email" element={<EmailForm />} exact />
           <Route path="/export-csv" element={<CSVExportPage />} exact />
           <Route path="/notes" element={<Notes />} exact />
-          
+
 
           {/* -------------- ADMIN ROUTES -----------------*/}
           <Route path='/admin/*' element={<AdminPrivateRoute/>}>
             <Route index element={<AdminDashboard />} />
             <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
           </Route>
-          
+
           <Route path="/call" element={<CallForm />} exact />
           <Route path="/abs" element={<AbsPage />} exact />
         </Route>
