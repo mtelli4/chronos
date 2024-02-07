@@ -4,39 +4,34 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// Variables d'initialisation du formik
+const initialValues = {
+  email: '',
+  password: '',
+};
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
+  password: Yup.string().required('Le mot de passe est requis'),
+});
+
 const LoginForm = () => {
   const navigate = useNavigate();
-
-  const initialValues = {
-    email: '',
-    password: '',
-  };
-
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
-    password: Yup.string().required('Le mot de passe est requis'),
-  });
 
   const handleSubmit = (values, { setSubmitting }) => {
     // Envoyer les données au serveur pour authentification
     axios.post('http://localhost:5000/login',  { 'email': values.email, 'password': values.password })
       .then((response) => {
-        console.log('Succès');
-        console.log(response);
         const result = response.data;
-        console.log('Test :\n');
-        console.log(result);
         if (result === 2) {
-          navigate('/psw'); // Si route présente dans App.js, redirige vers le composant/page associé
+          navigate('/psw'); // Redirige vers la page de changement de mdp
         } else if (result === 1) {
           console.log('Authentifié');
-          navigate('/');
+          navigate('/'); // Redirige vers la page d'accueil (Calendrier)
         } else {
           console.log('error');
         }
       })
       .catch((error) => {
-        console.log('Echec');
         console.log(error);
       })
       .finally(() => {

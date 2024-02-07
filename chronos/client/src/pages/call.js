@@ -5,104 +5,89 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+// Import des sous composants
 import CallCard from '../components/CallCard';
 
+// Variables d'initialisation du formik
+const validationSchema = Yup.object({});
+const initialValues = {};
+
 const CallForm = () => {
+
+
+
+
+
+  /* ------------------------------------- PRE-CHARGEMENT DE LA PAGE ------------------------------------- */
   const navigate = useNavigate();
+  const [studentList, setStudentList] = useState([]);
+  const [absentList, setAbsentList] = useState([]);
 
-  // const initialValues = {
-  //   email: '',
-  //   password: '',
-  // };
+  const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
-  // const validationSchema = Yup.object().shape({
-  //   email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
-  //   password: Yup.string().required('Le mot de passe est requis'),
-  // });
-
-  const [studentList, setStudentList] = useState([])
     
   useEffect(() => {
-    axios.get("http://localhost:5000/eleve-cours/1") // 1 correspond à l'id du cours envoyé
-      .then((response) => {
-        console.log("Réponse :");
-        console.log(response);
-        // Utilise la méthode reduce pour concaténer les listes des étudiants afin d'obtenir une liste contenant tous les étudiants du cours actuel
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/eleve-cours/1"); // 1 correspond à l'id du cours envoyé
         setStudentList(
           response.data.Groupes.reduce((accumulator, currentList) => {
-            console.log("Liste :");
-            console.log(currentList.Eleves);
             return accumulator.concat(currentList.Eleves);
           }, [])
         );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    // Si la requête n'a pas encore été lancée
+    if (isLoading) {
+      fetchData();
+    }
+  }, [isLoading]); // Déclenche le useEffect uniquement si isLoading passe à true à nouveau
 
-        // setStudentList(response.data.Groupes[0].Eleves)
+  /* ------------------------------------- CHARGEMENT DE LA PAGE ------------------------------------- */
+  // Liste des callcards pour chaque élève
+  const callCardList = studentList.map((student, index) => (
+    <div>
+      <CallCard student={student} number={index} absentList={absentList} setAbsentList={setAbsentList} key={student.id} />
+    </div>
+  ));
+
+  /* ------------------------------------- ENVOI ------------------------------------- */
+  const handleSubmit = (students) => {
+    if (students.length === 0) {
+      console.log("Pas d'absents");
+      navigate('/'); // Redirige vers la page d'accueil (Calendrier)
+    } else {
+      // Envoyer les données au serveur pour authentification
+      axios.post('http://localhost:5000/testabs',  { 'students': students, 'coursId': 1 })
+      .then((response) => {
+        if (response) {
+          navigate('/'); // Redirige vers la page d'accueil (Calendrier)
+        } else {
+          console.log("Erreur lors de la mise en absence des élèves");
+        }
       })
-  }, [])
-
-
-  console.log("Liste de tous les étudiants");
-  console.log(studentList);
-
-  const handleSubmit = (values, { setSubmitting }) => {
-    // Envoyer les données au serveur pour authentification
-
-
-    console.log("Liste :");
-    console.log(values);
-    // Créer une liste contenant que les élèves absents et l'envoyer dans axios
-    // let studentAbsentList
-    // studentList.map((student, index) => {
-
-    // })
-
-
-
-
-    // axios.post('http://localhost:5000/login',  { 'email': values.email, 'password': values.password })
-    //   .then((response) => {
-    //     console.log('Succès');
-    //     console.log(response);
-    //     const result = response.data;
-    //     console.log('Test :\n');
-    //     console.log(result);
-    //     if (result === 2) {
-    //       navigate('/psw'); // Si route présente dans App.js, redirige vers le composant/page associé
-    //     } else if (result === 1) {
-    //       console.log('Authentifié');
-    //       navigate('/');
-    //     } else {
-    //       console.log('error');
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log('Echec');
-    //     console.log(error);
-    //   })
-    //   .finally(() => {
-    //     setSubmitting(false);
-    //   });
+      .catch((error) => {
+        console.log(error);
+      })
+    }
   };
-  
+
+  /* ------------------------------------- AFFICHAGE DE LA PAGE ------------------------------------- */
   return (
     <Formik
-      // initialValues={initialValues}
-      // validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={() => handleSubmit(absentList)} // Appel de la fonction handleSubmit avec absentList comme paramètre
+      initialValues={initialValues}
+      validationSchema={validationSchema}
     >
       <Form>
-
-
-          {studentList.map((student, index) => {
-            return ( 
-              <CallCard student={student} number={index} key={student.id}/>
-            )
-          })}
+        {callCardList}
         <div>
           <button type="submit">Valider l'appel</button>
         </div>
-
-
       </Form>
     </Formik>
   );

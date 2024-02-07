@@ -9,7 +9,7 @@ const { hashPassword } = require('../librairies/utils');
 // })
 
 router.post("/", async (req, res) => {
-    const identifiants =  req.body; // obtient le corps de la requête (format json)
+    const identifiants = req.body; // obtient le corps de la requête (format json)
     // faire requête SQL
     console.log(identifiants);
 

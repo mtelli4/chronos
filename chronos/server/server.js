@@ -49,13 +49,6 @@ app.use("/eleves", elevesRouter)
 const formationsRouter = require('./routes/Formation')
 app.use("/formations", formationsRouter)
 
-
-
-
-
-
-
-
 // Redirection/route pour backend Login (analyse email et mdp)
 const loginRouter = require('./routes/Login')
 app.use("/login", loginRouter)
@@ -67,6 +60,10 @@ app.use("/newpsw", newPasswordRouter)
 
 
 
-// Redirection/route pour backend newPassword (changement de mot de passe)
+// Redirection/route pour backend getEleveCours (récupération des élèves du cours)
 const getEleveCoursRouter = require('./routes/getEleveCours')
 app.use("/eleve-cours", getEleveCoursRouter)
+
+// Redirection/route pour backend insertAbsences (insertion d'absences à un cours)
+const insertAbsencesRouter = require('./routes/insertAbsences')
+app.use("/testabs", insertAbsencesRouter)
