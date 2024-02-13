@@ -136,4 +136,13 @@ router.post("/deleteNote", async (req, res) => {
   )
   res.json({"hasBeenDeleted":countDelete>0})
 })
+
+router.post("/insertEvaluations", async (req, res) => {
+  const moduleId =  req.body.moduleId
+  const libelle = req.body.libelle
+  const coefficient = req.body.coefficient
+
+  db.Evaluation.create({moduleId:moduleId, libelle:libelle, coefficient:coefficient})
+  res.json("Succès")
+})
 module.exports = router

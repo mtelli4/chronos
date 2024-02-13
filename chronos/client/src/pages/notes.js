@@ -18,7 +18,7 @@ function Notes() {
         const { values } = useFormikContext();
         useEffect(() => {
             if (values.hasOwnProperty("formationId")) {
-                if (currentFormation == values.formationId) {
+                if (currentFormation === values.formationId) {
                     return
                 }
                 setCurrentFormation(values.formationId)
@@ -37,9 +37,13 @@ function Notes() {
         return null;
     };
 
-    const initialValues = {}
+    const initialValuesSearch = {}
+    const initialValuesInsertEval = {
+        libelle:"",
+        coefficient:1
+        }
 
-    const onSubmit = (data) => {
+    const onSubmitSearch = (data) => {
         Object.keys(data).forEach(key => {
             if (data[key] === '') {
                 delete data[key];
@@ -47,7 +51,7 @@ function Notes() {
         });
         axios.get("http://localhost:5000/notes", { params: data })
             .then((response) => {
-                console.log("Succès")
+                console.log("Succès SearchNotes")
                 setNotes(response.data)
             }).catch(function (error) {
                 if (error.response) {
@@ -72,6 +76,40 @@ function Notes() {
     const validationSchema = Yup.object().shape({
     })
 
+    const validationSchemaInsert = Yup.object().shape({
+        libelle: Yup.string().min(5).max(50).required("Ce champ est obligatoire."),
+        coefficient: Yup.number().required("Ce champ est obligatoire."),
+    })
+
+    const onSubmitInsertEval = (data) => {
+        if ((!data.hasOwnProperty("libelle")) || (!data.hasOwnProperty("coefficient")) || formRef.current.values.moduleId==""){
+            console.log("return")
+            return
+        }
+        axios.post("http://localhost:5000/notes/insertEvaluations", { moduleId: formRef.current.values.moduleId, coefficient:data.coefficient, libelle:data.libelle })
+            .then((response) => {
+                console.log("Succès InsertEvaluations")
+                onSubmitSearch(formRef.current.values);
+            }).catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
+    }
+
     useEffect(() => {
         axios.get("http://localhost:5000/notes").then((response) => {
             setNotes(response.data)
@@ -93,12 +131,12 @@ function Notes() {
     function handleChange(e,eleveId,evalId){
         console.log(e)
         if(e.key === 'Enter') {
-            if (e.target.value == ""){
+            if (e.target.value === ""){
                 axios.post("http://localhost:5000/notes/deleteNote", {evalId:evalId,eleveId:eleveId}).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                     if(response.data.hasBeenDeleted){
                         alert("Suppression réussie, cliquer pour mettre à jour");
-                        onSubmit(formRef.current.values)
+                        onSubmitSearch(formRef.current.values)
                     }
                 })
                 .catch(function (error) {
@@ -124,7 +162,7 @@ function Notes() {
                 axios.post("http://localhost:5000/notes/insertNotes", {evalId:evalId,eleveId:eleveId,note:e.target.value}).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                     alert("Upsert réussi, cliquer pour mettre à jour");
-                    onSubmit(formRef.current.values)
+                    onSubmitSearch(formRef.current.values)
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -167,7 +205,7 @@ function Notes() {
 
         {roles==1 && 
         <>
-            <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema} innerRef={formRef}>
+            <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
                 <Form>
                     <label>Formation</label>
                     <ErrorMessage name="formationId" component="span" />
@@ -191,6 +229,31 @@ function Notes() {
                     <FormObserver />
                 </Form>
             </Formik>
+
+
+            {
+            (!(typeof formRef.current === 'undefined'))&&
+            formRef.current.values.hasOwnProperty("moduleId") && 
+            formRef.current.values.moduleId!="" &&
+            <Formik initialValues={initialValuesInsertEval} onSubmit={onSubmitInsertEval} validationSchema={validationSchemaInsert}>
+                <Form>
+                    <label>Libelle</label>
+                    <ErrorMessage name="libelle" component="span"/>
+                    <Field 
+                        name="libelle" 
+                        placeholder="Veuillez saisir un libellé pour votre évaluation"
+                    />
+                    <label>Coefficient</label>
+                    <ErrorMessage name="coefficient" component="span"/>
+                    <Field 
+                        name="coefficient" 
+                        type="number"
+                    />
+                    <button id="insertEvaluation" type="submit">Confirmer</button>
+                    <FormObserver />
+                </Form>
+            </Formik>
+            }
 
 
             <table>

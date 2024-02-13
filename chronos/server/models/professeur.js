@@ -14,7 +14,17 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'utilisateurId',
         onDelete: 'SET NULL',
       });
+
+      // Lien associatif à la table Module passant à travers la table PROFESSEUR_MODULE
+      Professeur.belongsToMany(models.ModuleCours, {
+        through: {
+          model: models.ProfesseurModule,
+        },
+        foreignKey: 'professeurId',
+        otherKey: 'moduleId',
+      });
     }
+
   }
   Professeur.init({
     nom: DataTypes.STRING,
