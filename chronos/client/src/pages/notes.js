@@ -233,6 +233,7 @@ function Notes() {
 
             {
             (!(typeof formRef.current === 'undefined'))&&
+            formRef.current != null && 
             formRef.current.values.hasOwnProperty("moduleId") && 
             formRef.current.values.moduleId!="" &&
             <Formik initialValues={initialValuesInsertEval} onSubmit={onSubmitInsertEval} validationSchema={validationSchemaInsert}>
