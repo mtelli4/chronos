@@ -14,7 +14,9 @@ import FileImport from './pages/fileImport';
 import Notes from './pages/notes';
 
 import LoginForm from './pages/loginForm';
+import PageLogin from './pages/pageLogin';
 import ChangePasswordForm from './pages/changePasswordForm';
+import PagePasswordChange from './pages/pagePasswordChange';
 
 function App() {
 
@@ -29,7 +31,7 @@ function App() {
     <Router>
       {/* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */}
-      <Header links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
+      <Header isVisible={true} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
       <Routes>
         {/* <Route path="/" element={<Calendar />} exact /> */}
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
@@ -41,7 +43,9 @@ function App() {
 
 
         <Route path="/login" element={<LoginForm />} exact />
+        <Route path="/loginNidal" element={<PageLogin />} exact />
         <Route path="/psw" element={<ChangePasswordForm />} exact />
+        <Route path="/pswNidal" element={<PagePasswordChange />} exact />
 
 
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}

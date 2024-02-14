@@ -6,9 +6,9 @@ export const HeaderCont = styled.div`
     height: 10vh;
     min-height: 100px;
     max-width: 1750px;
-    position: sticky;
+    position: ${props => props.isVisible ? "sticky" : "absolute"};
     margin: 0 auto;
-    top: 0px;
+    top: 0;
     left: 0;
     background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(20px);
@@ -19,6 +19,9 @@ export const HeaderCont = styled.div`
     justify-content: space-between;
     align-items: center;
     display: flex;
+    transform-origin: center;
+    transform: ${props => props.isVisible ? "translate(0%, 0)" : "translate(0, -100%)"};
+    transition: all 0.5s;
 `;
 
 export const HeaderNav = styled.div`

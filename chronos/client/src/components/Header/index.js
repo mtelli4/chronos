@@ -4,7 +4,7 @@ import { HeaderCont, HeaderNav, HeaderLinks, HeaderLink, HeaderProfile, HeaderLi
 import ProfilePic from '../ProfilePic/index.js';
 import pic from "../../images/test.jpg";
  
-const Header = ({ links }) => { // links = [{title : string, to : string}]
+const Header = ({ links, isVisible }) => { // links = [{title : string, to : string}]
 
   const [selected, setSelected] = useState(0);
 
@@ -13,7 +13,7 @@ const Header = ({ links }) => { // links = [{title : string, to : string}]
   }
 
   return (
-    <HeaderCont>
+    <HeaderCont isVisible={isVisible}>
         <ChronosLogo fontsize={3} />
 
         <HeaderNav>
