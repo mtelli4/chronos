@@ -9,6 +9,7 @@ function Notes() {
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [] })
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
+    const [periodes, setPeriodes] = useState([])
 
     const [currentFormation, setCurrentFormation] = useState([""])
 
@@ -40,7 +41,8 @@ function Notes() {
     const initialValuesSearch = {}
     const initialValuesInsertEval = {
         libelle:"",
-        coefficient:1
+        coefficient:1,
+        noteMaximale:20
         }
 
     const onSubmitSearch = (data) => {
@@ -79,14 +81,16 @@ function Notes() {
     const validationSchemaInsert = Yup.object().shape({
         libelle: Yup.string().min(5).max(50).required("Ce champ est obligatoire."),
         coefficient: Yup.number().required("Ce champ est obligatoire."),
+        noteMaximale: Yup.number().required("Ce champ est obligatoire."),
+        periodeId: Yup.number().required("Ce champ est obligatoire."),
     })
 
     const onSubmitInsertEval = (data) => {
-        if ((!data.hasOwnProperty("libelle")) || (!data.hasOwnProperty("coefficient")) || formRef.current.values.moduleId==""){
+        if (formRef.current.values.moduleId==""){
             console.log("return")
             return
         }
-        axios.post("http://localhost:5000/notes/insertEvaluations", { moduleId: formRef.current.values.moduleId, coefficient:data.coefficient, libelle:data.libelle })
+        axios.post("http://localhost:5000/notes/insertEvaluations", { moduleId: formRef.current.values.moduleId, coefficient:data.coefficient, libelle:data.libelle, noteMaximale:data.noteMaximale, periodeId:data.periodeId })
             .then((response) => {
                 console.log("Succès InsertEvaluations")
                 onSubmitSearch(formRef.current.values);
@@ -125,6 +129,12 @@ function Notes() {
     useEffect(() => {
         axios.get("http://localhost:5000/formations").then((response) => {
             setFormations(response.data)
+        })
+    }, [])
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/periodes").then((response) => {
+            setPeriodes(response.data)
         })
     }, [])
 
@@ -225,6 +235,15 @@ function Notes() {
                             <option value={parseInt(module.id)}>{module.id}.({module.codeApogee}) - {module.libelle}</option>
                         ))}
                     </Field>
+                    <label>Periode</label>
+                    <ErrorMessage name="periodeId" component="span" />
+                    <Field as="select" name="periodeId">
+                        <option disabled value=''>Sélectionner une période</option>
+                        <option defaultValue value=''>Sélectionner une période</option>
+                        {periodes.map(periode => (
+                            <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
+                        ))}
+                    </Field>
                     <button id="searchNote" type="submit">chercher</button>
                     <FormObserver />
                 </Form>
@@ -250,6 +269,21 @@ function Notes() {
                         name="coefficient" 
                         type="number"
                     />
+                    <label>Note Maximale</label>
+                    <ErrorMessage name="noteMaximale" component="span"/>
+                    <Field 
+                        name="noteMaximale" 
+                        type="number"
+                    />
+                    <label>Periode</label>
+                    <ErrorMessage name="periodeId" component="span" />
+                    <Field as="select" name="periodeId">
+                        <option disabled value=''>Sélectionner une période</option>
+                        <option defaultValue value=''>Sélectionner une période</option>
+                        {periodes.map(periode => (
+                            <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
+                        ))}
+                    </Field>
                     <button id="insertEvaluation" type="submit">Confirmer</button>
                     <FormObserver />
                 </Form>
@@ -267,7 +301,7 @@ function Notes() {
                     {
                         notes.evaluations.map((evals) => {
                             return (
-                                <td style={{ border: "1pt solid black" }}>{evals.libelle}<br/>Coeff:{evals.coefficient}</td>
+                                <td key={"libelleEval"+evals.id} style={{ border: "1pt solid black" }}>{evals.libelle}<br/>Coeff:{evals.coefficient}<br/>Max:{evals.noteMaximale}</td>
                             )
                         })
                     }
@@ -275,8 +309,8 @@ function Notes() {
                 {notes.eleves.map((eleve) => {
                     return (
                         <tr>
-                            <td style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
-                            <td style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
+                            <td key={"eleveIdentite"+eleve.id} style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
+                            <td key={"eleveMoyenne"+eleve.id} style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
                             {notes.evaluations.map((evals) => {
                                 let val = ""
                                 if (notes.hasOwnProperty(eleve.id)) {
@@ -285,8 +319,8 @@ function Notes() {
                                     }
                                 }
                                 return (
-                                    <td style={{ border: "1pt solid black" }}>
-                                        <input className="" type="number"  defaultValue={val} onKeyDown={event => handleChange(event,eleve.id,evals.id)} /> 
+                                    <td key={"CaseEleve"+eleve.id+"Eval"+evals.id} style={{ border: "1pt solid black" }}>
+                                        <input key={"InputEleve"+eleve.id+"Eval"+evals.id} className="" type="number"  defaultValue={val} onKeyDown={event => handleChange(event,eleve.id,evals.id)} /> 
                                         
                                     </td>
                                 )
@@ -304,7 +338,7 @@ function Notes() {
                     {
                         notes.evaluations.map((evals) => {
                             return (
-                                <td style={{ border: "1pt solid black" }}>{evals.moyenne}</td>
+                                <td key={"MoyenneNote"+evals.id} style={{ border: "1pt solid black" }}>{evals.moyenne}</td>
                             )
                         })
                     }
