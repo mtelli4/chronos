@@ -160,14 +160,4 @@ router.post("/deleteNote", async (req, res) => {
   res.json({ "hasBeenDeleted": countDelete > 0 })
 })
 
-router.post("/insertEvaluations", async (req, res) => {
-  const moduleId = req.body.moduleId
-  const libelle = req.body.libelle
-  const coefficient = req.body.coefficient
-  const periodeId = req.body.periodeId
-  const noteMaximale = req.body.noteMaximale
-
-  db.Evaluation.create({ moduleId: moduleId, libelle: libelle, coefficient: coefficient, noteMaximale:noteMaximale, periodeId: periodeId })
-  res.json("Succès")
-})
 module.exports = router
