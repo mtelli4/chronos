@@ -12,9 +12,11 @@ import PageEdt from './pages/pageEdt';
 import Header from './components/Header';
 import FileImport from './pages/fileImport';
 import Notes from './pages/notes';
-
+import EmailForm from './pages/emailForm';
 import LoginForm from './pages/loginForm';
 import ChangePasswordForm from './pages/changePasswordForm';
+import CallForm from './pages/call';
+import CSVExportPage from './pages/exportExample';
 
 function App() {
 
@@ -42,11 +44,13 @@ function App() {
 
         <Route path="/login" element={<LoginForm />} exact />
         <Route path="/psw" element={<ChangePasswordForm />} exact />
+        <Route path="/call" element={<CallForm />} exact />
 
 
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
 
-
+        <Route path="/email" element={<EmailForm />} exact />
+        <Route path="/export-csv" element={<CSVExportPage />} exact />
         {/* test branch notes lucas */}
         <Route path="/notes" element={<Notes />} exact />
       </Routes>

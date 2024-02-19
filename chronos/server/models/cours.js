@@ -1,22 +1,33 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Cours extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+    // Lien associatif à la table MODULE_COURS
     static associate(models) {
-      Cours.belongsTo(models.ModuleCours, { foreignKey: 'moduleId', onDelete: 'SET NULL' });
+      Cours.belongsTo(models.ModuleCours, { 
+        foreignKey: 'moduleId', 
+        onDelete: 'SET NULL' 
+      });
+
+      // Lien associatif à la table GROUPE passant à travers la table COURS_GROUPE
+      Cours.belongsToMany(models.Groupe, {
+        through: {
+          model: models.CoursGroupe,
+        },
+        foreignKey: 'coursId',
+        otherKey: 'groupeId',
+      });
     }
   }
+
+  // Définition des champs de la table COURS
   Cours.init({
+    // Champ classique
     libelle: DataTypes.STRING,
     debutCours: DataTypes.DATE,
     duree: DataTypes.INTEGER,
+    // Clé étrangère
     moduleId: {
       type: DataTypes.INTEGER,
       references: {
@@ -26,8 +37,12 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
+    // Nom du modèle à utiliser dans les fonctions js
     modelName: 'Cours',
-    tableName: 'COURS'
+    // Nom de la table dans mysql
+    tableName: 'COURS',
+    // Désactive les timestamps
+    timestamps: false,
   });
   return Cours;
 };

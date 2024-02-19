@@ -117,10 +117,67 @@ const PageEdt = () => {
     const [listCours, setListCours] = useState([]);
 
     useEffect(() => {
-      axios.get("http://localhost:5000/cours").then((response) => {
+      axios.get("http://localhost:5000/eleves/1/cours").then((response) => { //si tu veux voir tout les cours --> http://localhost:5000/cours
         setListCours(response.data)
       })
     }, []);
+
+    // Fonction pour obtenir le libellé du jour de la semaine
+    function getDayLabel(dateTimeString) {
+      const date = new Date(dateTimeString);
+      const day = date.getDay();
+      const dayNames = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+
+      return dayNames[day];
+    }
+
+    // Fonction pour obtenir le numéro de la semaine à partir d'une date
+    Date.prototype.getWeekNumber = function () {
+      const date = new Date(this.getTime());
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+      const week1 = new Date(date.getFullYear(), 0, 4);
+      return 1 + Math.round(((date - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+    };
+
+    // Fonction pour obtenir le label du mois à partir d'une date (Janvier, Février, etc...)
+    Date.prototype.getMonthLabel = function () {
+      const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+      return monthNames[this.getMonth()];
+    };
+
+
+    // Fonction pour organiser les cours dans une structure hiérarchique
+    function organizeCoursesByDate(courses) {
+      const organizedData = {};
+
+      // On parcours chaque cours de la BDD
+      courses.forEach(cours => {
+        const date = new Date(cours.debutCours);
+        const year = date.getFullYear();
+        const month = date.getMonthLabel();
+        const week = date.getWeekNumber();
+        const day = getDayLabel(cours.debutCours);
+
+        // Initialiser les champs de la structure s'ils n'existent pas déjà
+        if (!organizedData[year]) organizedData[year] = {};
+        if (!organizedData[year][month]) organizedData[year][month] = {};
+        if (!organizedData[year][month][week]) organizedData[year][month][week] = {};
+        if (!organizedData[year][month][week][day]) organizedData[year][month][week][day] = [];
+        
+        organizedData[year][month][week][day].push({
+          title: cours.libelle,
+          room: 169, //il faut qu'on ajoute le numéro de la salle dans la BDD
+          startHour: cours.debutCours,
+          duration: cours.duree,
+          color: cours.color,
+        });
+      });
+
+      return organizedData;
+    }
+    const organizedCourses = organizeCoursesByDate(listCours);
+    console.log(organizedCourses);
 
     return (
         <>
