@@ -44,6 +44,13 @@ app.use("/professeurs", professeursRouter)
 const formationsRouter = require('./routes/Formation')
 app.use("/formations", formationsRouter)
 
+const periodesRouter = require('./routes/Periode')
+app.use("/periodes", periodesRouter)
+
+const evaluationsRouter = require('./routes/Evaluations')
+app.use("/evaluations", evaluationsRouter)
+
+
 // Redirection/route pour backend Login (analyse email et mdp)
 const loginRouter = require('./routes/Login')
 app.use("/login", loginRouter)

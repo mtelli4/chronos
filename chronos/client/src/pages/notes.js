@@ -6,7 +6,7 @@ import * as Yup from "yup";
 
 function Notes() {
     const [roles, setRoles] = useState(1);
-    const [notes, setNotes] = useState({ "eleves": [], "evaluations": [] })
+    const [notes, setNotes] = useState({ "eleves": [], "evaluations": [] , "modules":[]})
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
     const [periodes, setPeriodes] = useState([])
@@ -51,6 +51,10 @@ function Notes() {
                 delete data[key];
             }
         });
+        data["profil"] = roles
+        if (roles==2){
+            data["eleveId"] = 1
+        }
         axios.get("http://localhost:5000/notes", { params: data })
             .then((response) => {
                 console.log("Succès SearchNotes")
@@ -140,10 +144,14 @@ function Notes() {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:5000/notes").then((response) => {
+        let parameters = {"profil":roles}
+        if (roles==2){
+            parameters["eleveId"] = 1
+        }
+        axios.get("http://localhost:5000/notes", { params:parameters }).then((response) => {
             setNotes(response.data)
         })
-    }, [])
+    }, [roles])
 
     useEffect(() => {
         axios.get("http://localhost:5000/modules").then((response) => {
@@ -228,9 +236,9 @@ function Notes() {
         <>
             <h1> Role actuel : {['Secrétaire', 'Professeurs', 'Eleves'].at(roles)}
             </h1>
-            <button className="" onClick={() => { setRoles(0) }}>Secrétaire</button>
-            <button className="" onClick={() => { setRoles(1) }}>Professeurs</button>
-            <button className="" onClick={() => { setRoles(2) }}>Eleves</button>
+            <button className="" onClick={() => {setNotes({"evaluations":[],"eleves":[]}); setRoles(0);}}>Secrétaire</button>
+            <button className="" onClick={() => {setNotes({"evaluations":[],"eleves":[]}); setRoles(1);}}>Professeurs</button>
+            <button className="" onClick={() => {setNotes({"modules":[],"eleves":[]}); setRoles(2);}}>Eleves</button>
             {
                 roles == 0 &&
                 <>
@@ -380,8 +388,41 @@ function Notes() {
 
             {
                 roles == 2 &&
-                <>
-
+                <><Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                <Form>
+                    <label>Periode</label>
+                    <ErrorMessage name="periodeId" component="span" />
+                    <Field as="select" name="periodeId">
+                        <option disabled value=''>Sélectionner une période</option>
+                        <option defaultValue value=''>Sélectionner une période</option>
+                        {periodes.map(periode => (
+                            <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
+                        ))}
+                    </Field>
+                    <button id="searchNote" type="submit">chercher</button>
+                    <FormObserver />
+                </Form>
+            </Formik>
+                {console.log(notes)}
+                    {notes.modules.map((module) => {
+                        return <>
+                            <h1 key={"NomModule" + module.id}>{module.libelle}</h1>
+                            {notes.evaluations.map((evaluation) => {
+                                if (notes.hasOwnProperty(module.id) && notes[module.id].hasOwnProperty(evaluation.id)) {
+                                    return (
+                                        <>
+                                            <div key={"EvaluationsInfos" + evaluation.id}>
+                                                <p>{evaluation.libelle} ({evaluation.moyenne}): {notes[module.id][evaluation.id]}</p>
+                                            </div>
+                                        </>
+                                    );
+                                }
+                                return (<></>);
+                            })}
+                        </>
+                    }
+                    )
+                }
                 </>
             }
         </>
