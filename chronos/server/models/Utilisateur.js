@@ -10,13 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here  
+      const { Role,UtilisateurRole } = models
+      Utilisateur.belongsToMany(Role, {through:UtilisateurRole, foreignKey:'UtilisateurId'});
     }
   }
   Utilisateur.init({
     email: DataTypes.STRING,
     mdp: DataTypes.STRING,
-    role: DataTypes.TINYINT,
     premiereConnexion: DataTypes.TINYINT 
   }, {
     sequelize,
