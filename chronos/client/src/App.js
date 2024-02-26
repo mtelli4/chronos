@@ -19,6 +19,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import TestAdmin from './pages/admin/test';
 import Unauthorized from './pages/error/Unauthorized';
 import NotFound from './pages/error/NotFound';
+import MessageApp from './pages/messages';
 
 function App() {
 

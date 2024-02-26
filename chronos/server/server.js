@@ -55,7 +55,6 @@ app.use("/evaluations", evaluationsRouter)
 const loginRouter = require('./routes/Login')
 app.use("/login", loginRouter)
 
-// Redirection/route pour backend newPassword (changement de mot de passe)
 const newPasswordRouter = require('./routes/newPassword')
 app.use("/newpsw", newPasswordRouter)
 
@@ -79,8 +78,11 @@ app.use("/add_justification_file", addJustificationWithFileRouter)
 const addJustificationRouter = require('./routes/setJustificationWithoutFile') 
 app.use("/add_justification", addJustificationRouter)
 
-app.use(express.json({ limit: "25mb" }));
-app.use(express.urlencoded({ limit: "25mb" }));
+const getMessageRouter = require('./routes/Message')
+app.use("/messages", getMessageRouter)
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
