@@ -57,13 +57,26 @@ app.use("/login", loginRouter)
 const newPasswordRouter = require('./routes/newPassword')
 app.use("/newpsw", newPasswordRouter)
 
-
-
-
 // Redirection/route pour backend getEleveCours (récupération des élèves du cours)
 const getEleveCoursRouter = require('./routes/getEleveCours')
-app.use("/eleve-cours", getEleveCoursRouter)
+app.use("/eleve_cours", getEleveCoursRouter)
 
-// Redirection/route pour backend insertAbsences (insertion d'absences à un cours)
+
+
+
+
+// Redirection/route pour backend insertAbsences (insertion d'absences d'élèves pour un cours)
 const insertAbsencesRouter = require('./routes/insertAbsences')
-app.use("/testabs", insertAbsencesRouter)
+app.use("/insert_abs", insertAbsencesRouter)
+
+
+
+
+
+// Redirection/route pour backend getAbsences (récupère les absences d'un élève)
+const getAbsencesRouter = require('./routes/getAbsences')
+app.use("/get-abs", getAbsencesRouter)
+
+// Redirection/route pour backend addJustification (ajout de justification à une absence)
+// const addJustificationRouter = require('./routes/addJustification') // ERREUR ROUTER ICI
+// app.use("/add-justification", addJustificationRouter)

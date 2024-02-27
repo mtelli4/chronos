@@ -8,20 +8,18 @@ import { useState, useEffect } from 'react';
 // Import des sous composants
 import CallCard from '../components/CallCard';
 
+
 // Variables d'initialisation du formik
 const validationSchema = Yup.object({});
 const initialValues = {};
 
+
 const CallForm = () => {
-
-
-
-
-
   /* ------------------------------------- PRE-CHARGEMENT DE LA PAGE ------------------------------------- */
   const navigate = useNavigate();
   const [studentList, setStudentList] = useState([]);
   const [absentList, setAbsentList] = useState([]);
+  const [lateList, setLateList] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
@@ -29,7 +27,8 @@ const CallForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/eleve-cours/1"); // 1 correspond à l'id du cours envoyé
+        const response = await axios.get("http://localhost:5000/eleve_cours/1"); // 1 correspond à l'id du cours envoyé
+        // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
         setStudentList(
           response.data.Groupes.reduce((accumulator, currentList) => {
             return accumulator.concat(currentList.Eleves);
@@ -51,35 +50,28 @@ const CallForm = () => {
   // Liste des callcards pour chaque élève
   const callCardList = studentList.map((student, index) => (
     <div>
-      <CallCard student={student} number={index} absentList={absentList} setAbsentList={setAbsentList} key={student.id} />
+      <CallCard student={student} number={index} absentList={absentList} setAbsentList={setAbsentList} lateList={lateList} setLateList={setLateList} key={student.id} />
     </div>
   ));
 
   /* ------------------------------------- ENVOI ------------------------------------- */
-  const handleSubmit = (students) => {
-    if (students.length === 0) {
-      console.log("Pas d'absents");
+  const handleSubmit = (absences, lates) => {
+    console.log(absences);
+    console.log(lates);
+    // Envoyer les données au serveur pour authentification
+    axios.post('http://localhost:5000/insert_abs',  { 'absences': absences, 'lates': lates, 'coursId': 1 })
+    .then(() => {
       navigate('/'); // Redirige vers la page d'accueil (Calendrier)
-    } else {
-      // Envoyer les données au serveur pour authentification
-      axios.post('http://localhost:5000/testabs',  { 'students': students, 'coursId': 1 })
-      .then((response) => {
-        if (response) {
-          navigate('/'); // Redirige vers la page d'accueil (Calendrier)
-        } else {
-          console.log("Erreur lors de la mise en absence des élèves");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    }
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   };
 
   /* ------------------------------------- AFFICHAGE DE LA PAGE ------------------------------------- */
   return (
     <Formik
-      onSubmit={() => handleSubmit(absentList)} // Appel de la fonction handleSubmit avec absentList comme paramètre
+      onSubmit={() => handleSubmit(absentList, lateList)} // Appel de la fonction handleSubmit avec absentList comme paramètre
       initialValues={initialValues}
       validationSchema={validationSchema}
     >

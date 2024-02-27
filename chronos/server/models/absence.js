@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Cours',
         key: 'id',
       },
-    }
+    },
+    retard: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Absence',

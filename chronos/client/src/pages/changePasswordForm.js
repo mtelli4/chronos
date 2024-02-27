@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 // Variables d'initialisation du formik
 const initialValues = {
   email: '',
@@ -22,6 +23,7 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .required('Confirmer le mot de passe est requis'),
 });
+
 
 const ChangePasswordForm = () => {
   const navigate = useNavigate();
