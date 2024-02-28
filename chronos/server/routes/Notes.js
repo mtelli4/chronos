@@ -24,7 +24,8 @@ router.get("/", async (req, res) => {
 const getNotesEleves = async (parameters) => {
   const notesParameters = {}
   var result = {}
-  tmpLstEvalMoyenne = {}
+  tmpLstEvaluationsMoyenne = {}
+  tmpLstModulesMoyenne = {}
 
   eleveId = parseInt(parameters.eleveId)
     
@@ -76,7 +77,6 @@ const getNotesEleves = async (parameters) => {
       }
     }
   })
-  // console.log(allNotes)
 
   result["evaluations"] = await db.Evaluation.findAll(
     {
@@ -88,12 +88,6 @@ const getNotesEleves = async (parameters) => {
       order: [
         ['id', 'ASC'],
       ],
-      // include: [
-      //   {
-      //     model: db.Periode,
-      //     required: true
-      //   }
-      // ]
     }
   )
 
@@ -110,22 +104,38 @@ const getNotesEleves = async (parameters) => {
         result["modules"].push(item.Evaluation.ModuleCour)
       }
       result[moduleId][evaluationId] = note;
+
+
+      if(!tmpLstModulesMoyenne[moduleId]){
+        tmpLstModulesMoyenne[moduleId] = {note: 0, coefficient:0};
+      }
+      tmpLstModulesMoyenne[moduleId].note += note * Number.parseFloat(item.Evaluation.coefficient) / item.Evaluation.noteMaximale * 20;
+      tmpLstModulesMoyenne[moduleId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
     }
 
-    if (!tmpLstEvalMoyenne[evaluationId]) {
-      tmpLstEvalMoyenne[evaluationId] = { note: 0, coefficient: 0 };
+    if (!tmpLstEvaluationsMoyenne[evaluationId]) {
+      tmpLstEvaluationsMoyenne[evaluationId] = { note: 0, coefficient: 0 };
     }
-    tmpLstEvalMoyenne[evaluationId].note += note;
-    tmpLstEvalMoyenne[evaluationId].coefficient += 1;
+    tmpLstEvaluationsMoyenne[evaluationId].note += note;
+    tmpLstEvaluationsMoyenne[evaluationId].coefficient += 1;
   });
 
   result["evaluations"].forEach(item => {
-    if (tmpLstEvalMoyenne.hasOwnProperty(item.id)) {
-      item.dataValues["moyenne"] = (tmpLstEvalMoyenne[item.id].note / tmpLstEvalMoyenne[item.id].coefficient).toFixed(2)
+    if (tmpLstEvaluationsMoyenne.hasOwnProperty(item.id)) {
+      item.dataValues["moyenne"] = (tmpLstEvaluationsMoyenne[item.id].note / tmpLstEvaluationsMoyenne[item.id].coefficient).toFixed(2)
     } else {
       item.dataValues["moyenne"] = '...'
     }
   })  
+
+  result["modules"].forEach(item =>{
+    if (tmpLstModulesMoyenne.hasOwnProperty(item.id)) {
+      item.dataValues["moyenne"] = (tmpLstModulesMoyenne[item.id].note / tmpLstModulesMoyenne[item.id].coefficient).toFixed(2)
+    } else {
+      item.dataValues["moyenne"] = '...'
+    }
+  })
+
   result["modules"].sort((a, b) => a.id - b.id)
 
   return result

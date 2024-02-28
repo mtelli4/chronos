@@ -388,31 +388,32 @@ function Notes() {
 
             {
                 roles == 2 &&
-                <><Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
-                <Form>
-                    <label>Periode</label>
-                    <ErrorMessage name="periodeId" component="span" />
-                    <Field as="select" name="periodeId">
-                        <option disabled value=''>Sélectionner une période</option>
-                        <option defaultValue value=''>Sélectionner une période</option>
-                        {periodes.map(periode => (
-                            <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
-                        ))}
-                    </Field>
-                    <button id="searchNote" type="submit">chercher</button>
-                    <FormObserver />
-                </Form>
-            </Formik>
+                <>
+                    <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                        <Form>
+                            <label>Periode</label>
+                            <ErrorMessage name="periodeId" component="span" />
+                            <Field as="select" name="periodeId">
+                                <option disabled value=''>Sélectionner une période</option>
+                                <option defaultValue value=''>Sélectionner une période</option>
+                                {periodes.map(periode => (
+                                    <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
+                                ))}
+                            </Field>
+                            <button id="searchNote" type="submit">chercher</button>
+                            <FormObserver />
+                        </Form>
+                    </Formik>
                 {console.log(notes)}
                     {notes.modules.map((module) => {
                         return <>
-                            <h1 key={"NomModule" + module.id}>{module.libelle}</h1>
+                            <h1 key={"NomModule" + module.id}>{module.libelle} ({module.moyenne})</h1>
                             {notes.evaluations.map((evaluation) => {
                                 if (notes.hasOwnProperty(module.id) && notes[module.id].hasOwnProperty(evaluation.id)) {
                                     return (
                                         <>
                                             <div key={"EvaluationsInfos" + evaluation.id}>
-                                                <p>{evaluation.libelle} ({evaluation.moyenne}): {notes[module.id][evaluation.id]}</p>
+                                                <p>{evaluation.libelle} (Moyenne : {evaluation.moyenne}): {notes[module.id][evaluation.id]}/{evaluation.noteMaximale}</p>
                                             </div>
                                         </>
                                     );
