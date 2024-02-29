@@ -191,11 +191,11 @@ function Notes() {
     }, [])
 
     //Fonction de gestion lors de la saisie/suppression/modification de notes
-    function handleChange(e, eleveId, evalId) {
+    function handleChange(e, eleveId, evalId, statutId) {
         //Lorsque l'utilisateur valide sa saisie
         if (e.key === 'Enter') {
             //Si la case est vide, suppression de la note, sinon insertion/modification de la note
-            if (e.target.value === "") {
+            if (e.target.value === "" && statutId==null) {
                 axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                     if (response.data.hasBeenDeleted) {
@@ -224,7 +224,11 @@ function Notes() {
                         alert("UpsertError");
                     });
             } else {
-                axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: e.target.value }).then((response) => {
+                let note = e.target.value
+                if (e.target.value == ""){
+                    note = null
+                }
+                axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: note, statutId:statutId }).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                     //Appel à l'API pour mettre à jour l'affichage des notes
                     onSubmitSearch(formRef.current.values)
@@ -251,7 +255,6 @@ function Notes() {
                     });
 
             }
-            console.log(e.target.value)
         }
     }
 
@@ -382,16 +385,22 @@ function Notes() {
 
                                     {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}
                                     {notes.evaluations.map((evals) => {
-                                        let val = ""
+                                        let note = ""
+                                        let statutLibelle =""
+                                        let statutId=null
                                         if (notes.hasOwnProperty(eleve.id)) {
                                             if (notes[eleve.id].hasOwnProperty(evals.id)) {
-                                                val = notes[eleve.id][evals.id]
+                                                note = notes[eleve.id][evals.id].note
+                                                if (notes[eleve.id][evals.id].hasOwnProperty("statutLibelle") && notes[eleve.id][evals.id].hasOwnProperty("statutId") ){
+                                                    statutLibelle=notes[eleve.id][evals.id].statutLibelle
+                                                    statutId= notes[eleve.id][evals.id].statutId
+                                                }
                                             }
                                         }
                                         return (
                                             <td key={"CaseEleve" + eleve.id + "Eval" + evals.id} style={{ border: "1pt solid black" }}>
-                                                <input key={"InputEleve" + eleve.id + "Eval" + evals.id} className="" type="number" defaultValue={val} onKeyDown={event => handleChange(event, eleve.id, evals.id)} />
-
+                                                <input key={"InputEleve" + eleve.id + "Eval" + evals.id} className="" type="number" defaultValue={note} onKeyDown={event => handleChange(event, eleve.id, evals.id, statutId)}/>
+                                                {statutLibelle!="" && <><br/>{statutLibelle}</>}
                                             </td>
                                         )
                                     })}
@@ -455,7 +464,11 @@ function Notes() {
                                     return (
                                         <>
                                             <div key={"EvaluationsInfos" + evaluation.id}>
-                                                <p>{evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}): {notes[module.id][evaluation.id]}/{evaluation.noteMaximale}</p>
+                                                <h3>{evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}):</h3>
+                                                <p>
+                                                    {notes[module.id][evaluation.id].note}/{evaluation.noteMaximale}
+                                                {notes[module.id][evaluation.id].hasOwnProperty("statut") && <> {notes[module.id][evaluation.id].statut}</>}
+                                                </p>
                                             </div>
                                         </>
                                     );

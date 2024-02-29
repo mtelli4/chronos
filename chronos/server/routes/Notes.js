@@ -71,6 +71,9 @@ const getNotesEleves = async (parameters) => {
         include: {
           model: db.ModuleCours,
         }
+      },
+      {
+        model: db.StatutNote
       }
     ],
     where: {
@@ -100,6 +103,7 @@ const getNotesEleves = async (parameters) => {
   allNotes.forEach(item => {
     const moduleId = item.Evaluation.moduleId;
     const evaluationId = item.Evaluation.id;
+    const possedeNote = item.note != null
     const note = parseFloat(item.note);
  
     if (item.eleveId == eleveId){
@@ -108,22 +112,29 @@ const getNotesEleves = async (parameters) => {
         result[moduleId] = {};
         result["modules"].push(item.Evaluation.ModuleCour)
       }
-      result[moduleId][evaluationId] = note;
+      result[moduleId][evaluationId] = {note:note};
+      if (item.StatutNote != null){
+        result[moduleId][evaluationId].statut = item.StatutNote.libelle
+      }
 
       //Préparation des données pour calculer la moyenne de l'élève par module
-      if(!tmpLstModulesMoyenne[moduleId]){
-        tmpLstModulesMoyenne[moduleId] = {note: 0, coefficient:0};
+      if (possedeNote){
+        if(!tmpLstModulesMoyenne[moduleId]){
+          tmpLstModulesMoyenne[moduleId] = {note: 0, coefficient:0};
+        }
+        tmpLstModulesMoyenne[moduleId].note += note * Number.parseFloat(item.Evaluation.coefficient) / item.Evaluation.noteMaximale * 20;
+        tmpLstModulesMoyenne[moduleId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
       }
-      tmpLstModulesMoyenne[moduleId].note += note * Number.parseFloat(item.Evaluation.coefficient) / item.Evaluation.noteMaximale * 20;
-      tmpLstModulesMoyenne[moduleId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
     }
 
     //Préparation des données pour calculer la moyenne dans chaque évaluation
-    if (!tmpLstEvaluationsMoyenne[evaluationId]) {
-      tmpLstEvaluationsMoyenne[evaluationId] = { note: 0, coefficient: 0 };
+    if (possedeNote){
+      if (!tmpLstEvaluationsMoyenne[evaluationId]) {
+        tmpLstEvaluationsMoyenne[evaluationId] = { note: 0, coefficient: 0 };
+      }
+      tmpLstEvaluationsMoyenne[evaluationId].note += note;
+      tmpLstEvaluationsMoyenne[evaluationId].coefficient += 1;
     }
-    tmpLstEvaluationsMoyenne[evaluationId].note += note;
-    tmpLstEvaluationsMoyenne[evaluationId].coefficient += 1;
   });
 
   //Ajout de la moyenne pour chaque évaluation
@@ -180,6 +191,9 @@ const getNotesProfesseurs = async (parameters) => {
       {
         model: db.Eleve,
         required: true
+      },
+      {
+        model: db.StatutNote
       }
     ],
     where: notesParameters
@@ -218,27 +232,34 @@ const getNotesProfesseurs = async (parameters) => {
   listNotes.forEach(item => {
     const eleveId = item.Eleve.id;
     const evaluationId = item.Evaluation.id;
+    const possedeNote = item.note != null
     const note = parseFloat(item.note);
 
     //Rangement des notes par élèves et par évaluations
     if (!result[eleveId]) {
       result[eleveId] = {};
     }
-    result[eleveId][evaluationId] = note;
-
-    //Préparation des données pour calculer la moyenne de chaque étudiant
-    if (!tmpLstEleveMoyenne[eleveId]) {
-      tmpLstEleveMoyenne[eleveId] = { note: 0, coefficient: 0 };
+    result[eleveId][evaluationId] = {note:note};
+    if (item.StatutNote != null){
+      result[eleveId][evaluationId].statutLibelle = item.StatutNote.libelle
+      result[eleveId][evaluationId].statutId = item.StatutNote.id
     }
-    tmpLstEleveMoyenne[eleveId].note += note * Number.parseFloat(item.Evaluation.coefficient) / item.Evaluation.noteMaximale * 20;
-    tmpLstEleveMoyenne[eleveId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
 
-    //Préparation des données pour calculer la moyenne dans chaque évaluation
-    if (!tmpLstEvalMoyenne[evaluationId]) {
-      tmpLstEvalMoyenne[evaluationId] = { note: 0, coefficient: 0 };
+    if(possedeNote){
+      //Préparation des données pour calculer la moyenne de chaque étudiant
+      if (!tmpLstEleveMoyenne[eleveId]) {
+        tmpLstEleveMoyenne[eleveId] = { note: 0, coefficient: 0 };
+      }
+      tmpLstEleveMoyenne[eleveId].note += note * Number.parseFloat(item.Evaluation.coefficient) / item.Evaluation.noteMaximale * 20;
+      tmpLstEleveMoyenne[eleveId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
+  
+      //Préparation des données pour calculer la moyenne dans chaque évaluation
+      if (!tmpLstEvalMoyenne[evaluationId]) {
+        tmpLstEvalMoyenne[evaluationId] = { note: 0, coefficient: 0 };
+      }
+      tmpLstEvalMoyenne[evaluationId].note += note;
+      tmpLstEvalMoyenne[evaluationId].coefficient += 1;
     }
-    tmpLstEvalMoyenne[evaluationId].note += note;
-    tmpLstEvalMoyenne[evaluationId].coefficient += 1;
   });
 
 
@@ -268,6 +289,7 @@ router.post("/insertNotes", async (req, res) => {
   const eval = req.body.evalId
   const eleve = req.body.eleveId
   const note = req.body.note
+  const statutId = req.body.statutId
 
   // Récupération de la note actuelle si elle existe
   const dbNote = await db.Note.findOne(
@@ -281,15 +303,15 @@ router.post("/insertNotes", async (req, res) => {
 
   //Si elle n'existe pas on la crée, sinon on la met à jour
   if (dbNote == null) {
-    db.Note.create({ evaluationId: eval, eleveId: eleve, note: note })
+    db.Note.create({ evaluationId: eval, eleveId: eleve, note: note, statutId: statutId})
   } else {
-    await db.Note.update({ note: note }, {
+    await db.Note.update({ note: note, statutId:statutId}, {
       where: {
         id: dbNote.id,
       },
     });
   }
-  
+
   res.json("Succès")
 })
 
