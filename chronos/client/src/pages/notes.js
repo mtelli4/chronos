@@ -18,6 +18,7 @@ function Notes() {
     const FormObserver = () => {
         const { values } = useFormikContext();
         useEffect(() => {
+            // Mise à jour des modules disponibles en fonction de la formation actuellement sélectionnée dans le formulaire pour les professeurs
             if (values.hasOwnProperty("formationId")) {
                 if (currentFormation === values.formationId) {
                     return
@@ -38,25 +39,29 @@ function Notes() {
         return null;
     };
 
+    //Initialisation des paramètres pour le formulaire de recherche de notes
     const initialValuesSearch = {}
-    const initialValuesInsertEval = {
-        libelle: "",
-        coefficient: 1,
-        noteMaximale: 20
-    }
-
+    const validationSchema = Yup.object().shape({
+    })
+    //Fonction de validation du formulaire de recherche de notes
     const onSubmitSearch = (data) => {
+        //Suppression des champs vides, pour ne pas les prendre en compte dans la recherche
         Object.keys(data).forEach(key => {
             if (data[key] === '') {
                 delete data[key];
             }
         });
+
+        //Ajout du rôle actuel pour la recherche de notes
         data["profil"] = roles
         if (roles==2){
             data["eleveId"] = 1
         }
+
+        //Appel à l'API de récupération de notes
         axios.get("http://localhost:5000/notes", { params: data })
             .then((response) => {
+                //Mise à jour des notes
                 console.log("Succès SearchNotes")
                 setNotes(response.data)
             }).catch(function (error) {
@@ -79,23 +84,30 @@ function Notes() {
             });
     }
 
-    const validationSchema = Yup.object().shape({
-    })
 
+    //Initialisation des paramètres pour le formulaire d'insertion d'évaluation du professeur
+    const initialValuesInsertEval = {
+        libelle: "",
+        coefficient: 1,
+        noteMaximale: 20
+    }
     const validationSchemaInsert = Yup.object().shape({
         libelle: Yup.string().min(5).max(50).required("Ce champ est obligatoire."),
         coefficient: Yup.number().required("Ce champ est obligatoire."),
         noteMaximale: Yup.number().required("Ce champ est obligatoire."),
         periodeId: Yup.number().required("Ce champ est obligatoire."),
     })
-
+    
+    //Fonction d'insertion d'évaluation
     const onSubmitInsertEval = (data) => {
         if (formRef.current.values.moduleId == "") {
             console.log("return")
             return
         }
+        //Appel de l'API d'insertion d'évaluations
         axios.post("http://localhost:5000/evaluations/insertEvaluations", { moduleId: formRef.current.values.moduleId, coefficient: data.coefficient, libelle: data.libelle, noteMaximale: data.noteMaximale, periodeId: data.periodeId })
             .then((response) => {
+                //Appel à la fonction d'envoie de formulaire, pour mettre à jour avec la nouvelle évaluation
                 console.log("Succès InsertEvaluations")
                 onSubmitSearch(formRef.current.values);
             }).catch(function (error) {
@@ -118,9 +130,12 @@ function Notes() {
             });
     }
 
+    //Fonction de suppression d'évaluation
     const deleteEvaluation = (evalId) => {
+        //Appel de l'API de suppression d'évaluations
         axios.post("http://localhost:5000/evaluations/deleteEvaluations", { evalId: evalId })
             .then((response) => {
+                //Appel à la fonction d'envoie de formulaire, pour mettre à jour sans l'évaluation supprimée
                 console.log("Succès DeleteEvaluations")
                 onSubmitSearch(formRef.current.values);
             }).catch(function (error) {
@@ -143,6 +158,7 @@ function Notes() {
             });
     }
 
+    //Mise à jour des notes, quand on change de rôle
     useEffect(() => {
         let parameters = {"profil":roles}
         if (roles==2){
@@ -153,33 +169,39 @@ function Notes() {
         })
     }, [roles])
 
+    //Récupération des modules disponibles au lancement
     useEffect(() => {
         axios.get("http://localhost:5000/modules").then((response) => {
             setModules(response.data)
         })
     }, [])
 
+    //Récupération des formations disponibles au lancement
     useEffect(() => {
         axios.get("http://localhost:5000/formations").then((response) => {
             setFormations(response.data)
         })
     }, [])
 
+    //Récupération des périodes disponibles au lancement
     useEffect(() => {
         axios.get("http://localhost:5000/periodes").then((response) => {
             setPeriodes(response.data)
         })
     }, [])
 
+    //Fonction de gestion lors de la saisie/suppression/modification de notes
     function handleChange(e, eleveId, evalId) {
-        console.log(e)
+        //Lorsque l'utilisateur valide sa saisie
         if (e.key === 'Enter') {
+            //Si la case est vide, suppression de la note, sinon insertion/modification de la note
             if (e.target.value === "") {
                 axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                     if (response.data.hasBeenDeleted) {
-                        alert("Suppression réussie, cliquer pour mettre à jour");
+                        //Appel à l'API pour mettre à jour l'affichage des notes
                         onSubmitSearch(formRef.current.values)
+                        alert("Suppression réussie");
                     }
                 })
                     .catch(function (error) {
@@ -204,8 +226,9 @@ function Notes() {
             } else {
                 axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: e.target.value }).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
-                    alert("Upsert réussi, cliquer pour mettre à jour");
+                    //Appel à l'API pour mettre à jour l'affichage des notes
                     onSubmitSearch(formRef.current.values)
+                    alert("Upsert réussi");
                 })
                     .catch(function (error) {
                         if (error.response) {
@@ -234,11 +257,14 @@ function Notes() {
 
     return (
         <>
+            {/* Tempororaire : Affichage du rôle actuel et bouton de sélection de rôle */}
             <h1> Role actuel : {['Secrétaire', 'Professeurs', 'Eleves'].at(roles)}
             </h1>
             <button className="" onClick={() => {setNotes({"evaluations":[],"eleves":[]}); setRoles(0);}}>Secrétaire</button>
             <button className="" onClick={() => {setNotes({"evaluations":[],"eleves":[]}); setRoles(1);}}>Professeurs</button>
             <button className="" onClick={() => {setNotes({"modules":[],"eleves":[]}); setRoles(2);}}>Eleves</button>
+            
+            {/* Affichage de la page pour les sécretaire */}
             {
                 roles == 0 &&
                 <>
@@ -246,8 +272,10 @@ function Notes() {
                 </>
             }
 
+            {/* Affichage de la page pour les professeurs */}
             {roles == 1 &&
                 <>
+                    {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
                         <Form>
                             <label>Formation</label>
@@ -282,7 +310,7 @@ function Notes() {
                         </Form>
                     </Formik>
 
-
+                    {/* Formulaire d'insertion d'évaluation */}
                     {
                         (!(typeof formRef.current === 'undefined')) &&
                         formRef.current != null &&
@@ -323,9 +351,10 @@ function Notes() {
                         </Formik>
                     }
 
-
+                    {/* Tableau d'affichage des notes */}
                     <table>
                         <tr>
+                            {/* Première ligne, nom des évaluations */}
                             <td style={{ border: "1pt solid black" }}>
                             </td>
                             <td style={{ border: "1pt solid black" }}>
@@ -347,8 +376,11 @@ function Notes() {
                         {notes.eleves.map((eleve) => {
                             return (
                                 <tr>
+                                    {/* Affichage du nom de l'élève et de sa moyenne */}
                                     <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
                                     <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
+
+                                    {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}
                                     {notes.evaluations.map((evals) => {
                                         let val = ""
                                         if (notes.hasOwnProperty(eleve.id)) {
@@ -367,6 +399,8 @@ function Notes() {
                                 </tr>
                             )
                         })}
+                        
+                        {/* Affichage des moyennes pour chaque évaluation*/}
                         <tr>
                             <td style={{ border: "1pt solid black" }}>
                             </td>
@@ -386,9 +420,13 @@ function Notes() {
                 </>
             }
 
+
+
+            {/* Affichage de la page pour les élèves */}
             {
                 roles == 2 &&
                 <>
+                    {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
                         <Form>
                             <label>Periode</label>
@@ -404,16 +442,20 @@ function Notes() {
                             <FormObserver />
                         </Form>
                     </Formik>
-                {console.log(notes)}
+
+                    {/* Affichage des notes pour chaque évaluation triées par modules  */}
                     {notes.modules.map((module) => {
                         return <>
+                            {/* Affichage du nom du module et de la moyenne de l'élève dans ce dernier */}
                             <h1 key={"NomModule" + module.id}>{module.libelle} ({module.moyenne})</h1>
+
                             {notes.evaluations.map((evaluation) => {
+                                {/* Affichage du nom de l'évaluation, la moyenne pour celle ci et la note de l'élève*/}
                                 if (notes.hasOwnProperty(module.id) && notes[module.id].hasOwnProperty(evaluation.id)) {
                                     return (
                                         <>
                                             <div key={"EvaluationsInfos" + evaluation.id}>
-                                                <p>{evaluation.libelle} (Moyenne : {evaluation.moyenne}): {notes[module.id][evaluation.id]}/{evaluation.noteMaximale}</p>
+                                                <p>{evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}): {notes[module.id][evaluation.id]}/{evaluation.noteMaximale}</p>
                                             </div>
                                         </>
                                     );

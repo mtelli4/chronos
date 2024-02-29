@@ -28,7 +28,8 @@ const getNotesEleves = async (parameters) => {
   tmpLstModulesMoyenne = {}
 
   eleveId = parseInt(parameters.eleveId)
-    
+  
+  // Création des filtres pour les requêtes en fonction des paramètres d'appel à l'API
   notesParameters['eleveId'] = eleveId
   if (parameters.hasOwnProperty('periodeId')) {
     notesParameters['$Evaluation.periodeId$'] = parseInt(parameters.periodeId)
@@ -51,6 +52,7 @@ const getNotesEleves = async (parameters) => {
 //     }],
 // });
 
+  //Récupération de toutes les notes de l'élève actuel
   const notesEleve = await db.Note.findAll({
     where: notesParameters,
     include: [
@@ -60,8 +62,8 @@ const getNotesEleves = async (parameters) => {
     ]
   })
 
+  //Récupération des notes de tout les élèves pour les évaluations pour lesquelles l'élève actuel à une note
   evaluationIds = notesEleve.map((note)=>note.evaluationId);
-
   const allNotes = await db.Note.findAll({
     include: [
       {
@@ -78,6 +80,7 @@ const getNotesEleves = async (parameters) => {
     }
   })
 
+  //Récupération des informations à afficher concernant les évaluations pour lesquelles l'élève actuel à une note
   result["evaluations"] = await db.Evaluation.findAll(
     {
       where: {
@@ -93,19 +96,21 @@ const getNotesEleves = async (parameters) => {
 
   result["modules"] = []
 
+  //Traitement de toutes les notes récupérer pour en extraire les données à renvoyer
   allNotes.forEach(item => {
     const moduleId = item.Evaluation.moduleId;
     const evaluationId = item.Evaluation.id;
     const note = parseFloat(item.note);
  
     if (item.eleveId == eleveId){
+      //Rangement des notes de l'élève par module et par note
       if (!result[moduleId]) {
         result[moduleId] = {};
         result["modules"].push(item.Evaluation.ModuleCour)
       }
       result[moduleId][evaluationId] = note;
 
-
+      //Préparation des données pour calculer la moyenne de l'élève par module
       if(!tmpLstModulesMoyenne[moduleId]){
         tmpLstModulesMoyenne[moduleId] = {note: 0, coefficient:0};
       }
@@ -113,6 +118,7 @@ const getNotesEleves = async (parameters) => {
       tmpLstModulesMoyenne[moduleId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
     }
 
+    //Préparation des données pour calculer la moyenne dans chaque évaluation
     if (!tmpLstEvaluationsMoyenne[evaluationId]) {
       tmpLstEvaluationsMoyenne[evaluationId] = { note: 0, coefficient: 0 };
     }
@@ -120,6 +126,7 @@ const getNotesEleves = async (parameters) => {
     tmpLstEvaluationsMoyenne[evaluationId].coefficient += 1;
   });
 
+  //Ajout de la moyenne pour chaque évaluation
   result["evaluations"].forEach(item => {
     if (tmpLstEvaluationsMoyenne.hasOwnProperty(item.id)) {
       item.dataValues["moyenne"] = (tmpLstEvaluationsMoyenne[item.id].note / tmpLstEvaluationsMoyenne[item.id].coefficient).toFixed(2)
@@ -128,6 +135,7 @@ const getNotesEleves = async (parameters) => {
     }
   })  
 
+  //Ajout de la moyenne de chaque module
   result["modules"].forEach(item =>{
     if (tmpLstModulesMoyenne.hasOwnProperty(item.id)) {
       item.dataValues["moyenne"] = (tmpLstModulesMoyenne[item.id].note / tmpLstModulesMoyenne[item.id].coefficient).toFixed(2)
@@ -147,6 +155,8 @@ const getNotesProfesseurs = async (parameters) => {
   const evaluationsParameters = {}
   var result = {}
 
+
+  // Création des filtres pour les requêtes en fonction des paramètres d'appel à l'API
   if (parameters.hasOwnProperty('moduleId')) {
     notesParameters['$Evaluation.moduleId$'] = parseInt(parameters.moduleId)
     evaluationsParameters['moduleId'] = parseInt(parameters.moduleId)
@@ -160,6 +170,7 @@ const getNotesProfesseurs = async (parameters) => {
     evaluationsParameters['periodeId'] = parseInt(parameters.periodeId)
   }
 
+  //Récupération de toutes les notes liées à la recherche du professeur
   const listNotes = await db.Note.findAll({
     include: [
       {
@@ -174,7 +185,7 @@ const getNotesProfesseurs = async (parameters) => {
     where: notesParameters
   })
 
-
+  //Récupération des informations liées aux élèves concernés par la recherche du professeur
   result["eleves"] = await db.Eleve.findAll(
     {
       where: eleveParameters,
@@ -184,6 +195,7 @@ const getNotesProfesseurs = async (parameters) => {
       ],
     }
   )
+  //Récupération des informations liées aux évaluations concernés par la recherche du professeur
   result["evaluations"] = await db.Evaluation.findAll(
     {
       where: evaluationsParameters,
@@ -202,23 +214,26 @@ const getNotesProfesseurs = async (parameters) => {
   tmpLstEleveMoyenne = {}
   tmpLstEvalMoyenne = {}
 
+  //Traitement de toutes les notes récupérer pour en extraire les données à renvoyer
   listNotes.forEach(item => {
     const eleveId = item.Eleve.id;
     const evaluationId = item.Evaluation.id;
     const note = parseFloat(item.note);
 
+    //Rangement des notes par élèves et par évaluations
     if (!result[eleveId]) {
       result[eleveId] = {};
     }
-
     result[eleveId][evaluationId] = note;
 
+    //Préparation des données pour calculer la moyenne de chaque étudiant
     if (!tmpLstEleveMoyenne[eleveId]) {
       tmpLstEleveMoyenne[eleveId] = { note: 0, coefficient: 0 };
     }
     tmpLstEleveMoyenne[eleveId].note += note * Number.parseFloat(item.Evaluation.coefficient) / item.Evaluation.noteMaximale * 20;
     tmpLstEleveMoyenne[eleveId].coefficient += Number.parseFloat(item.Evaluation.coefficient);
 
+    //Préparation des données pour calculer la moyenne dans chaque évaluation
     if (!tmpLstEvalMoyenne[evaluationId]) {
       tmpLstEvalMoyenne[evaluationId] = { note: 0, coefficient: 0 };
     }
@@ -227,6 +242,7 @@ const getNotesProfesseurs = async (parameters) => {
   });
 
 
+  //Ajout de la moyenne de chaque étudiant
   result["eleves"].forEach(item => {
     if (tmpLstEleveMoyenne.hasOwnProperty(item.id)) {
       item.dataValues["moyenne"] = (tmpLstEleveMoyenne[item.id].note / tmpLstEleveMoyenne[item.id].coefficient).toFixed(2)
@@ -235,6 +251,7 @@ const getNotesProfesseurs = async (parameters) => {
     }
   })
 
+  //Ajout de la moyenne pour chaque évaluation
   result["evaluations"].forEach(item => {
     if (tmpLstEvalMoyenne.hasOwnProperty(item.id)) {
       item.dataValues["moyenne"] = (tmpLstEvalMoyenne[item.id].note / tmpLstEvalMoyenne[item.id].coefficient).toFixed(2)
@@ -252,6 +269,7 @@ router.post("/insertNotes", async (req, res) => {
   const eleve = req.body.eleveId
   const note = req.body.note
 
+  // Récupération de la note actuelle si elle existe
   const dbNote = await db.Note.findOne(
     {
       where: {
@@ -260,6 +278,8 @@ router.post("/insertNotes", async (req, res) => {
       }
     }
   )
+
+  //Si elle n'existe pas on la crée, sinon on la met à jour
   if (dbNote == null) {
     db.Note.create({ evaluationId: eval, eleveId: eleve, note: note })
   } else {
@@ -269,6 +289,7 @@ router.post("/insertNotes", async (req, res) => {
       },
     });
   }
+  
   res.json("Succès")
 })
 
