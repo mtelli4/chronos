@@ -38,31 +38,10 @@ const getNotesEleves = async (parameters) => {
     notesParameters['$Evaluation.periodeId$'] = parseInt(parameters.periodeId)
   }
 
-  //   const result = await Cours.findByPk(1, {//mettre l'id du cours ici :)
-  //     attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
-  //     include: [{
-  //         model: Groupe,
-  //         through: CoursGroupe, // Utilisez le modèle Sequelize correspondant à la table intermédiaire Cours-Groupe
-  //         timestamps: false,
-  //         where: { id:2},
-  //         attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
-  //         include: [{
-  //             model: Eleve,
-  //             through: GroupeEleve, // Utilisez le modèle Sequelize correspondant à la table intermédiaire Groupe-Eleve
-  //             timestamps: false,
-  //             attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
-  //         }],
-  //     }],
-  // });
-
   //Récupération de toutes les notes de l'élève actuel
   const notesEleve = await Note.findAll({
     where: notesParameters,
-    include: [
-      {
-        model: Evaluation
-      }
-    ]
+    attributes: ['id','evaluationId']
   })
 
   //Récupération des notes de tout les élèves pour les évaluations pour lesquelles l'élève actuel à une note
@@ -73,17 +52,20 @@ const getNotesEleves = async (parameters) => {
         model: Evaluation,
         include: {
           model: ModuleCours,
+          attributes: ['id', 'libelle'],
         }
       },
       {
-        model: StatutNote
+        model: StatutNote,
+        attributes: ['id', 'libelle'],
       }
     ],
     where: {
       evaluationId: {
         [Op.in]: evaluationIds
       }
-    }
+    },
+    attributes:['id','note','eleveId','evaluationId','statutId']
   })
 
   //Récupération des informations à afficher concernant les évaluations pour lesquelles l'élève actuel à une note
@@ -97,6 +79,7 @@ const getNotesEleves = async (parameters) => {
       order: [
         ['id', 'ASC'],
       ],
+      attributes:['id','libelle','coefficient','noteMaximale']
     }
   )
 
@@ -176,7 +159,7 @@ const getNotesProfesseurs = async (parameters) => {
     evaluationsParameters['moduleId'] = parseInt(parameters.moduleId)
   }
   if (parameters.hasOwnProperty('formationId')) {
-    notesParameters['$Eleve.formationId$'] = parseInt(parameters.formationId)
+    notesParameters['eleveId'] = parseInt(parameters.formationId)
     eleveParameters['formationId'] = parseInt(parameters.formationId)
   }
   if (parameters.hasOwnProperty('periodeId')) {
@@ -189,17 +172,16 @@ const getNotesProfesseurs = async (parameters) => {
     include: [
       {
         model: Evaluation,
-        required: true
+        required: true,
+        attributes:['id','coefficient','noteMaximale']
       },
       {
-        model: Eleve,
-        required: true
-      },
-      {
-        model: StatutNote
+        model: StatutNote,
+        attributes:['id','libelle']
       }
     ],
-    where: notesParameters
+    where: notesParameters,
+    attributes:['id','note','eleveId','evaluationId','statutId']
   })
 
   //Récupération des informations liées aux élèves concernés par la recherche du professeur
@@ -210,6 +192,7 @@ const getNotesProfesseurs = async (parameters) => {
         ['nom', 'ASC'],
         ['prenom', 'ASC'],
       ],
+      attributes:['id','nom','prenom','numeroEtudiant','trombinoscope','tiersTemps']
     }
   )
   //Récupération des informations liées aux évaluations concernés par la recherche du professeur
@@ -222,9 +205,11 @@ const getNotesProfesseurs = async (parameters) => {
       include: [
         {
           model: Periode,
-          required: true
+          required: true,
+          attributes:['id','libelle']
         }
-      ]
+      ],
+      attributes:['id','libelle','coefficient','noteMaximale']
     }
   )
 
@@ -233,7 +218,7 @@ const getNotesProfesseurs = async (parameters) => {
 
   //Traitement de toutes les notes récupérer pour en extraire les données à renvoyer
   listNotes.forEach(item => {
-    const eleveId = item.Eleve.id;
+    const eleveId = item.eleveId;
     const evaluationId = item.Evaluation.id;
     const possedeNote = item.note != null
     const note = parseFloat(item.note);
@@ -303,22 +288,22 @@ const getNotesSecretaire = async (parameters) => {
     notesParameters['$Evaluation.periodeId$'] = parseInt(parameters.periodeId)
   }
 
-  //Récupération de toutes les notes liées à la recherche du professeur
+  //Récupération de toutes les notes liées à la recherche du secrétaire
   const listNotes = await Note.findAll({
     include: [
       {
         model: Evaluation,
-        required: true
+        required: true,
+        attributes:['id','coefficient','noteMaximale','moduleId']
       },
       {
         model: Eleve,
-        required: true
-      },
-      {
-        model: StatutNote
+        required: true,
+        attributes:['id','formationId']
       }
     ],
-    where: notesParameters
+    where: notesParameters,
+    attributes:['id','note','eleveId','evaluationId','statutId']
   })
 
   //Récupération des informations liées aux élèves concernés par la recherche du secrétaire
@@ -329,9 +314,10 @@ const getNotesSecretaire = async (parameters) => {
         ['nom', 'ASC'],
         ['prenom', 'ASC'],
       ],
+      attributes:['id','nom','prenom','numeroEtudiant','trombinoscope']
     }
   )
-  //Récupération des informations liées aux évaluations concernés par la recherche du professeur
+  //Récupération des informations liées aux modules concernés par la recherche du secrétaire
   result["modules"] = await ModuleCours.findAll(
     {
       order: [
@@ -340,16 +326,10 @@ const getNotesSecretaire = async (parameters) => {
       include: [{
         model: Formation,
         through: FormationModule, // Utilisez le modèle Sequelize correspondant à la table intermédiaire Formation-Module
-        // timestamps: false,
-        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
-        // include: [{
-        //   model: Eleve,
-        //   through: GroupeEleve, // Utilisez le modèle Sequelize correspondant à la table intermédiaire Groupe-Eleve
-        //   timestamps: false,
-        //   attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
-        // }],
+        attributes:['id','libelle']
       }],
       where: modulesParameters,
+      attributes:['id','libelle','codeApogee']
     }
   )
 
