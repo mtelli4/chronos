@@ -5,8 +5,8 @@ import * as Yup from "yup";
 
 
 function Notes() {
-    const [roles, setRoles] = useState(1);
-    const [notes, setNotes] = useState({ "eleves": [], "evaluations": [] , "modules":[]})
+    const [roles, setRoles] = useState(0);
+    const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
     const [periodes, setPeriodes] = useState([])
@@ -54,7 +54,7 @@ function Notes() {
 
         //Ajout du rôle actuel pour la recherche de notes
         data["profil"] = roles
-        if (roles==2){
+        if (roles == 2) {
             data["eleveId"] = 1
         }
 
@@ -97,7 +97,7 @@ function Notes() {
         noteMaximale: Yup.number().required("Ce champ est obligatoire."),
         periodeId: Yup.number().required("Ce champ est obligatoire."),
     })
-    
+
     //Fonction d'insertion d'évaluation
     const onSubmitInsertEval = (data) => {
         if (formRef.current.values.moduleId == "") {
@@ -160,11 +160,11 @@ function Notes() {
 
     //Mise à jour des notes, quand on change de rôle
     useEffect(() => {
-        let parameters = {"profil":roles}
-        if (roles==2){
+        let parameters = { "profil": roles }
+        if (roles == 2) {
             parameters["eleveId"] = 1
         }
-        axios.get("http://localhost:5000/notes", { params:parameters }).then((response) => {
+        axios.get("http://localhost:5000/notes", { params: parameters }).then((response) => {
             setNotes(response.data)
         })
     }, [roles])
@@ -195,7 +195,7 @@ function Notes() {
         //Lorsque l'utilisateur valide sa saisie
         if (e.key === 'Enter') {
             //Si la case est vide, suppression de la note, sinon insertion/modification de la note
-            if (e.target.value === "" && statutId==null) {
+            if (e.target.value === "" && statutId == null) {
                 axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                     if (response.data.hasBeenDeleted) {
@@ -225,10 +225,10 @@ function Notes() {
                     });
             } else {
                 let note = e.target.value
-                if (e.target.value == ""){
+                if (e.target.value == "") {
                     note = null
                 }
-                axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: note, statutId:statutId }).then((response) => {
+                axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: note, statutId: statutId }).then((response) => {
                     //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                     //Appel à l'API pour mettre à jour l'affichage des notes
                     onSubmitSearch(formRef.current.values)
@@ -263,15 +263,83 @@ function Notes() {
             {/* Tempororaire : Affichage du rôle actuel et bouton de sélection de rôle */}
             <h1> Role actuel : {['Secrétaire', 'Professeurs', 'Eleves'].at(roles)}
             </h1>
-            <button className="" onClick={() => {setNotes({"evaluations":[],"eleves":[]}); setRoles(0);}}>Secrétaire</button>
-            <button className="" onClick={() => {setNotes({"evaluations":[],"eleves":[]}); setRoles(1);}}>Professeurs</button>
-            <button className="" onClick={() => {setNotes({"modules":[],"eleves":[]}); setRoles(2);}}>Eleves</button>
-            
+            <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles(0); }}>Secrétaire</button>
+            <button className="" onClick={() => { setNotes({ "evaluations": [], "eleves": [] }); setRoles(1); }}>Professeurs</button>
+            <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles(2); }}>Eleves</button>
+
             {/* Affichage de la page pour les sécretaire */}
             {
                 roles == 0 &&
                 <>
+                    {/* Formulaire de recherche de notes */}
+                    <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                        <Form>
+                            <label>Formation</label>
+                            <ErrorMessage name="formationId" component="span" />
+                            <Field as="select" name="formationId">
+                                <option disabled value=''>Sélectionner une formation</option>
+                                <option defaultValue value=''>Sélectionner une formation</option>
+                                {formations.map(formation => (
+                                    <option value={parseInt(formation.id)}> {formation.id} - {formation.libelle} </option>
+                                ))}
+                            </Field>
+                            <label>Periode</label>
+                            <ErrorMessage name="periodeId" component="span" />
+                            <Field as="select" name="periodeId">
+                                <option disabled value=''>Sélectionner une période</option>
+                                <option defaultValue value=''>Sélectionner une période</option>
+                                {periodes.map(periode => (
+                                    <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
+                                ))}
+                            </Field>
+                            <button id="searchNote" type="submit">chercher</button>
+                            <FormObserver />
+                        </Form>
+                    </Formik>
 
+                    {/* Tableau d'affichage des notes */}
+                    <table>
+                        <tr>
+                            {/* Première ligne, nom des évaluations */}
+                            <td style={{ border: "1pt solid black" }}>
+                            </td>
+                            {
+                                notes.modules.map((module) => {
+                                    return (
+                                        <td key={"libelleModule" + module.id} style={{ border: "1pt solid black" }}>
+                                            {module.libelle}<br />
+                                            {module.codeApogee}
+                                        </td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        {notes.eleves.map((eleve) => {
+                            return (
+                                <tr>
+                                    {/* Affichage du nom de l'élève*/}
+                                    <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
+
+                                    {/* Affichage de toutes les moyenne de l'élève, pour tout les modules */}
+                                    {notes.modules.map((module) => {
+                                        let note = ""
+                                        if (notes.hasOwnProperty(eleve.id)) {
+                                            if (notes[eleve.id].hasOwnProperty(module.id)) {
+                                                console.log()
+                                                note = notes[eleve.id][module.id]
+                                            }
+                                        }
+                                        return (
+                                            <td key={"CaseEleve" + eleve.id + "Module" + module.id} style={{ border: "1pt solid black" }}>
+                                                {note}
+                                            </td>
+                                        )
+                                    })}
+
+                                </tr>
+                            )
+                        })}
+                    </table>
                 </>
             }
 
@@ -370,7 +438,7 @@ function Notes() {
                                             {evals.libelle}<br />
                                             Coeff:{evals.coefficient}<br />
                                             Max:{evals.noteMaximale}<br />
-                                            <button onClick={() => { deleteEvaluation(evals.id)}}> Supprimer</button>
+                                            <button onClick={() => { deleteEvaluation(evals.id) }}> Supprimer</button>
                                         </td>
                                     )
                                 })
@@ -386,21 +454,21 @@ function Notes() {
                                     {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}
                                     {notes.evaluations.map((evals) => {
                                         let note = ""
-                                        let statutLibelle =""
-                                        let statutId=null
+                                        let statutLibelle = ""
+                                        let statutId = null
                                         if (notes.hasOwnProperty(eleve.id)) {
                                             if (notes[eleve.id].hasOwnProperty(evals.id)) {
                                                 note = notes[eleve.id][evals.id].note
-                                                if (notes[eleve.id][evals.id].hasOwnProperty("statutLibelle") && notes[eleve.id][evals.id].hasOwnProperty("statutId") ){
-                                                    statutLibelle=notes[eleve.id][evals.id].statutLibelle
-                                                    statutId= notes[eleve.id][evals.id].statutId
+                                                if (notes[eleve.id][evals.id].hasOwnProperty("statutLibelle") && notes[eleve.id][evals.id].hasOwnProperty("statutId")) {
+                                                    statutLibelle = notes[eleve.id][evals.id].statutLibelle
+                                                    statutId = notes[eleve.id][evals.id].statutId
                                                 }
                                             }
                                         }
                                         return (
                                             <td key={"CaseEleve" + eleve.id + "Eval" + evals.id} style={{ border: "1pt solid black" }}>
-                                                <input key={"InputEleve" + eleve.id + "Eval" + evals.id} className="" type="number" defaultValue={note} onKeyDown={event => handleChange(event, eleve.id, evals.id, statutId)}/>
-                                                {statutLibelle!="" && <><br/>{statutLibelle}</>}
+                                                <input key={"InputEleve" + eleve.id + "Eval" + evals.id} className="" type="number" defaultValue={note} onKeyDown={event => handleChange(event, eleve.id, evals.id, statutId)} />
+                                                {statutLibelle != "" && <><br />{statutLibelle}</>}
                                             </td>
                                         )
                                     })}
@@ -408,7 +476,7 @@ function Notes() {
                                 </tr>
                             )
                         })}
-                        
+
                         {/* Affichage des moyennes pour chaque évaluation*/}
                         <tr>
                             <td style={{ border: "1pt solid black" }}>
@@ -459,7 +527,7 @@ function Notes() {
                             <h1 key={"NomModule" + module.id}>{module.libelle} ({module.moyenne})</h1>
 
                             {notes.evaluations.map((evaluation) => {
-                                {/* Affichage du nom de l'évaluation, la moyenne pour celle ci et la note de l'élève*/}
+                                {/* Affichage du nom de l'évaluation, la moyenne pour celle ci et la note de l'élève*/ }
                                 if (notes.hasOwnProperty(module.id) && notes[module.id].hasOwnProperty(evaluation.id)) {
                                     return (
                                         <>
@@ -467,7 +535,7 @@ function Notes() {
                                                 <h3>{evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}):</h3>
                                                 <p>
                                                     {notes[module.id][evaluation.id].note}/{evaluation.noteMaximale}
-                                                {notes[module.id][evaluation.id].hasOwnProperty("statut") && <> {notes[module.id][evaluation.id].statut}</>}
+                                                    {notes[module.id][evaluation.id].hasOwnProperty("statut") && <> {notes[module.id][evaluation.id].statut}</>}
                                                 </p>
                                             </div>
                                         </>
@@ -478,7 +546,7 @@ function Notes() {
                         </>
                     }
                     )
-                }
+                    }
                 </>
             }
         </>
