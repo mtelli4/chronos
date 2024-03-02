@@ -3,15 +3,12 @@ const router = express.Router();
 const { Absence, Cours } = require('../models')
 
 
-router.post("/", async (req, res) => {
-    const eleveId =  req.body.id; // obtient l'id de l'élève
+router.get("/:id", async (req, res) => {
+    const eleveId =  req.params.id; // obtient l'id de l'élève
 
     // requête SQL
-    const result = await Absence.findOne({ 
-        include: [{
-            model: Cours
-        }],
-        where: { elveId: eleveId } 
+    const result = await Absence.findAll({ 
+        where: { eleveId: eleveId } 
     });
 
     // Renvoi du résultat (objet JSON)

@@ -50,7 +50,7 @@ const CallForm = () => {
   // Liste des callcards pour chaque élève
   const callCardList = studentList.map((student, index) => (
     <div>
-      <CallCard student={student} number={index} absentList={absentList} setAbsentList={setAbsentList} lateList={lateList} setLateList={setLateList} key={student.id} />
+      <CallCard student={student} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} key={student.id} />
     </div>
   ));
 

@@ -3,7 +3,7 @@ import { CallCardCont } from './callCardsElements.js'
 import { useState } from 'react'
 
 
-const CallCard = ({student, number, absentList, setAbsentList, lateList, setLateList}) => {
+const CallCard = ({student, absentList, setAbsentList, setLateList}) => {
     // Etat local pour enregistrer si l'élève est absent ou présent
     const [isAbsent, setIsAbsent] = useState(false);
     // État local pour stocker le temps de retard

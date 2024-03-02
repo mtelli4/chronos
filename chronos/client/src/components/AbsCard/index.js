@@ -1,85 +1,60 @@
 import React, { useState } from 'react';
-const fs = require('fs').promises;
+import axios from 'axios';
+import FormData from 'form-data';
 
 
-const AbsenceCard = ({ idStudent, idList, onRemove }) => {
+const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
   // Variable contenant le texte de justification de l'absence
   const [reason, setReason] = useState('');
   // Variable contenant le fichier justificatif d'absence (photo, image, pdf, ..)
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [file, setFile] = useState(null);
 
   // Enregistre le fichier dans la variable
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      // Faire quelque chose avec le fichier sélectionné, comme l'afficher ou l'envoyer au serveur
-      console.log('Fichier sélectionné :', file);
-      setSelectedFile(file);
-    }
+    setFile(event.target.files[0]);
   };
 
   const handleSubmit = () => {
     // Supprime l'absence justifié de la liste des absences
-    onRemove(idList);
+    // onRemove(idList);
 
-    // Dépose le fichier
     try {
+      // Envoi la justification de l'absence
+      axios.post('http://localhost:5000/add_justification', {"reason": reason, "studentId": idStudent, "coursId": idCours, 'file': file}, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Assurez-vous que le type de contenu est correct
+        },
+      });
 
 
-
-        // Création du dossier
-        const uploadPath = 'uploads/';
-        const folderPath = path.join(uploadPath, 'newFolder');
-        // Vérifie si le dossier existe, sinon le créé
-        fs.mkdir(folderPath, { recursive: true });
-
-
-
-
-        // Dépot du fichier dans le dossier
-        axios.post('http://localhost:5000/uploads', formData);
-        console.log('Fichier déposé avec succès.');
-        setSelectedFile(file);
+      console.log('Fichier déposé avec succès.');
     } catch (error) {
-        console.error('Erreur lors du dépôt du fichier :', error);
+      console.error('Erreur lors du dépôt du fichier :', error);
     }
-
-
-
-
-
-    // Envoi la justification de l'absence
-    
-
-
 
 
   }
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Raison de l'absence"
+      <h2>
+        {Absence.retard === null ? 'Absence' : 'Retard'}
+      </h2>
+
+      <textarea
+        placeholder={Absence.retard === null ? 'Raison de l\'absence' : 'Raison du retard'}
         value={reason}
         onChange={(e) => setReason(e.target.value)}
       />
 
-
-
-      
       <input type="file" accept=".pdf, .png, .jpeg, .jpg" onChange={handleFileChange} />
-      {selectedFile && (
+      {file && (
         <div>
-          <p>Fichier sélectionné : {selectedFile.name}</p>
-          <p>Type : {selectedFile.type}</p>
-          <p>Taille : {selectedFile.size} octets</p>
+          <p>Fichier sélectionné : {file.name}</p>
+          <p>Type : {file.type}</p>
+          <p>Taille : {file.size} octets</p>
         </div>
       )}
-
-
-
 
       <button onClick={handleSubmit}>Valider</button>
     </div>
