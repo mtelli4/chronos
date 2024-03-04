@@ -1,26 +1,39 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Eleve extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
+      // Lien associatif à la table FORMATION
       Eleve.belongsTo(models.Formation, {
         foreignKey: 'formationId',
         onDelete: 'SET NULL',
       });
 
+      // Lien associatif à la table UTILISATEUR
       Eleve.belongsTo(models.Utilisateur, {
         foreignKey: 'utilisateurId',
         onDelete: 'SET NULL',
       });
+
+      // Lien associatif à la table GROUPE passant à travers la table GROUPE_ELEVE
+      Eleve.belongsToMany(models.Cours, {
+        through: 'eleve_cours',
+        foreignKey: 'coursId',
+        otherKey: 'eleveId',
+        timestamps: false
+      });
+
+      Eleve.belongsToMany(models.Groupe, {
+        through: 'groupe_eleve',
+        foreignKey: 'eleveId',
+        otherKey: 'groupeId',
+        timestamps: false
+      });
     }
   }
+
+  // Définition des champs de la table ELEVE
   Eleve.init({
     nom: DataTypes.STRING,
     prenom: DataTypes.STRING,
@@ -43,8 +56,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
+    // Nom du modèle à utiliser dans les fonctions js
     modelName: 'Eleve',
-    tableName: 'ELEVE'
+    // Nom de la table dans mysql
+    tableName: 'ELEVE',
+    // Désactive les timestamps
+    timestamps: false,
+    freezeTableName: true,
   });
   return Eleve;
 };

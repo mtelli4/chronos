@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 
+
 // Fonction pour hacher le mot de passe
 function hashPassword(password) {
   try {
