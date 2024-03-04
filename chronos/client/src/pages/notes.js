@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios'
 import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik"
 import * as Yup from "yup";
+import { authService } from "../services/authService";
+
 
 
 function Notes() {
-    const [roles, setRoles] = useState(0);
+    const [roles, setRoles] = useState(authService.getCurrentRole());
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
@@ -54,7 +56,7 @@ function Notes() {
 
         //Ajout du rôle actuel pour la recherche de notes
         data["profil"] = roles
-        if (roles == 2) {
+        if (roles.includes('ROLE_USER')) {
             data["eleveId"] = 1
         }
 
@@ -161,7 +163,8 @@ function Notes() {
     //Mise à jour des notes, quand on change de rôle
     useEffect(() => {
         let parameters = { "profil": roles }
-        if (roles == 2) {
+        console.log("Role"+roles)
+        if (roles.includes('ROLE_USER')) {
             parameters["eleveId"] = 1
         }
         axios.get("http://localhost:5000/notes", { params: parameters }).then((response) => {
@@ -169,22 +172,20 @@ function Notes() {
         })
     }, [roles])
 
-    //Récupération des modules disponibles au lancement
     useEffect(() => {
+        setRoles(authService.getCurrentRole())
+        
+        //Récupération des modules disponibles au lancement
         axios.get("http://localhost:5000/modules").then((response) => {
             setModules(response.data)
         })
-    }, [])
 
-    //Récupération des formations disponibles au lancement
-    useEffect(() => {
+        //Récupération des formations disponibles au lancement
         axios.get("http://localhost:5000/formations").then((response) => {
             setFormations(response.data)
         })
-    }, [])
 
-    //Récupération des périodes disponibles au lancement
-    useEffect(() => {
+        //Récupération des périodes disponibles au lancement
         axios.get("http://localhost:5000/periodes").then((response) => {
             setPeriodes(response.data)
         })
@@ -261,15 +262,16 @@ function Notes() {
     return (
         <>
             {/* Tempororaire : Affichage du rôle actuel et bouton de sélection de rôle */}
-            <h1> Role actuel : {['Secrétaire', 'Professeurs', 'Eleves'].at(roles)}
+            <h1> Role actuel : {roles}
+            {/* <h1> Role actuel : {['Secrétaire', 'Professeurs', 'Eleves'].at(roles)} */}
             </h1>
-            <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles(0); }}>Secrétaire</button>
-            <button className="" onClick={() => { setNotes({ "evaluations": [], "eleves": [] }); setRoles(1); }}>Professeurs</button>
-            <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles(2); }}>Eleves</button>
+            {/* <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles('ROLE_SECRETARY'); }}>Secrétaire</button>
+            <button className="" onClick={() => { setNotes({ "evaluations": [], "eleves": [] }); setRoles('ROLE_PROFESSOR'); }}>Professeurs</button>
+            <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles('ROLE_USER'); }}>Eleves</button> */}
 
             {/* Affichage de la page pour les sécretaire */}
             {
-                roles == 0 &&
+                roles.includes('ROLE_SECRETARY') &&
                 <>
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
@@ -344,7 +346,7 @@ function Notes() {
             }
 
             {/* Affichage de la page pour les professeurs */}
-            {roles == 1 &&
+            {roles.includes('ROLE_PROFESSOR') &&
                 <>
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
@@ -501,7 +503,7 @@ function Notes() {
 
             {/* Affichage de la page pour les élèves */}
             {
-                roles == 2 &&
+                roles.includes('ROLE_USER') &&
                 <>
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>

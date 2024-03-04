@@ -8,17 +8,21 @@ router.get("/", async (req, res) => {
   const parameters = req.query
   const profil = parameters.profil
   console.log(parameters)
-  //  0 pour secretaire, 1 pour professeur, 2 pour eleves  
-  var result = {}
-  if (profil ==='0'){
-    result = await getNotesSecretaire(parameters)
+  if (profil !==null){
+    //  0 pour secretaire, 1 pour professeur, 2 pour eleves  
+    if (profil.includes('ROLE_SECRETARY')){
+      result = await getNotesSecretaire(parameters)
+    }
+    if (profil.includes('ROLE_PROFESSOR')) {
+      result = await getNotesProfesseurs(parameters)
+    }
+    if (profil.includes('ROLE_USER')) {
+      result = await getNotesEleves(parameters)
+    }
+  }else{
+    result = {}
   }
-  if (profil === '1') {
-    result = await getNotesProfesseurs(parameters)
-  }
-  if (profil === '2') {
-    result = await getNotesEleves(parameters)
-  }
+  
 
   res.json(result);
 })
