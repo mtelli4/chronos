@@ -30,10 +30,6 @@ function App() {
   }, [])
 
   return (
-    <Router>
-      {/* <Link to="/createcourse"> Créer un cours</Link>
-      <Link to="/"> Accueil</Link> */}
-      <Header links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/notes"}]} />
       <Routes>
         <Route exact path='/' element={<PrivateRoute/>}>
           <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />

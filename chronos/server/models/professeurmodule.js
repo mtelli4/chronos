@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 // Nom du modèle à utiliser dans les fonctions js
     modelName: 'ProfesseurModule',
     // Nom de la table dans mysql
-    tableName: 'Professeur_Module',
+    tableName: 'PROFESSEUR_MODULE',
     // Désactive les timestamps
   timestamps: false,
   });

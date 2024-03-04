@@ -14,8 +14,10 @@ const PageEdt = () => {
     const selectedRole = event.target.value;
 
     // Mettre à jour le local storage avec le nouveau rôle sélectionné
-    localStorage.setItem('currentRole', selectedRole);
+    authService.setCurrentRole(selectedRole);
     setCurrentRole(selectedRole);
+
+    authService.setCurrentRoleId(userRoles[selectedRole]);
   };
 
   useEffect(() => {
@@ -209,7 +211,7 @@ const PageEdt = () => {
           <div>
           <label htmlFor="roleSelector">Sélecteur de role: </label>
           <select id="roleSelector" value={currentRole} onChange={handleRoleChange}>
-              {(userRoles ?? []).map((role) => (
+              {Object.keys(userRoles ?? {}).map((role) => (
                 <option key={role} value={role}>
                   {role}
                 </option>
