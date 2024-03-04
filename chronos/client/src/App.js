@@ -1,15 +1,10 @@
 import './App.css';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
-import Button from './components/Button';
 import React, {useEffect,useState} from 'react';
-import PageExemple from './pages/pageExemple';
-import ClassSquare from './components/ClassSquare';
-import Calendar from './components/Calendar';
 import axios from 'axios';
 import CreateCourse from './pages/createCourse';
 import Agenda from './pages/agenda';
 import PageEdt from './pages/pageEdt';
-import Header from './components/Header';
 import FileImport from './pages/fileImport';
 import Notes from './pages/notes';
 import EmailForm from './pages/emailForm';
@@ -17,6 +12,12 @@ import LoginForm from './pages/loginForm';
 import ChangePasswordForm from './pages/changePasswordForm';
 import CallForm from './pages/call';
 import CSVExportPage from './pages/exportExample';
+import { PrivateRoute } from './routes/privateRoute';
+import { AdminPrivateRoute } from './routes/adminRoute';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import TestAdmin from './pages/admin/test';
+import Unauthorized from './pages/error/Unauthorized';
+import NotFound from './pages/error/NotFound';
 
 function App() {
 
@@ -28,33 +29,31 @@ function App() {
   }, []) 
 
   return (
-    <Router>
-      {/* <Link to="/createcourse"> Créer un cours</Link>
-      <Link to="/"> Accueil</Link> */}
-      <Header links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
       <Routes>
-        {/* <Route path="/" element={<Calendar />} exact /> */}
-        {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
-        <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
-        <Route path="/createcourse" element={<CreateCourse />} exact />
-        {/* test branch nidal */}
-        <Route path="/" element={<PageEdt />} exact /> 
-        <Route path="/importStudents" element={<FileImport />} exact />
+          <Route exact path='/' element={<PrivateRoute/>}>
+            <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
+            <Route path="/createcourse" element={<CreateCourse />} exact />
+            <Route path="/" element={<PageEdt />} exact /> 
+            <Route path="/importStudents" element={<FileImport />} exact />
+            <Route path="/call" element={<CallForm />} exact />
+            <Route path="/email" element={<EmailForm />} exact />
+            <Route path="/export-csv" element={<CSVExportPage />} exact />
+            <Route path="/notes" element={<Notes />} exact />
 
+            {/* -------------- ADMIN ROUTES -----------------*/}
+            <Route path='/admin/*' element={<AdminPrivateRoute/>}>
+              <Route index element={<AdminDashboard />} />
+              <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
+            </Route>
 
-        <Route path="/login" element={<LoginForm />} exact />
-        <Route path="/psw" element={<ChangePasswordForm />} exact />
-        <Route path="/call" element={<CallForm />} exact />
+          </Route>
 
-
-        {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
-
-        <Route path="/email" element={<EmailForm />} exact />
-        <Route path="/export-csv" element={<CSVExportPage />} exact />
-        {/* test branch notes lucas */}
-        <Route path="/notes" element={<Notes />} exact />
+          {/* -------------- PUBLIC ROUTES -----------------*/}
+          <Route path="/login" element={<LoginForm />} exact />
+          <Route path="/psw" element={<ChangePasswordForm />} exact />
+          <Route path='/*' element={<NotFound /> }/>
+          <Route path='/unauthorized' element={<Unauthorized/>} exact />
       </Routes>
-    </Router>
   );
 }
 
