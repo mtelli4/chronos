@@ -20,6 +20,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import TestAdmin from './pages/admin/test';
 import Unauthorized from './pages/error/Unauthorized';
 import NotFound from './pages/error/NotFound';
+import Header from "./components/Header"
 
 function App() {
 
@@ -30,17 +31,19 @@ function App() {
     })
   }, []) 
 
+  const [headerVisibility, setHeaderVisibility] = useState(false);
+
   return (
 
     <Router>
+      <Header isVisible={headerVisibility} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
-      <Header isVisible={false} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
-      <Routes>
+        <Routes>
           <Route exact path='/' element={<PrivateRoute/>} />
           <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
           <Route path="/createcourse" element={<CreateCourse />} exact />
-          <Route path="/" element={<PageEdt />} exact /> 
+          <Route path="/edt" element={<PageEdt />} exact /> 
           <Route path="/importStudents" element={<FileImport />} exact />
           <Route path="/call" element={<CallForm />} exact />
           <Route path="/email" element={<EmailForm />} exact />
@@ -51,10 +54,7 @@ function App() {
           <Route path='/admin/*' element={<AdminPrivateRoute/>} />
           <Route index element={<AdminDashboard />} />
           <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
-
-          <Route path="/login" element={<LoginForm />} exact />
           <Route path="/loginNidal" element={<PageLogin />} exact />
-          <Route path="/psw" element={<ChangePasswordForm />} exact />
           <Route path="/pswNidal" element={<PagePasswordChange />} exact />
 
           {/* -------------- PUBLIC ROUTES -----------------*/}

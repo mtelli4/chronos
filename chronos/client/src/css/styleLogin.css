@@ -55,6 +55,11 @@
     overflow: auto;
 }
 
+.LoginSubtitle {
+    color: #000;
+    font-size: 1.5rem;
+}
+
 .LoginConfirmButton {
     outline: none;
     border: 1px solid #000;
@@ -70,6 +75,7 @@
 @keyframes triangleAppear {
     
 }
+
 
 @media (max-width: 1000px) {
     .LoginCont {
@@ -93,5 +99,31 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+    }
+}
+
+@media (max-width: 700px) {
+    .LoginSubtitle {
+        font-size: 1.25rem;
+    }
+
+    .LoginContentCont {
+        width: 95%;
+        height: 70%;
+        padding: 20px 15px;
+    }
+
+    .LoginPurpleTriangle {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, #AD6DFF, #8734DB);
+        position: absolute;
+        z-index: -999;
+        top: 0;
+        right: 0;
+        transform-origin: center;
+        transform: translateY(0%);
+        clip-path: polygon(0 0, 100% 0%, 100% 100%, 42% 100%);
+        transition: all 0.25s linear;
     }
 }
