@@ -11,8 +11,12 @@ const FileImport = () => {
     file:""
   }
 
-  const validationSchema = Yup.object().shape({
+  const validationSchemaStudent = Yup.object().shape({
       formationId: Yup.number().required("Ce champ est obligatoire."),
+      file: Yup.mixed().required('Ce fichier est obligatoire')
+  })
+
+  const validationSchemaTeacher = Yup.object().shape({
       file: Yup.mixed().required('Ce fichier est obligatoire')
   })
 
@@ -23,9 +27,26 @@ const FileImport = () => {
     setFile(selectedFile);
   };
 
-  const handleImport = (data) => {
-    console.log("THIS IS DATA")
-    console.log(data)
+  const validColumns = (columns, importType) => {
+    var requiredKeys = null;
+
+    switch (importType) {
+      // Eleves
+      case 1:
+        requiredKeys = ['nom', 'prenom', 'email', 'numeroEtudiant', 'tiersTemps'];
+        break;
+      // Profs
+      case 2:
+        requiredKeys = ['nom', 'prenom', 'email', 'vacataire'];
+        break;
+      default:
+        return false;
+    }
+    
+    return requiredKeys.every(key => columns.includes(key));
+  };
+
+  const handleImport = (importType) => {
     if (file) {
       // Vérifier le type de fichier
       const fileType = file.type;
@@ -34,14 +55,49 @@ const FileImport = () => {
         // Traitement des fichiers CSV avec papaparse
         Papa.parse(file, {
           complete: (result) => {
-            console.log('Données CSV:', result.data);
+            const formData = {
+              "data": result.data,
+            };
+
+            // Check if the excel has the right columns
+            const columns = Object.keys(result.data[0]);
+
+            if (validColumns(columns, importType) !== true) {
+              alert("Le fichier ne possède pas les bons champs !");
+              return;
+            }
+
+            var url = "http://localhost:5000/professeurs/insertListProfs";
+
+            // Students import
+            console.log(importType);
+            if (importType === 1) {
+              // Get formationId
+              let formationSelect = document.getElementById('formationSelect').selectedOptions;
+              let formationId;
+              if (formationSelect.length > 0) {
+                formationId = formationSelect[0].value;
+              } else {
+                formationId = null;
+              }
+
+              formData.formationId = formationId;
+
+              url = "http://localhost:5000/eleves/insertListEleves";
+            }
+
             //requête post axios
-            axios.post("http://localhost:5000/eleves/insertListEleves", result.data)
+            axios.post(url, formData)
             .then((response) => {
-                console.log("Succès")
-                console.log(response)
+              const errors = response.data.filter((obj) => Object.keys(obj).length !== 0);
+
+              if (errors.length > 0) {
+                const errorMessage = "Une erreur est survenue lors de l'import des élèves suivants : \n" + errors.map((error) => JSON.stringify(error, null, 2)).join('\n');;
+                alert(errorMessage);
+              } else {
                 //APPARITION POP UP DE CONFIMATION A CUSTOM("Votre liste a été importée avec succès !")
                 alert("Votre liste a été importée avec succès!");
+              }
             })
             .catch(function (error) {
                 if (error.response) {
@@ -87,13 +143,48 @@ const FileImport = () => {
             });
             return obj;
           });
+          
+          const formData = {
+            "data": jsonDataObjects,
+          };
+
+          // Check if the excel has the right columns
+          const columns = Object.keys(jsonData[0]);
+
+          if (validColumns(columns, importType) !== true) {
+            alert("Le fichier ne possède pas les bons champs !");
+            return;
+          }
+
+          var url = "http://localhost:5000/professeurs/insertListProfs";
+
+          // Students import
+          if (importType === 1) {
+            let formationSelect = document.getElementById('formationSelect').selectedOptions;
+            let formationId;
+            if (formationSelect.length > 0) {
+              formationId = formationSelect[0].value;
+            } else {
+              formationId = null;
+            }
+
+            formData.formationId = formationId;
+
+            url = "http://localhost:5000/eleves/insertListEleves";
+          }
+          
           console.log('Données Excel (XLSX):', jsonDataObjects);
-          axios.post("http://localhost:5000/eleves/insertListEleves", jsonDataObjects)
+          axios.post(url, formData)
             .then((response) => {
-                console.log("Succès")
-                console.log(response)
+              const errors = response.data.filter((obj) => Object.keys(obj).length !== 0);
+
+              if (errors.length > 0) {
+                const errorMessage = "Une erreur est survenue lors de l'import des élèves suivants : \n" + errors.map((error) => JSON.stringify(error, null, 2)).join('\n');;
+                alert(errorMessage);
+              } else {
                 //APPARITION POP UP DE CONFIMATION A CUSTOM("Votre liste a été importée avec succès !")
                 alert("Votre liste a été importée avec succès!");
+              }
             })
             .catch(function (error) {
                 if (error.response) {
@@ -134,22 +225,45 @@ const FileImport = () => {
   }, [])
   
   return (
-    <div className="importStudentsContainer">
-        <p>Veuillez importer un fichier calc (.csv ou .xls) de votre liste d'élève.</p>
-        <Formik initialValues={initialValues} onSubmit={handleImport} validationSchema={validationSchema}>
-          <Form className="formContainer">
-              <label>Formations</label>
-              <ErrorMessage name="formationId" component="span"/>
-              <Field as="select" name="formationId">
-                  <option disabled value="">Sélectionnez la formation</option>
-                  {formations.map(formation => (
-                      <option value={formation.id}>{formation.libelle}</option>
-                  ))}
-              </Field>
-            <input type="file" accept=".csv, .xls, .xlsx" onChange={handleFileChange} />
-            <button id="importStudents" onClick={handleImport}>Importer</button>{/*A modifier pour avoir un vrai submit*/}
-          </Form>
-        </Formik>
+    <div>
+      <div className="importStudentsContainer">
+          <p>Veuillez importer un fichier calc (.csv ou .xlsx) de votre liste d'élèves.</p>
+          <p>
+            Télécharger un modèle{" "}
+            <a href="/import_eleve_vierge.xlsx" download>
+              Modèle d'import élève
+            </a>
+          </p>
+          <Formik initialValues={initialValues} validationSchema={validationSchemaStudent}>
+            <Form className="formContainer">
+                <label>Formations</label>
+                <ErrorMessage name="formationId" component="span"/>
+                <Field as="select" id='formationSelect' name="formationId">
+                    <option disabled value="">Sélectionnez la formation</option>
+                    {formations.map(formation => (
+                        <option value={formation.id}>{formation.libelle}</option>
+                    ))}
+                </Field>
+              <input type="file" accept=".csv, .xls, .xlsx" onChange={handleFileChange} />
+              <button id="importStudents" type="submit" onClick={() => handleImport(1)}>Importer</button>
+            </Form>
+          </Formik>
+      </div>
+      <div className="importTeachersContainer">
+          <p>Veuillez importer un fichier calc (.csv ou .xls) de votre liste de professeurs.</p>
+          <p>
+            Télécharger un modèle{" "}
+            <a href="/import_professeur_vierge.xlsx" download>
+              Modèle d'import professeur
+            </a>
+          </p>
+          <Formik initialValues={initialValues} validationSchema={validationSchemaTeacher}>
+            <Form className="formContainer">
+              <input type="file" accept=".csv, .xls, .xlsx" onChange={handleFileChange} />
+              <button id="importTeachers" type="submit" onClick={() => handleImport(2)}>Importer</button>
+            </Form>
+          </Formik>
+      </div>
     </div>
   );
 };

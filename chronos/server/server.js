@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json())
 
 const sequelize = new Sequelize('ingrid', process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
-  host: 'localhost',
+  host: '127.0.0.1',
   dialect: 'mysql',
 });
 
@@ -37,6 +37,9 @@ app.use("/notes", notesRouter)
 
 const elevesRouter = require('./routes/Eleve')
 app.use("/eleves", elevesRouter)
+
+const professeursRouter = require('./routes/Professeur')
+app.use("/professeurs", professeursRouter)
 
 const formationsRouter = require('./routes/Formation')
 app.use("/formations", formationsRouter)
