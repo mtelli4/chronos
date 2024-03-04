@@ -35,19 +35,24 @@
 }
 
 .LoginContentCont {
-    width: fit-content;
+    width: 55%;
     height: 75%;
     max-height: 525px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: all 0.5s linear;
 }
 
 .LoginFormCont {
     display: flex;
     flex-direction: column;
     padding-left: 40px;
+    padding-right: 10px;
     gap: 15px;
+    width: 100%;
+    max-height: 300px;
+    overflow: auto;
 }
 
 .LoginConfirmButton {
@@ -74,5 +79,19 @@
 
     .LoginFormCont {
         padding-left: 0px;
+        gap: 15px;
+    }
+
+    .LoginContentCont {
+        width: 80%;
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+        height: 85%;
+        max-height: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 }

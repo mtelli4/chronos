@@ -7,6 +7,11 @@
   font-family: 'Righteous', sans-serif;
 }
 
+*::selection {
+  background-color: #AD6DFF;
+  color: #fff;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

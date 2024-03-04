@@ -64,8 +64,8 @@ const PageLogin = () => {
             onSubmit={handleSubmit}>
 
             <Form className='LoginFormCont'>   
-              <ChronosInput width="500px" title="Email :" type="email" component="div" name="email" />
-              <ChronosInput title="Mot de passe :" type="password" component="div" name="password" />
+              <ChronosInput width="100%" title="Email :" type="email" component="div" name="email" />
+              <ChronosInput width="100%" title="Mot de passe :" type="password" component="div" name="password" />
 
               <button type="submit" className='LoginConfirmButton'>Soumettre</button>
             </Form>

@@ -31,7 +31,7 @@ function App() {
     <Router>
       {/* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */}
-      <Header isVisible={true} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
+      <Header isVisible={false} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
       <Routes>
         {/* <Route path="/" element={<Calendar />} exact /> */}
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}

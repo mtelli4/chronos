@@ -30,6 +30,7 @@ export const ChronosLogoCont = styled(LinkR)`
     align-items: center;
     gap: 0px;
     cursor: pointer;
+    user-select: none;
 `;
 
 export const ChronosC = styled.img`

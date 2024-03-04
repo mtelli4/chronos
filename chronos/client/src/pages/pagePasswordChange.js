@@ -70,10 +70,10 @@ const PagePasswordChange = () => {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    <Form>
-                      <ChronosInput type="email" name="email" component="div" title="Email :" width="500px" />
-                      <ChronosInput type="password" name="password" component="div" title="Nouveau mot de passe :" width="500px" />
-                      <ChronosInput type="password" name="confirmPassword" component="div" title="Confirmez le mot de passe :" width="500px" />
+                    <Form className='LoginFormCont'>
+                      <ChronosInput width="100%" type="email" name="email" component="div" title="Email :" />
+                      <ChronosInput width="100%" type="password" name="password" component="div" title="Nouveau mot de passe :"/>
+                      <ChronosInput width="100%" type="password" name="confirmPassword" component="div" title="Confirmez le mot de passe :"/>
           
                   
                       <button className='LoginConfirmButton' type="submit">Soumettre</button>
