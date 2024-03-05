@@ -45,7 +45,13 @@ const getNotesEleves = async (parameters) => {
   //Récupération de toutes les notes de l'élève actuel
   const notesEleve = await Note.findAll({
     where: notesParameters,
-    attributes: ['id','evaluationId']
+    attributes: ['id','evaluationId'],
+    include: [
+      {
+        model: Evaluation,
+        attributes:['id','periodeId']
+      }
+    ]
   })
 
   //Récupération des notes de tout les élèves pour les évaluations pour lesquelles l'élève actuel à une note
@@ -330,7 +336,7 @@ const getNotesSecretaire = async (parameters) => {
       include: [{
         model: Formation,
         through:{
-            model:db.FormationModule,
+            model:FormationModule,
             attributes:[]
         },// Utilisez le modèle Sequelize correspondant à la table intermédiaire Formation-Module
         attributes:['id','libelle']

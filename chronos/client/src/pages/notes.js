@@ -28,7 +28,7 @@ function Notes() {
                 }
                 setCurrentFormation(values.formationId)
                 if (values.formationId === '') {
-                    axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId }}).then((response) => {
+                    axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId } }).then((response) => {
                         setModules(response.data)
                     })
                 } else {
@@ -43,8 +43,23 @@ function Notes() {
     };
 
     //Initialisation des paramètres pour le formulaire de recherche de notes
-    const initialValuesSearch = {}
+    const initialValuesSearch = {
+        formationId: '',
+        moduleId: '',
+        periodeId: ''
+    }
     const validationSchema = Yup.object().shape({
+        formationId: Yup.number().when([], {
+            is: () => role.includes('ROLE_SECRETARY') || role.includes('ROLE_PROFESSOR'),
+            then: () => Yup.number().required("Ce champ est obligatoire."),
+            otherwise: () => Yup.number().nullable().notRequired(),
+        }),
+        moduleId: Yup.number().when([], {
+            is: () => role.includes('ROLE_PROFESSOR'),
+            then: () => Yup.number().required("Ce champ est obligatoire."),
+            otherwise: () => Yup.number().nullable().notRequired(),
+        }),
+        periodeId: Yup.number().notRequired(),
     })
     //Fonction de validation du formulaire de recherche de notes
     const onSubmitSearch = (data) => {
@@ -172,14 +187,14 @@ function Notes() {
     //     })
     // }, [role])
 
-    useEffect(() => {        
+    useEffect(() => {
         //Récupération des modules disponibles au lancement
         axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId } }).then((response) => {
             setModules(response.data)
         })
 
         //Récupération des formations disponibles au lancement
-        axios.get("http://localhost:5000/formations/byRole", {params:{role:role, roleId:roleId}}).then((response) => {
+        axios.get("http://localhost:5000/formations/byRole", { params: { role: role, roleId: roleId } }).then((response) => {
             setFormations(response.data)
         })
 
@@ -187,6 +202,10 @@ function Notes() {
         axios.get("http://localhost:5000/periodes").then((response) => {
             setPeriodes(response.data)
         })
+
+        if (role.includes('ROLE_USER')) {
+            onSubmitSearch(formRef.current.values);
+        }
     }, [])
 
     //Fonction de gestion lors de la saisie/suppression/modification de notes
@@ -256,13 +275,13 @@ function Notes() {
             }
         }
     }
-    console.log("ROLE ID :"+roleId)
+    console.log("ROLE ID :" + roleId)
 
     return (
         <>
             {/* Tempororaire : Affichage du rôle actuel et bouton de sélection de rôle */}
             <h1> Role actuel : {role}</h1>
-            
+
             {/* Affichage de la page pour les sécretaire */}
             {
                 role.includes('ROLE_SECRETARY') &&
@@ -273,7 +292,6 @@ function Notes() {
                             <label>Formation</label>
                             <ErrorMessage name="formationId" component="span" />
                             <Field as="select" name="formationId">
-                                <option disabled value=''>Sélectionner une formation</option>
                                 <option defaultValue value=''>Sélectionner une formation</option>
                                 {formations.map(formation => (
                                     <option value={parseInt(formation.id)}> {formation.id} - {formation.libelle} </option>
@@ -282,7 +300,6 @@ function Notes() {
                             <label>Periode</label>
                             <ErrorMessage name="periodeId" component="span" />
                             <Field as="select" name="periodeId">
-                                <option disabled value=''>Sélectionner une période</option>
                                 <option defaultValue value=''>Sélectionner une période</option>
                                 {periodes.map(periode => (
                                     <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
@@ -347,7 +364,6 @@ function Notes() {
                             <label>Formation</label>
                             <ErrorMessage name="formationId" component="span" />
                             <Field as="select" name="formationId">
-                                <option disabled value=''>Sélectionner une formation</option>
                                 <option defaultValue value=''>Sélectionner une formation</option>
                                 {formations.map(formation => (
                                     <option value={parseInt(formation.id)}> {formation.id} - {formation.libelle} </option>
@@ -356,7 +372,6 @@ function Notes() {
                             <label>Module</label>
                             <ErrorMessage name="moduleId" component="span" />
                             <Field as="select" name="moduleId">
-                                <option disabled value=''>Sélectionner un modules</option>
                                 <option defaultValue value=''>Sélectionner un modules</option>
                                 {modules.map(module => (
                                     <option value={parseInt(module.id)}>{module.id}.({module.codeApogee}) - {module.libelle}</option>
@@ -365,7 +380,6 @@ function Notes() {
                             <label>Periode</label>
                             <ErrorMessage name="periodeId" component="span" />
                             <Field as="select" name="periodeId">
-                                <option disabled value=''>Sélectionner une période</option>
                                 <option defaultValue value=''>Sélectionner une période</option>
                                 {periodes.map(periode => (
                                     <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
@@ -405,7 +419,6 @@ function Notes() {
                                 <label>Periode</label>
                                 <ErrorMessage name="periodeId" component="span" />
                                 <Field as="select" name="periodeId">
-                                    <option disabled value=''>Sélectionner une période</option>
                                     <option defaultValue value=''>Sélectionner une période</option>
                                     {periodes.map(periode => (
                                         <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
@@ -504,7 +517,6 @@ function Notes() {
                             <label>Periode</label>
                             <ErrorMessage name="periodeId" component="span" />
                             <Field as="select" name="periodeId">
-                                <option disabled value=''>Sélectionner une période</option>
                                 <option defaultValue value=''>Sélectionner une période</option>
                                 {periodes.map(periode => (
                                     <option value={parseInt(periode.id)}>{periode.id}.{periode.libelle}</option>
