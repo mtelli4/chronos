@@ -179,7 +179,7 @@ function Notes() {
         })
 
         //Récupération des formations disponibles au lancement
-        axios.get("http://localhost:5000/formations").then((response) => {
+        axios.get("http://localhost:5000/formations/byRole", {params:{role:role, roleId:roleId}}).then((response) => {
             setFormations(response.data)
         })
 

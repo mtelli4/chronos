@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'utilisateurId',
         onDelete: 'SET NULL',
       });
+      Secretaire.belongsToMany(models.Formation, {through:models.FormationSecretaire, foreignKey:'secretaireId'});
     }
   }
   Secretaire.init({

@@ -34,6 +34,9 @@ router.get("/byFilter", async (req, res) => {
             case "ROLE_PROFESSOR":
                 modulesFilters['$Professeurs.id$'] = parseInt(parameters.roleId)
                 break;
+            default:
+                console.log("get modules/byFilter - Unhandled Role: "+role)
+                break;
         }
     }
     if (parameters.hasOwnProperty('formation')) {
