@@ -35,6 +35,11 @@ export const ChronosInputTitle = styled.label`
     font-size: 1.5rem;
     padding-left: 5px;
     padding-right: 5px;
+
+    @media (max-width: 500px) {
+        font-size: 1.25rem;
+        transition: all 0.25s;
+    }
 `;
 
 export const ChronosInputField = styled(Field)`

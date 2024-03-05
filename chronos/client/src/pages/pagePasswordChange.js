@@ -61,7 +61,7 @@ const PagePasswordChange = () => {
                 <img className='LoginPurpleTriangle' />
                 <div className='LoginContentCont'>
                 <div className='LoginTitleCont'>
-                    <ChronosLogo fontsize={5} />
+                    <ChronosLogo fontsize={5} onMedia={{min: 500, fontsize: 4}} />
                     <h2 className='LoginSubtitle'>Petite phrase sympathique et accrochante</h2>
                 </div>
 
