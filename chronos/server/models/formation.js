@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       const { ModuleCours,FormationModule } = models
       Formation.belongsToMany(ModuleCours, {through:FormationModule, foreignKey:'FormationId'});
       // define association here
+      
+      Formation.hasMany(models.Eleve, {foreignKey: 'formationId',});
     }
   }
   Formation.init({

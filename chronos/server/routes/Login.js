@@ -58,6 +58,9 @@ router.post("/", async (req, res) => {
                         roles[role.label]=foundUser.Professeur.id
                     }
                     break;
+                default: 
+                    roles[role.label]=null
+                    break;
             }
         });
         const token = jwt.sign({ userId: foundUser.id, email: foundUser.email , roles: roles}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });

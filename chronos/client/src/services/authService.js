@@ -63,7 +63,7 @@ const setCurrentRoleId = (roleId) => {
 }
 
 const getCurrentRoleId = () => {
-    return localStorage.getItem('currentRoleId');
+    return parseInt(localStorage.getItem('currentRoleId'));
 }
 
 

@@ -329,7 +329,10 @@ const getNotesSecretaire = async (parameters) => {
       ],
       include: [{
         model: Formation,
-        through: FormationModule, // Utilisez le modèle Sequelize correspondant à la table intermédiaire Formation-Module
+        through:{
+            model:db.FormationModule,
+            attributes:[]
+        },// Utilisez le modèle Sequelize correspondant à la table intermédiaire Formation-Module
         attributes:['id','libelle']
       }],
       where: modulesParameters,

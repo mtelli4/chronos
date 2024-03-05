@@ -7,11 +7,12 @@ import { authService } from "../services/authService";
 
 
 function Notes() {
-    const [roles, setRoles] = useState(authService.getCurrentRole());
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
     const [periodes, setPeriodes] = useState([])
+    const role = authService.getCurrentRole();
+    const roleId = authService.getCurrentRoleId();
 
     const [currentFormation, setCurrentFormation] = useState([""])
 
@@ -27,11 +28,11 @@ function Notes() {
                 }
                 setCurrentFormation(values.formationId)
                 if (values.formationId === '') {
-                    axios.get("http://localhost:5000/modules").then((response) => {
+                    axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId }}).then((response) => {
                         setModules(response.data)
                     })
                 } else {
-                    axios.get(`http://localhost:5000/modules/byFormation/`, { params: { id: values.formationId } }).then((response) => {
+                    axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId, formation: values.formationId } }).then((response) => {
                         setModules(response.data)
                     })
                 }
@@ -55,9 +56,9 @@ function Notes() {
         });
 
         //Ajout du rôle actuel pour la recherche de notes
-        data["profil"] = roles
-        if (roles.includes('ROLE_USER')) {
-            data["eleveId"] = 1
+        data["profil"] = role
+        if (role.includes('ROLE_USER')) {
+            data["eleveId"] = roleId
         }
 
         //Appel à l'API de récupération de notes
@@ -161,22 +162,19 @@ function Notes() {
     }
 
     //Mise à jour des notes, quand on change de rôle
-    useEffect(() => {
-        let parameters = { "profil": roles }
-        console.log("Role"+roles)
-        if (roles.includes('ROLE_USER')) {
-            parameters["eleveId"] = 1
-        }
-        axios.get("http://localhost:5000/notes", { params: parameters }).then((response) => {
-            setNotes(response.data)
-        })
-    }, [roles])
+    // useEffect(() => {
+    //     let parameters = { "profil": role }
+    //     if (role.includes('ROLE_USER')) {
+    //         parameters["eleveId"] = roleId
+    //     }
+    //     axios.get("http://localhost:5000/notes", { params: parameters }).then((response) => {
+    //         setNotes(response.data)
+    //     })
+    // }, [role])
 
-    useEffect(() => {
-        setRoles(authService.getCurrentRole())
-        
+    useEffect(() => {        
         //Récupération des modules disponibles au lancement
-        axios.get("http://localhost:5000/modules").then((response) => {
+        axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId } }).then((response) => {
             setModules(response.data)
         })
 
@@ -258,20 +256,16 @@ function Notes() {
             }
         }
     }
+    console.log("ROLE ID :"+roleId)
 
     return (
         <>
             {/* Tempororaire : Affichage du rôle actuel et bouton de sélection de rôle */}
-            <h1> Role actuel : {roles}
-            {/* <h1> Role actuel : {['Secrétaire', 'Professeurs', 'Eleves'].at(roles)} */}
-            </h1>
-            {/* <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles('ROLE_SECRETARY'); }}>Secrétaire</button>
-            <button className="" onClick={() => { setNotes({ "evaluations": [], "eleves": [] }); setRoles('ROLE_PROFESSOR'); }}>Professeurs</button>
-            <button className="" onClick={() => { setNotes({ "modules": [], "eleves": [] }); setRoles('ROLE_USER'); }}>Eleves</button> */}
-
+            <h1> Role actuel : {role}</h1>
+            
             {/* Affichage de la page pour les sécretaire */}
             {
-                roles.includes('ROLE_SECRETARY') &&
+                role.includes('ROLE_SECRETARY') &&
                 <>
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
@@ -327,7 +321,6 @@ function Notes() {
                                         let note = ""
                                         if (notes.hasOwnProperty(eleve.id)) {
                                             if (notes[eleve.id].hasOwnProperty(module.id)) {
-                                                console.log()
                                                 note = notes[eleve.id][module.id]
                                             }
                                         }
@@ -346,7 +339,7 @@ function Notes() {
             }
 
             {/* Affichage de la page pour les professeurs */}
-            {roles.includes('ROLE_PROFESSOR') &&
+            {role.includes('ROLE_PROFESSOR') &&
                 <>
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
@@ -503,7 +496,7 @@ function Notes() {
 
             {/* Affichage de la page pour les élèves */}
             {
-                roles.includes('ROLE_USER') &&
+                role.includes('ROLE_USER') &&
                 <>
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
