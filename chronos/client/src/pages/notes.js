@@ -8,6 +8,7 @@ import { authService } from "../services/authService";
 
 function Notes() {
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
+    const [notesDetails, setNotesDetails] = useState({})
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
     const [periodes, setPeriodes] = useState([])
@@ -187,6 +188,39 @@ function Notes() {
     //     })
     // }, [role])
 
+    const getModulesDetails = (data)=>{
+        //Suppression des champs vides, pour ne pas les prendre en compte dans la recherche
+        Object.keys(data).forEach(key => {
+            if (data[key] === '') {
+                delete data[key];
+            }
+        });
+        //Appel à l'API de récupération des notes du module sélectionné
+        axios.get("http://localhost:5000/notes", { params: data})
+        .then((response) => {
+            //Mise à jour des notes
+            console.log("Succès SearchNotes")
+            setNotesDetails(response.data)
+        }).catch(function (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+        });
+    }
+
     useEffect(() => {
         //Récupération des modules disponibles au lancement
         axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId } }).then((response) => {
@@ -275,7 +309,6 @@ function Notes() {
             }
         }
     }
-    console.log("ROLE ID :" + roleId)
 
     return (
         <>
@@ -321,7 +354,13 @@ function Notes() {
                                     return (
                                         <td key={"libelleModule" + module.id} style={{ border: "1pt solid black" }}>
                                             {module.libelle}<br />
-                                            {module.codeApogee}
+                                            {module.codeApogee} <br/>
+                                            <button onClick={() => { 
+                                                getModulesDetails({moduleId:module.id, 
+                                                    formationId:formRef.current.values.formationId, 
+                                                    periodeId:formRef.current.values.periodeId, 
+                                                    getDetails:true}) 
+                                                }}> Accéder aux détails</button>
                                         </td>
                                     )
                                 })
@@ -352,6 +391,79 @@ function Notes() {
                             )
                         })}
                     </table>
+
+
+                    {/* Tableau d'affichage du détails des notes */}
+                    { notesDetails.hasOwnProperty("evaluations") && notesDetails.hasOwnProperty("eleves") &&
+                    <table>
+                    <tr>
+                        {/* Première ligne, nom des évaluations */}
+                        <td style={{ border: "1pt solid black" }}>
+                        </td>
+                        <td style={{ border: "1pt solid black" }}>
+                            Moyenne Eleve
+                        </td>
+                        {
+                            notesDetails.evaluations.map((evals) => {
+                                return (
+                                    <td key={"libelleEval" + evals.id} style={{ border: "1pt solid black" }}>
+                                        {evals.libelle}<br />
+                                        Coeff:{evals.coefficient}<br />
+                                        Max:{evals.noteMaximale}<br />
+                                    </td>
+                                )
+                            })
+                        }
+                    </tr>
+                    {notesDetails.eleves.map((eleve) => {
+                        return (
+                            <tr>
+                                {/* Affichage du nom de l'élève et de sa moyenne */}
+                                <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
+                                <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
+
+                                {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}
+                                {notesDetails.evaluations.map((evals) => {
+                                    let note = ""
+                                    let statutLibelle = ""
+                                    if (notesDetails.hasOwnProperty(eleve.id)) {
+                                        if (notesDetails[eleve.id].hasOwnProperty(evals.id)) {
+                                            note = notesDetails[eleve.id][evals.id].note
+                                            if (notesDetails[eleve.id][evals.id].hasOwnProperty("statutLibelle") && notesDetails[eleve.id][evals.id].hasOwnProperty("statutId")) {
+                                                statutLibelle = notesDetails[eleve.id][evals.id].statutLibelle
+                                            }
+                                        }
+                                    }
+                                    return (
+                                        <td key={"CaseEleve" + eleve.id + "Eval" + evals.id} style={{ border: "1pt solid black" }}>
+                                            {note}
+                                            {statutLibelle != "" && <><br />{statutLibelle}</>}
+                                        </td>
+                                    )
+                                })}
+
+                            </tr>
+                        )
+                    })}
+
+                    {/* Affichage des moyennes pour chaque évaluation*/}
+                    <tr>
+                        <td style={{ border: "1pt solid black" }}>
+                        </td>
+                        <td style={{ border: "1pt solid black" }}>
+                            Moyenne Pour note
+                        </td>
+                        {
+                            notesDetails.evaluations.map((evals) => {
+                                return (
+                                    <td key={"MoyenneNote" + evals.id} style={{ border: "1pt solid black" }}>{evals.moyenne}</td>
+                                )
+                            })
+                        }
+                    </tr>
+                </table>
+                    }
+                    
                 </>
             }
 

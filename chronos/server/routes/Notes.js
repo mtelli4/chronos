@@ -6,21 +6,20 @@ const { Note, Eleve, Formation, ModuleCours, FormationModule,StatutNote, Periode
 
 router.get("/", async (req, res) => {
   const parameters = req.query
-  const profil = parameters.profil
-  console.log(parameters)
+  const profil = parameters.profil !== undefined ? parameters.profil : ""
+  const getDetails = parameters.getDetails
+  var result = {}
   if (profil !==null){
     //  0 pour secretaire, 1 pour professeur, 2 pour eleves  
     if (profil.includes('ROLE_SECRETARY')){
       result = await getNotesSecretaire(parameters)
     }
-    if (profil.includes('ROLE_PROFESSOR')) {
+    if (profil.includes('ROLE_PROFESSOR')|| getDetails) {
       result = await getNotesProfesseurs(parameters)
     }
     if (profil.includes('ROLE_USER')) {
       result = await getNotesEleves(parameters)
     }
-  }else{
-    result = {}
   }
   
 
