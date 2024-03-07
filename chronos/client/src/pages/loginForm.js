@@ -5,6 +5,18 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { authService } from "../services/authService";
 
+
+// Variables d'initialisation du formik
+const initialValues = {
+  email: '',
+  password: '',
+};
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
+  password: Yup.string().required('Le mot de passe est requis'),
+});
+
+
 const LoginForm = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');

@@ -10,8 +10,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Absence.belongsTo(models.Eleve, { foreignKey: 'eleveId', onDelete: 'SET NULL' });
-      Absence.belongsTo(models.Cours, { foreignKey: 'coursId', onDelete: 'SET NULL' });
+      // Clé étrangère eleveId de la table ELEVE
+      Absence.belongsTo(models.Eleve, { 
+        foreignKey: 'eleveId', 
+        onDelete: 'SET NULL' 
+      });
+
+      // Clé étrangère coursId de la table COURS
+      Absence.belongsTo(models.Cours, { 
+        foreignKey: 'coursId', 
+        onDelete: 'SET NULL' 
+      });
     }
   }
   Absence.init({
@@ -31,7 +40,9 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Cours',
         key: 'id',
       },
-    }
+    },
+    retard: DataTypes.INTEGER,
+    envoye: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Absence',

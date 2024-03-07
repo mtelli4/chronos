@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       Eleve.belongsToMany(models.Groupe, {
-        through: 'GROUPE_ELEVE',
+        through: 'groupe_eleve',
         foreignKey: 'eleveId',
         otherKey: 'groupeId',
         timestamps: false
@@ -60,9 +60,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Eleve',
     // Nom de la table dans mysql
     tableName: 'ELEVE',
-    // Désactive les timestamps
-    timestamps: false,
-    freezeTableName: true,
   });
   return Eleve;
 };
