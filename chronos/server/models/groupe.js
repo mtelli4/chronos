@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Lien associatif à la table ELEVE passant à travers la table GROUPE_ELEVE
       Groupe.belongsToMany(models.Eleve, {
-        through: 'groupe_eleve', 
+        through: 'GROUPE_ELEVE', 
         foreignKey: 'groupeId', 
         otherKey: 'eleveId', 
       });
