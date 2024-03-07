@@ -14,8 +14,6 @@ router.get("/:eleveId/:coursId", async (req, res) => {
         }],
         where: { eleveId: eleveId, coursId: coursId } 
     });
-    console.log("TEST TEST TEST TEST TEST TEST TEST");
-    console.log(result);
     // Renvoi du résultat (objet JSON)
     res.json(result); 
 })
