@@ -20,10 +20,8 @@ const CallForm = () => {
   const [studentList, setStudentList] = useState([]);
   const [absentList, setAbsentList] = useState([]);
   const [lateList, setLateList] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
-    
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,8 +54,6 @@ const CallForm = () => {
 
   /* ------------------------------------- ENVOI ------------------------------------- */
   const handleSubmit = (absences, lates) => {
-    console.log(absences);
-    console.log(lates);
     // Envoyer les données au serveur pour authentification
     axios.post('http://localhost:5000/insert_abs',  { 'absences': absences, 'lates': lates, 'coursId': 1 })
     .then(() => {

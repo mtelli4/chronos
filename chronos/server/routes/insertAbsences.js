@@ -13,7 +13,8 @@ router.post("/", async (req, res) => {
             justificatif: "",
             message: "",
             eleveId: eleveId,
-            coursId: call.coursId
+            coursId: call.coursId,
+            envoye: 0
         });
     }
 
@@ -27,7 +28,8 @@ router.post("/", async (req, res) => {
                 message: "",
                 eleveId: late.eleveId,
                 coursId: call.coursId,
-                retard: Math.abs(late.time)
+                retard: Math.abs(late.time),
+                envoye: 0
             });
         }
     }
@@ -38,7 +40,7 @@ router.post("/", async (req, res) => {
         await Absence.bulkCreate(absentsToInsert);
     }
     if (latesToInsert.length !== 0) {
-        // Ajoute les absences dans la table
+        // Ajoute les retards dans la table
         await Absence.bulkCreate(latesToInsert);
     }
 })

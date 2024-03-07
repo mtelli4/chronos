@@ -7,13 +7,7 @@ import AbsCard from '../components/AbsCard';
 
 const AbsPage = () => {
   const [absences, setAbsencesList] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
-
-
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,15 +26,6 @@ const AbsPage = () => {
       fetchData();
     }
   }, [isLoading]); // Déclenche le useEffect uniquement si isLoading passe à true à nouveau
-
-
-
-
-
-
-
-
-
 
   // Fonction qui supprime une absence validé de la liste des absences
   const handleRemoveAbsence = (id) => {

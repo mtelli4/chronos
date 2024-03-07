@@ -15,49 +15,57 @@ const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
   };
 
   const handleSubmit = () => {
-    // Supprime l'absence justifié de la liste des absences
-    // onRemove(idList);
-
-    try {
-      // Envoi la justification de l'absence
-      axios.post('http://localhost:5000/add_justification', {"reason": reason, "studentId": idStudent, "coursId": idCours, 'file': file}, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Assurez-vous que le type de contenu est correct
-        },
-      });
-
-
-      console.log('Fichier déposé avec succès.');
-    } catch (error) {
-      console.error('Erreur lors du dépôt du fichier :', error);
+    if (file !== null) { // Si il y a fichier
+      try {
+        axios.post('http://localhost:5000/add_justification_file', {"reason": reason, "studentId": idStudent, "coursId": idCours, "file": file}, {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Assurez-vous que le type de contenu est correct
+          },
+        });
+        // Supprime l'absence justifié de la liste des absences
+        onRemove(idList);
+        console.log("fichier déposé");
+      } catch (error) {
+        console.log(error);
+      }
+    } 
+    else { // S'il n'y a pas de fichier
+      try {
+        // Envoi la justification de l'absence
+        axios.post('http://localhost:5000/add_justification', {"reason": reason, "studentId": idStudent, "coursId": idCours}).
+        // Supprime l'absence justifié de la liste des absences
+        onRemove(idList);
+        console.log("raison envoyé");
+      } catch (error) {
+        console.log(error);
+      }
     }
-
-
   }
 
-  return (
-    <div>
-      <h2>
-        {Absence.retard === null ? 'Absence' : 'Retard'}
-      </h2>
+  return !Absence.envoye && (
+      <div>
+        <h2>
+          {Absence.retard === null ? 'Absence' : 'Retard'}
+        </h2>
 
-      <textarea
-        placeholder={Absence.retard === null ? 'Raison de l\'absence' : 'Raison du retard'}
-        value={reason}
-        onChange={(e) => setReason(e.target.value)}
-      />
+        <textarea
+          placeholder={Absence.retard === null ? 'Raison de l\'absence' : 'Raison du retard'}
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          required
+        />
 
-      <input type="file" accept=".pdf, .png, .jpeg, .jpg" onChange={handleFileChange} />
-      {file && (
-        <div>
-          <p>Fichier sélectionné : {file.name}</p>
-          <p>Type : {file.type}</p>
-          <p>Taille : {file.size} octets</p>
-        </div>
-      )}
+        <input type="file" accept=".pdf, .png, .jpeg, .jpg" onChange={handleFileChange} />
+        {file && (
+          <div>
+            <p>Fichier sélectionné : {file.name}</p>
+            <p>Type : {file.type}</p>
+            <p>Taille : {file.size} octets</p>
+          </div>
+        )}
 
-      <button onClick={handleSubmit}>Valider</button>
-    </div>
+        <button onClick={handleSubmit}>Valider</button>
+      </div>
   );
 };
 

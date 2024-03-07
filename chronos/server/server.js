@@ -65,14 +65,14 @@ app.use("/eleve_cours", getEleveCoursRouter)
 const insertAbsencesRouter = require('./routes/insertAbsences')
 app.use("/insert_abs", insertAbsencesRouter)
 
-
-
-
-
 // Redirection/route pour backend getAbsences (récupère les absences d'un élève)
 const getEleveAbsenceRouter = require('./routes/getEleveAbsence')
 app.use("/eleve_absence", getEleveAbsenceRouter)
 
-// Redirection/route pour backend addJustification (ajout de justification à une absence)
-const addJustificationRouter = require('./routes/setJustification') 
+// Redirection/route pour backend addJustificationWithFile (ajout de justification à une absence)
+const addJustificationWithFileRouter = require('./routes/setJustificationWithFile') 
+app.use("/add_justification_file", addJustificationWithFileRouter)
+
+// Redirection/route pour backend setJustificationWithoutFile (ajout de justification à une absence)
+const addJustificationRouter = require('./routes/setJustificationWithoutFile') 
 app.use("/add_justification", addJustificationRouter)

@@ -20,44 +20,22 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/", upload.single('file'), async (req, res) => {
-    console.log("TEST TEST TEST TEST TEST TEST TEST");
-    
+    const uploadedFile = req.file; // obtient le fichier de la requête
+    const abs = req.body; // obtient le corps de la requête (format json)
 
-    const uploadedFile = req.file;
-    const abs = req.body; // Accédez à d'autres champs du formulaire via req.body
-    // console.log(uploadedFile);
-    console.log(abs);
-    console.log(uploadedFile);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // console.log(`uploads/r1/n${abs.studentId}/${abs.file.originalname}`);
-    // if (abs.file) {
-    //     // requête SQL
-    //     const result = await Absence.update({ 
-    //         justificatif: 'path', // Chemin du fichier de justificatif d'absence
-    //         message: abs.reason, // Raison/message pour justifier l'absence
-    //         where: { eleveId: abs.studentId, coursId: abs.coursId } 
-    //     });
-    // } 
-    // else {
-
-    // }
-
-
-
+    // Chemin d'accès au fichier déposé
+    const path = `uploads/r1/n${req.body.studentId}/${uploadedFile.originalname}`;
+    // requête SQL
+    Absence.update(
+        { 
+            justificatif: path, // Chemin du fichier de justificatif d'absence
+            message: abs.reason, // Raison/message pour justifier l'absence
+            envoye: 1
+        },
+        {
+            where: { eleveId: abs.studentId, coursId: abs.coursId } 
+        }
+    );
 });
 
 module.exports = router;
