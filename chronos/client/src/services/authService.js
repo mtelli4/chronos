@@ -1,0 +1,61 @@
+import { jwtDecode } from "jwt-decode";
+import axios from 'axios'
+
+const setToken  = (token) => {
+    localStorage.setItem('token', token)
+}
+
+const getToken = () => {
+    const token  = localStorage.getItem('token');
+    if (token) {
+        return token
+    }
+    return null;
+}
+
+const login = (userData) => {
+    return axios.post("http://localhost:5000/login", userData)
+}
+
+const getUserEmail = () => {
+    const token = getToken();
+    if (token) {
+        const payload = jwtDecode(token)
+        return payload?.email
+    }
+    return null;
+}
+
+const getUserRoles = () => {
+    const token = getToken();
+    if (token) {
+        const payload = jwtDecode(token)
+        return payload?.roles
+    }
+    return null; 
+}
+
+const isLoggedIn = () => {
+    const token = getToken();
+    if (token) {
+        const payload = jwtDecode(token);
+        const isLogin = Date.now() < payload.exp * 1000;
+        return isLogin;
+    }
+    return null;
+}
+
+const logOut = ()=> {
+    localStorage.clear();
+ }
+
+
+const setCurrentRole = (role) => {
+    localStorage.setItem('currentRole', role);
+}
+
+const getCurrentRole = () => {
+    return localStorage.getItem('currentRole');
+}
+
+ export  const authService = { logOut, getToken, setToken, login, getUserEmail, getUserRoles, isLoggedIn, setCurrentRole, getCurrentRole};
