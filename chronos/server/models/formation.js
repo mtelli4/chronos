@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       
       Formation.hasMany(models.Eleve, {foreignKey: 'formationId',});
       Formation.belongsToMany(models.Secretaire, {through:models.FormationSecretaire, foreignKey:'formationId'});
+      Formation.belongsToMany(models.Directeur, {through:models.FormationDirecteur, foreignKey:'formationId'});
     }
   }
   Formation.init({

@@ -27,11 +27,10 @@ module.exports = (sequelize, DataTypes) => {
 
   }
   Professeur.init({
-    nom: DataTypes.STRING,
-    prenom: DataTypes.STRING,
     vacataire: DataTypes.BOOLEAN,
     utilisateurId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: 'Utilisateur',
         key: 'id',

@@ -35,8 +35,6 @@ module.exports = (sequelize, DataTypes) => {
 
   // Définition des champs de la table ELEVE
   Eleve.init({
-    nom: DataTypes.STRING,
-    prenom: DataTypes.STRING,
     numeroEtudiant: DataTypes.STRING,
     trombinoscope: DataTypes.STRING,
     tiersTemps: DataTypes.BOOLEAN,
@@ -49,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     utilisateurId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: 'Utilisateur',
         key: 'id',

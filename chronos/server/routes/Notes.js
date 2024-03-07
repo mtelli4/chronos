@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const express = require('express');
 const router = express.Router();
 
-const { Note, Eleve, Formation, ModuleCours, FormationModule,StatutNote, Periode, Evaluation } = require('../models')
+const { Note, Eleve, Formation, ModuleCours, FormationModule,StatutNote, Periode, Evaluation, Utilisateur } = require('../models')
 
 router.get("/", async (req, res) => {
   const parameters = req.query
@@ -10,8 +10,7 @@ router.get("/", async (req, res) => {
   const getDetails = parameters.getDetails
   var result = {}
   if (profil !==null){
-    //  0 pour secretaire, 1 pour professeur, 2 pour eleves  
-    if (profil.includes('ROLE_SECRETARY')){
+    if (profil.includes('ROLE_SECRETARY') || profil.includes('ROLE_DIRECTOR') || profil.includes('ROLE_DEPARTMENT_DIRECTOR')){
       result = await getNotesSecretaire(parameters)
     }
     if (profil.includes('ROLE_PROFESSOR')|| getDetails) {
@@ -21,8 +20,6 @@ router.get("/", async (req, res) => {
       result = await getNotesEleves(parameters)
     }
   }
-  
-
   res.json(result);
 })
 
@@ -198,10 +195,16 @@ const getNotesProfesseurs = async (parameters) => {
     {
       where: eleveParameters,
       order: [
-        ['nom', 'ASC'],
-        ['prenom', 'ASC'],
+        [Utilisateur,'nom', 'ASC'],
+        [Utilisateur,'prenom', 'ASC']
       ],
-      attributes:['id','nom','prenom','numeroEtudiant','trombinoscope','tiersTemps']
+      include:[
+        {
+          model: Utilisateur,
+          attributes: ['id','nom','prenom']
+        },
+      ],
+      attributes:['id','numeroEtudiant','trombinoscope','tiersTemps']
     }
   )
   //Récupération des informations liées aux évaluations concernés par la recherche du professeur
@@ -320,10 +323,16 @@ const getNotesSecretaire = async (parameters) => {
     {
       where: eleveParameters,
       order: [
-        ['nom', 'ASC'],
-        ['prenom', 'ASC'],
+        [Utilisateur,'nom', 'ASC'],
+        [Utilisateur,'prenom', 'ASC']
       ],
-      attributes:['id','nom','prenom','numeroEtudiant','trombinoscope']
+      include:[
+        {
+          model: Utilisateur,
+          attributes: ['id','nom','prenom']
+        },
+      ],
+      attributes:['id','numeroEtudiant','trombinoscope','tiersTemps']
     }
   )
   //Récupération des informations liées aux modules concernés par la recherche du secrétaire

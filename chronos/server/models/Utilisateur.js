@@ -16,11 +16,14 @@ module.exports = (sequelize, DataTypes) => {
       Utilisateur.hasOne(models.Eleve, {foreignKey: 'utilisateurId',});
       Utilisateur.hasOne(models.Professeur, {foreignKey: 'utilisateurId',});
       Utilisateur.hasOne(models.Secretaire, {foreignKey: 'utilisateurId',});
+      Utilisateur.hasOne(models.Directeur, {foreignKey: 'utilisateurId',});
     }
   }
   Utilisateur.init({
     email: DataTypes.STRING,
     mdp: DataTypes.STRING,
+    nom: DataTypes.STRING,
+    prenom: DataTypes.STRING,
     premiereConnexion: DataTypes.TINYINT 
   }, {
     sequelize,

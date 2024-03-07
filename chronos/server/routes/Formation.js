@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Formation, Secretaire, FormationSecretaire, Professeur, ModuleCours, FormationModule, ProfesseurModule } = require('../models')
+const { Formation, Secretaire, FormationSecretaire, Professeur, ModuleCours, FormationModule, ProfesseurModule, Directeur, FormationDirecteur } = require('../models')
 
 router.get("/", async (req, res) => {
     const formations = await Formation.findAll()
@@ -20,6 +20,12 @@ router.get("/byRole", async (req, res) => {
                 break;
             case "ROLE_SECRETARY":
                 formationsFilters['$Secretaires.id$'] = parseInt(parameters.roleId)
+                break;
+            case "ROLE_DIRECTOR":
+                formationsFilters['$Directeurs.id$'] = parseInt(parameters.roleId)
+                break;
+            case "ROLE_DEPARTMENT_DIRECTOR":
+                formationsFilters['$Directeurs.id$'] = parseInt(parameters.roleId)
                 break;
             default:
                 console.log("get formations/byRole - Unhandled Role: "+role)
@@ -51,6 +57,14 @@ router.get("/byRole", async (req, res) => {
                     model: Secretaire,
                     through : {
                         model: FormationSecretaire,
+                        attributes:[]
+                    },
+                    attributes:["id"],
+                },
+                {
+                    model: Directeur,
+                    through : {
+                        model: FormationDirecteur,
                         attributes:[]
                     },
                     attributes:["id"],

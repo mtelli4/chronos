@@ -51,7 +51,7 @@ function Notes() {
     }
     const validationSchema = Yup.object().shape({
         formationId: Yup.number().when([], {
-            is: () => role.includes('ROLE_SECRETARY') || role.includes('ROLE_PROFESSOR'),
+            is: () => role.includes('ROLE_SECRETARY') || role.includes('ROLE_DIRECTOR') || role.includes('ROLE_DEPARTMENT_DIRECTOR') || role.includes('ROLE_PROFESSOR'),
             then: () => Yup.number().required("Ce champ est obligatoire."),
             otherwise: () => Yup.number().nullable().notRequired(),
         }),
@@ -315,9 +315,9 @@ function Notes() {
             {/* Tempororaire : Affichage du rôle actuel et bouton de sélection de rôle */}
             <h1> Role actuel : {role}</h1>
 
-            {/* Affichage de la page pour les sécretaire */}
+            {/* Affichage de la page pour les sécretaire et directeurs */}
             {
-                role.includes('ROLE_SECRETARY') &&
+                (role.includes('ROLE_SECRETARY')|| role.includes('ROLE_DIRECTOR') || role.includes('ROLE_DEPARTMENT_DIRECTOR')) &&
                 <>
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
@@ -370,7 +370,7 @@ function Notes() {
                             return (
                                 <tr>
                                     {/* Affichage du nom de l'élève*/}
-                                    <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
+                                    <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.Utilisateur.nom} {eleve.Utilisateur.prenom}</td>
 
                                     {/* Affichage de toutes les moyenne de l'élève, pour tout les modules */}
                                     {notes.modules.map((module) => {
@@ -419,7 +419,7 @@ function Notes() {
                         return (
                             <tr>
                                 {/* Affichage du nom de l'élève et de sa moyenne */}
-                                <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
+                                <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.Utilisateur.nom} {eleve.Utilisateur.prenom}</td>
                                 <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
 
                                 {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}
@@ -568,7 +568,7 @@ function Notes() {
                             return (
                                 <tr>
                                     {/* Affichage du nom de l'élève et de sa moyenne */}
-                                    <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
+                                    <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.Utilisateur.nom} {eleve.Utilisateur.prenom}</td>
                                     <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
 
                                     {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}

@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const { Utilisateur, Role, UtilisateurRole, Eleve, Professeur, Secretaire } = require('../models')
+const { Utilisateur, Role, UtilisateurRole, Eleve, Professeur, Secretaire, Directeur } = require('../models')
 const { hashPassword } = require('../librairies/utils');
 
 router.post("/", async (req, res) => {
@@ -32,6 +32,10 @@ router.post("/", async (req, res) => {
             {
             model:Secretaire,
             attributes:["id"]
+            },
+            {
+            model:Directeur,
+            attributes:["id"]
             }
 ],
     })
@@ -56,6 +60,16 @@ router.post("/", async (req, res) => {
                 case "ROLE_PROFESSOR":
                     if(foundUser.Professeur != null){
                         roles[role.label]=foundUser.Professeur.id
+                    }
+                    break;
+                case "ROLE_DIRECTOR":
+                    if(foundUser.Directeur != null){
+                        roles[role.label]=foundUser.Directeur.id
+                    }
+                    break;
+                case "ROLE_DEPARTMENT_DIRECTOR":
+                    if(foundUser.Directeur != null){
+                        roles[role.label]=foundUser.Directeur.id
                     }
                     break;
                 default: 
