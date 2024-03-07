@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import FormData from 'form-data';
 
 
 const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
