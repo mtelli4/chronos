@@ -71,9 +71,6 @@ app.use("/add_justification_file", addJustificationWithFileRouter)
 // Redirection/route pour backend setJustificationWithoutFile (ajout de justification à une absence)
 const addJustificationRouter = require('./routes/setJustificationWithoutFile') 
 app.use("/add_justification", addJustificationRouter)
-// Redirection/route pour backend newPassword (changement de mot de passe)
-const getEleveCoursRouter = require('./routes/getEleveCours')
-app.use("/eleve-cours", getEleveCoursRouter)
 
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ limit: "25mb" }));

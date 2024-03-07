@@ -12,7 +12,7 @@ const AbsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/eleve_absence/9"); // 1 correspond à l'id du cours envoyé
+        const response = await axios.get("http://localhost:5000/eleve_absence/9/1"); // 9 correspond à l'id de l'élève et 1 pour l'id cours envoyé
         // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
         setAbsencesList(response.data);
       } catch (error) {

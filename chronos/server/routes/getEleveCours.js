@@ -14,7 +14,6 @@ router.get("/:id", async (req, res) => {
             model: Groupe, // La table à join Groupe
             through: CoursGroupe, // La table intermédiaire CoursGroupe
             attributes: { exclude: ['createdAt', 'updatedAt'] },
-
             include: [{
                 model: Eleve, // La table à join Eleve
                 through: GroupeEleve, // La table intermédiaire GroupeEleve

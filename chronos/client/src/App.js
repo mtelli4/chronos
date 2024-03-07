@@ -31,34 +31,32 @@ function App() {
 
   return (
       <Routes>
-          <Route exact path='/' element={<PrivateRoute/>}>
-            <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
-            <Route path="/createcourse" element={<CreateCourse />} exact />
-            <Route path="/" element={<PageEdt />} exact /> 
-            <Route path="/importStudents" element={<FileImport />} exact />
-            <Route path="/call" element={<CallForm />} exact />
-            <Route path="/email" element={<EmailForm />} exact />
-            <Route path="/export-csv" element={<CSVExportPage />} exact />
-            <Route path="/notes" element={<Notes />} exact />
-            
+        <Route exact path='/' element={<PrivateRoute/>}>
+          <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
+          <Route path="/createcourse" element={<CreateCourse />} exact />
+          <Route path="/" element={<PageEdt />} exact /> 
+          <Route path="/importStudents" element={<FileImport />} exact />
+          <Route path="/call" element={<CallForm />} exact />
+          <Route path="/email" element={<EmailForm />} exact />
+          <Route path="/export-csv" element={<CSVExportPage />} exact />
+          <Route path="/notes" element={<Notes />} exact />
+          
 
-            {/* -------------- ADMIN ROUTES -----------------*/}
-            <Route path='/admin/*' element={<AdminPrivateRoute/>}>
-              <Route index element={<AdminDashboard />} />
-              <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
-            </Route>
-
-            <Route path="/login" element={<LoginForm />} exact />
-            <Route path="/psw" element={<ChangePasswordForm />} exact />
-            <Route path="/call" element={<CallForm />} exact />
-            <Route path="/abs" element={<AbsPage />} exact />
+          {/* -------------- ADMIN ROUTES -----------------*/}
+          <Route path='/admin/*' element={<AdminPrivateRoute/>}>
+            <Route index element={<AdminDashboard />} />
+            <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
           </Route>
+          
+          <Route path="/call" element={<CallForm />} exact />
+          <Route path="/abs" element={<AbsPage />} exact />
+        </Route>
 
-          {/* -------------- PUBLIC ROUTES -----------------*/}
-          <Route path="/login" element={<LoginForm />} exact />
-          <Route path="/psw" element={<ChangePasswordForm />} exact />
-          <Route path='/*' element={<NotFound /> }/>
-          <Route path='/unauthorized' element={<Unauthorized/>} exact />
+        {/* -------------- PUBLIC ROUTES -----------------*/}
+        <Route path="/login" element={<LoginForm />} exact />
+        <Route path="/psw" element={<ChangePasswordForm />} exact />
+        <Route path='/*' element={<NotFound /> }/>
+        <Route path='/unauthorized' element={<Unauthorized/>} exact />
       </Routes>
   );
 }

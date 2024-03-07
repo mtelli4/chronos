@@ -45,7 +45,15 @@ const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
   return !Absence.envoye && (
       <div>
         <h2>
-          {Absence.retard === null ? 'Absence' : 'Retard'}
+          <p>
+          {Absence.retard === null ? 'Absence' : `Retard de ${Absence.retard} minutes`}
+          </p>
+          <p>
+          {Absence.Cour.libelle}
+          </p>
+          <p>
+          {Absence.Cour.debutCours}
+          </p>
         </h2>
 
         <textarea
