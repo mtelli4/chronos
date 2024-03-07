@@ -21,6 +21,7 @@ import TestAdmin from './pages/admin/test';
 import Unauthorized from './pages/error/Unauthorized';
 import NotFound from './pages/error/NotFound';
 import Header from "./components/Header"
+import PageNotes from './pages/pageNotes';
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
     })
   }, []) 
 
-  const [headerVisibility, setHeaderVisibility] = useState(false);
+  const [headerVisibility, setHeaderVisibility] = useState(true);
 
   return (
 
@@ -49,6 +50,7 @@ function App() {
           <Route path="/email" element={<EmailForm />} exact />
           <Route path="/export-csv" element={<CSVExportPage />} exact />
           <Route path="/notes" element={<Notes />} exact />
+          <Route path="/notesNidal" element={<PageNotes />} exact />
 
           {/* -------------- ADMIN ROUTES -----------------*/}
           <Route path='/admin/*' element={<AdminPrivateRoute/>} />

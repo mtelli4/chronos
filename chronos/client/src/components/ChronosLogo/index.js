@@ -2,12 +2,12 @@ import React from 'react';
 import chronosC from "../../images/chronos-c.svg";
 import { ChronosC, ChronosLogoCont, ChronosText, ChronosTextCont } from './ChronosLogoElements';
 
-const ChronosLogo = ({ fontsize, onMedia }) => { // fontsize en rem / onMedi = {min: 500px, fontsize: 2}
+const ChronosLogo = ({ fontsize }) => { // fontsize en rem
   return (
     <ChronosLogoCont to="/">
-        <ChronosC fontsize={fontsize} onMedia={onMedia} src={chronosC}/>
+        <ChronosC fontsize={fontsize} src={chronosC}/>
         <ChronosTextCont>
-            <ChronosText onMedia={onMedia} fontsize={fontsize}>hronos</ChronosText>
+            <ChronosText fontsize={fontsize}>hronos</ChronosText>
         </ChronosTextCont>
     </ChronosLogoCont>
   )

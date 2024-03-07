@@ -22,9 +22,6 @@ if (['ROLE_SECRETARY', 'ROLE_ADMIN'].includes(currentRole)) {
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Header links={headerRoutes} />
       <App />
-    </BrowserRouter>
   </React.StrictMode>
 );
