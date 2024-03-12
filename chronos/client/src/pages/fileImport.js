@@ -251,7 +251,7 @@ const FileImport = () => {
       </div>
       <div className="importTeachersContainer">
           <p>Veuillez importer un fichier calc (.csv ou .xls) de votre liste de professeurs.</p>
-          <p>
+          <p> 
             Télécharger un modèle{" "}
             <a href="/import_professeur_vierge.xlsx" download>
               Modèle d'import professeur

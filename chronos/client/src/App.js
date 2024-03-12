@@ -22,6 +22,7 @@ import Unauthorized from './pages/error/Unauthorized';
 import NotFound from './pages/error/NotFound';
 import Header from "./components/Header"
 import PageNotes from './pages/pageNotes';
+import PageImportEleves from './pages/pageImportEleves';
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
           <Route path="/createcourse" element={<CreateCourse />} exact />
           <Route path="/edt" element={<PageEdt />} exact /> 
           <Route path="/importStudents" element={<FileImport />} exact />
+          <Route path="/importStudentNidal" element={<PageImportEleves />} exact />
           <Route path="/call" element={<CallForm />} exact />
           <Route path="/email" element={<EmailForm />} exact />
           <Route path="/export-csv" element={<CSVExportPage />} exact />

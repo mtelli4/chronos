@@ -1,0 +1,108 @@
+.ImportTitle {
+    font-weight: normal;
+    margin-left: 60px;
+    font-size: 2rem;
+    font-style: italic;
+    text-align: center;
+}
+
+.importCont {
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 10px 15px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;    
+    width: 80%;
+    max-width: 1000px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+.importPurpleTriangle {
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(180deg, #AD6DFF, #8734DB);
+    position: absolute;
+    z-index: -999;
+    top: 50%;
+    right: 0;
+    transform-origin: center;
+    transform: translateY(-50%);
+    clip-path: polygon(80% 0, 90% 0%, 50% 100%, 0% 100%);
+}
+
+.typeLstGrid{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.gridElem {
+    width: 25%;
+    aspect-ratio: 1;
+    border-radius: 15px;
+    background: linear-gradient(180deg, #AD6DFF, #8734DB);
+    cursor: pointer;
+    transition: all 0.25s;
+    padding: 30px;
+    color: #fff;
+    font-weight: normal;
+    font-size: 1.25rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gridImg {
+    height: 90%;
+    aspect-ratio: 1;
+    border-radius: 20px;
+}
+
+.gridElem:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 10px 15px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;    
+}
+
+.gridElem:active {
+    transform: scale(0.9);
+    cursor: pointer; 
+}
+
+.importStudentCont {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.importStudentTitle {
+    color: #fff;
+    font-size: 2.25rem;
+    font-weight: normal;
+    width: 100%;
+    background: linear-gradient(180deg, #AD6DFF, #8734DB);
+    padding: 15px 40px;
+}
+
+.importStudentFormCont {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+}
+
+.importStudentSubTitle {
+    font-weight: normal;
+    font-size: 1.25rem;
+
+    margin-bottom: 10px;
+}

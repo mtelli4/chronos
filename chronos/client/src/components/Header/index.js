@@ -21,7 +21,7 @@ const Header = ({ links, isVisible }) => { // links = [{title : string, to : str
 
   return (
     <HeaderCont isVisible={isVisible}>
-        <ChronosLogo fontsize={3} />
+        <ChronosLogo fontsize={2.25} />
 
         <HeaderNav>
             <HeaderLinks>
