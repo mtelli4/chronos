@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 var headerRoutes = [
   {title:"Calendrier", to:"/"},
-  {title: "Notes", to:"/note"}
+  {title: "Notes", to:"/notes"}
 ];
 
 const currentRole = authService.getCurrentRole();

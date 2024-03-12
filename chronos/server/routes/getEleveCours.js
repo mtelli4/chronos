@@ -26,6 +26,6 @@ router.get("/:id", async (req, res) => {
     });
 
     // Renvoi du résultat (objet JSON)
-    res.json(result); 
+    res.json(result);
 })
 module.exports = router

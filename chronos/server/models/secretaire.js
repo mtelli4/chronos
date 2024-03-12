@@ -12,17 +12,16 @@ module.exports = (sequelize, DataTypes) => {
 
       // Lien associatif à la table FORMATION passant à travers la table FORMATION_SECRETAIRE
       Secretaire.belongsToMany(models.Formation, {
-        through: 'FORMATION_SECRETAIRE', 
+        through: models.FormationSecretaire, 
         foreignKey: 'secretaireId', 
         otherKey: 'formationId', 
       });
     }
   }
   Secretaire.init({
-    nom: DataTypes.STRING,
-    prenom: DataTypes.STRING,
     utilisateurId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: 'Utilisateur',
         key: 'id',

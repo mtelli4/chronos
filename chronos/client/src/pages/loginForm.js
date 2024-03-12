@@ -47,7 +47,10 @@ const LoginForm = () => {
         if(response?.data?.accessToken){
           console.log('Authentifié');
           authService.setToken(response.data.accessToken);
-          authService.setCurrentRole(authService.getUserRoles()[0]);
+          const roles = authService.getUserRoles();
+          const currentRole = Object.keys(roles)[0];
+          authService.setCurrentRole(currentRole);
+          authService.setCurrentRoleId(roles[currentRole]);
           navigate("/")
         }
       } else {

@@ -28,14 +28,14 @@ function App() {
     axios.get("http://localhost:5000/cours").then((response) => {
       setListCours(response.data)
     })
-  }, []) 
+  }, [])
 
   return (
       <Routes>
         <Route exact path='/' element={<PrivateRoute/>}>
           <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
           <Route path="/createcourse" element={<CreateCourse />} exact />
-          <Route path="/" element={<PageEdt />} exact /> 
+          <Route path="/" element={<PageEdt />} exact />
           <Route path="/importStudents" element={<FileImport />} exact />
           <Route path="/call" element={<CallForm />} exact />
           <Route path="/email" element={<EmailForm />} exact />

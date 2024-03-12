@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Lien associatif à la table SECRETAIRE passant à travers la table FORMATION_SECRETAIRE
       Formation.belongsToMany(models.Secretaire, {
-        through: 'FORMATION_SECRETAIRE', 
+        through: models.FormationSecretaire, 
         foreignKey: 'formationId', 
         otherKey: 'secretaireId', 
       });
@@ -24,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'formationId', 
         otherKey: 'groupeId', 
       });
+
+      // Lien associatif à la table DIRECTEUR passant à travers la table FORMATION_DIRECTEUR
+      Formation.belongsToMany(models.Directeur, {
+        through:models.FormationDirecteur, 
+        foreignKey:'formationId'
+      });
+      
+      Formation.hasMany(models.Eleve, {foreignKey: 'formationId',});
     }
   }
 

@@ -3,31 +3,21 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Professeur extends Model {
+  class Directeur extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Professeur.belongsTo(models.Utilisateur, {
+      Directeur.belongsTo(models.Utilisateur, {
         foreignKey: 'utilisateurId',
         onDelete: 'SET NULL',
       });
-
-      // Lien associatif à la table Module passant à travers la table PROFESSEUR_MODULE
-      Professeur.belongsToMany(models.ModuleCours, {
-        through: {
-          model: models.ProfesseurModule,
-        },
-        foreignKey: 'professeurId',
-        otherKey: 'moduleId',
-      });
+      Directeur.belongsToMany(models.Formation, {through:models.FormationDirecteur, foreignKey:'directeurId'});
     }
-
   }
-  Professeur.init({
-    vacataire: DataTypes.BOOLEAN,
+  Directeur.init({
     utilisateurId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -38,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Professeur',
-    tableName: 'PROFESSEUR'
+    modelName: 'Directeur',
+    tableName: 'DIRECTEUR'
   });
-  return Professeur;
+  return Directeur;
 };

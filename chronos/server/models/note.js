@@ -12,10 +12,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Note.belongsTo(models.Eleve, { foreignKey: 'eleveId', onDelete: 'SET NULL' });
       Note.belongsTo(models.Evaluation, { foreignKey: 'evaluationId', onDelete: 'SET NULL' });
+      Note.belongsTo(models.StatutNote, { foreignKey: 'statutId', onDelete: 'SET NULL' });
     }
   }
   Note.init({
-    note: DataTypes.DECIMAL(15, 2),
+    note: {
+      type:DataTypes.DECIMAL(15, 2),
+      allowNull: true
+    },
     eleveId: {
       type: DataTypes.INTEGER,
       references: {
@@ -29,6 +33,14 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Evaluation',
         key: 'id',
       },
+    },
+    statutId:{
+      type:DataTypes.INTEGER,
+      allowNull: true,
+      references:{
+        model:'StatutNote',
+        key:'id'
+      }
     }
   }, {
     sequelize,
