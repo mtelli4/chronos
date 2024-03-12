@@ -1,31 +1,31 @@
 'use strict';
 const { Model } = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
-  class CoursGroupe extends Model {}
-  CoursGroupe.init({
-    coursId: {
+  class ProfesseurModule extends Model {}
+
+  ProfesseurModule.init({
+    professeurId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Cours',
+        model: 'Professeur',
         key: 'id',
       },
     },
-    groupeId: {
+    moduleId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Groupe',
+        model: 'ModuleCours',
         key: 'id',
       },
     },
   }, {
     sequelize,
-    // Nom du modèle à utiliser dans les fonctions js
-    modelName: 'CoursGroupe',
+// Nom du modèle à utiliser dans les fonctions js
+    modelName: 'ProfesseurModule',
     // Nom de la table dans mysql
-    tableName: 'COURS_GROUPE',
+    tableName: 'PROFESSEUR_MODULE',
     // Désactive les timestamps
-    timestamps: false,
+  timestamps: false,
   });
-  return CoursGroupe;
+  return ProfesseurModule;
 };

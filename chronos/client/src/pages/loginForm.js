@@ -5,6 +5,18 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { authService } from "../services/authService";
 
+
+// Variables d'initialisation du formik
+const initialValues = {
+  email: '',
+  password: '',
+};
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
+  password: Yup.string().required('Le mot de passe est requis'),
+});
+
+
 const LoginForm = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
@@ -35,7 +47,10 @@ const LoginForm = () => {
         if(response?.data?.accessToken){
           console.log('Authentifié');
           authService.setToken(response.data.accessToken);
-          authService.setCurrentRole(authService.getUserRoles()[0]);
+          const roles = authService.getUserRoles();
+          const currentRole = Object.keys(roles)[0];
+          authService.setCurrentRole(currentRole);
+          authService.setCurrentRoleId(roles[currentRole]);
           navigate("/")
         }
       } else {

@@ -3,32 +3,26 @@ const router = express.Router();
 const { Eleve, Groupe, Cours, CoursGroupe, GroupeEleve } = require('../models')
 
 
-router.get("/", async (req, res) => {
-    const cours =  req.body; // obtient le corps de la requête (format json)
-    // await Eleve.sequelize.models.Eleve.cache.clear();
-    // await Groupe.sequelize.models.Groupe.cache.clear();
-    // await Cours.sequelize.models.Cours.cache.clear();
-    // await CoursGroupe.sequelize.models.CoursGroupe.cache.clear();
-    // await GroupeEleve.sequelize.models.GroupeEleve.cache.clear();
-    // faire requête SQL
+router.get("/:id", async (req, res) => {
+    const coursId =  req.params.id; // obtient le corps de la requête (format json)
 
-    const result = await Cours.findByPk(1, {//mettre l'id du cours ici :)
-        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
-        include: [{
-            model: Groupe,
-            through: CoursGroupe, // Utilisez le modèle Sequelize correspondant à la table intermédiaire Cours-Groupe
-            timestamps: false,
-            where: { id:2},
-            attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+    // requête SQL
+    const result = await Cours.findByPk(coursId, {
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+
+        include: [{ // Join Groupe à travers la table associative CoursGroupe
+            model: Groupe, // La table à join Groupe
+            through: CoursGroupe, // La table intermédiaire CoursGroupe
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
             include: [{
-                model: Eleve,
-                through: GroupeEleve, // Utilisez le modèle Sequelize correspondant à la table intermédiaire Groupe-Eleve
-                timestamps: false,
-                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                model: Eleve, // La table à join Eleve
+                through: GroupeEleve, // La table intermédiaire GroupeEleve
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
             }],
         }],
     });
-    
-    res.json(result); // pour renvoyer un objet JSON
+
+    // Renvoi du résultat (objet JSON)
+    res.json(result);
 })
 module.exports = router

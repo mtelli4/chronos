@@ -1,7 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class ModuleCours extends Model {
     /**
@@ -14,6 +13,15 @@ module.exports = (sequelize, DataTypes) => {
      
       const { Formation,FormationModule } = models
       ModuleCours.belongsToMany(Formation, {through:FormationModule, foreignKey:'ModuleCoursId'});
+
+      // Lien associatif à la table Professeur passant à travers la table PROFESSEUR_MODULE
+      ModuleCours.belongsToMany(models.Professeur, {
+        through: {
+          model: models.ProfesseurModule,
+        },
+        foreignKey: 'moduleId',
+        otherKey: 'professeurId',
+      });
     }
   }
   ModuleCours.init({

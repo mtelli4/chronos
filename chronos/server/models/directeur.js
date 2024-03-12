@@ -3,21 +3,21 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Secretaire extends Model {
+  class Directeur extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Secretaire.belongsTo(models.Utilisateur, {
+      Directeur.belongsTo(models.Utilisateur, {
         foreignKey: 'utilisateurId',
         onDelete: 'SET NULL',
       });
-      Secretaire.belongsToMany(models.Formation, {through:models.FormationSecretaire, foreignKey:'secretaireId'});
+      Directeur.belongsToMany(models.Formation, {through:models.FormationDirecteur, foreignKey:'directeurId'});
     }
   }
-  Secretaire.init({
+  Directeur.init({
     utilisateurId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Secretaire',
-    tableName: 'SECRETAIRE'
+    modelName: 'Directeur',
+    tableName: 'DIRECTEUR'
   });
-  return Secretaire;
+  return Directeur;
 };

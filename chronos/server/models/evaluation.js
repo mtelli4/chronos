@@ -10,15 +10,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Evaluation.belongsTo(models.ModuleCours, { foreignKey: 'moduleId', onDelete: 'SET NULL' });
+      Evaluation.belongsTo(models.Periode, { foreignKey: 'periodeId', onDelete: 'SET NULL' });
     }
   }
   Evaluation.init({
     libelle: DataTypes.STRING,
     coefficient: DataTypes.INTEGER,
+    noteMaximale: {
+      type:DataTypes.INTEGER,
+      defaultValue: 20
+    },
     moduleId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'ModuleCours',
+        key: 'id',
+      },
+    },
+    periodeId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Periode',
         key: 'id',
       },
     },

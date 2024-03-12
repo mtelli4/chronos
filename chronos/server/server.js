@@ -44,6 +44,13 @@ app.use("/professeurs", professeursRouter)
 const formationsRouter = require('./routes/Formation')
 app.use("/formations", formationsRouter)
 
+const periodesRouter = require('./routes/Periode')
+app.use("/periodes", periodesRouter)
+
+const evaluationsRouter = require('./routes/Evaluations')
+app.use("/evaluations", evaluationsRouter)
+
+
 // Redirection/route pour backend Login (analyse email et mdp)
 const loginRouter = require('./routes/Login')
 app.use("/login", loginRouter)
@@ -52,9 +59,25 @@ app.use("/login", loginRouter)
 const newPasswordRouter = require('./routes/newPassword')
 app.use("/newpsw", newPasswordRouter)
 
-// Redirection/route pour backend newPassword (changement de mot de passe)
+// Redirection/route pour backend getEleveCours (récupération des élèves du cours)
 const getEleveCoursRouter = require('./routes/getEleveCours')
-app.use("/eleve-cours", getEleveCoursRouter)
+app.use("/eleve_cours", getEleveCoursRouter)
+
+// Redirection/route pour backend insertAbsences (insertion d'absences d'élèves pour un cours)
+const insertAbsencesRouter = require('./routes/insertAbsences')
+app.use("/insert_abs", insertAbsencesRouter)
+
+// Redirection/route pour backend getAbsences (récupère les absences d'un élève)
+const getEleveAbsenceRouter = require('./routes/getEleveAbsence')
+app.use("/eleve_absence", getEleveAbsenceRouter)
+
+// Redirection/route pour backend addJustificationWithFile (ajout de justification à une absence)
+const addJustificationWithFileRouter = require('./routes/setJustificationWithFile') 
+app.use("/add_justification_file", addJustificationWithFileRouter)
+
+// Redirection/route pour backend setJustificationWithoutFile (ajout de justification à une absence)
+const addJustificationRouter = require('./routes/setJustificationWithoutFile') 
+app.use("/add_justification", addJustificationRouter)
 
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ limit: "25mb" }));

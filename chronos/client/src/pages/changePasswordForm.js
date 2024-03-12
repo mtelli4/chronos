@@ -4,27 +4,29 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
+// Variables d'initialisation du formik
+const initialValues = {
+  email: '',
+  password: '',
+  confirmPassword: ''
+};
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
+  password: Yup.string()
+    .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
+      'Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial'
+    )
+    .required('Le mot de passe est requis'),
+  confirmPassword: Yup.string()
+    .required('Confirmer le mot de passe est requis'),
+});
+
+
 const ChangePasswordForm = () => {
   const navigate = useNavigate();
-
-  const initialValues = {
-    email: '',
-    password: '',
-    confirmPassword: ''
-  };
-
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Format d\'e-mail invalide').required('L\'e-mail est requis'),
-    password: Yup.string()
-      .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
-        'Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial'
-      )
-      .required('Le mot de passe est requis'),
-    confirmPassword: Yup.string()
-      .required('Confirmer le mot de passe est requis'),
-  });
 
   const handleSubmit = (values, { setSubmitting, setErrors }) => {
     console.log('Email:', values.email, 'Mot de passe:', values.password, 'Mot de passe réécrit:', values.confirmPassword);
@@ -43,7 +45,7 @@ const ChangePasswordForm = () => {
         console.log(response);
         const result = response.data;
         if (result === 1) {
-          navigate('/login'); // Si route présente dans App.js, redirige vers le composant/page associé
+          navigate('/login'); // Redirige vers la page de connexion
         } else {
           console.log("Erreur lors du changement de mot de passe");
         }

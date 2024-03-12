@@ -13,6 +13,7 @@ Dans ce fichier, il y a 2 fonctions :
 Je vous ai mis quelques exemples de migrations dans ce dossier que vous pouvez reprendre et modifier à votre sauce.
 
 Une fois que vous avez fini de créer la migration, vous pouvez la lancer avec la commande :  <code>npx sequelize-cli db:migrate</code>
+Si vous ne voulez exécuter la migration que d'un seul fichier, faites la commande mais avec une nouvelle option name :  <code>npx sequelize-cli db:migrate --name lenomdufichier</code>
 
 Ca va vous mettre un truc comme ca normalement.
 Loaded configuration file "config/config.json".

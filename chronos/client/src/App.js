@@ -13,6 +13,7 @@ import PageLogin from './pages/pageLogin';
 import ChangePasswordForm from './pages/changePasswordForm';
 import PagePasswordChange from './pages/pagePasswordChange';
 import CallForm from './pages/call';
+import AbsPage from './pages/absences';
 import CSVExportPage from './pages/exportExample';
 import { PrivateRoute } from './routes/privateRoute';
 import { AdminPrivateRoute } from './routes/adminRoute';
@@ -31,7 +32,7 @@ function App() {
     axios.get("http://localhost:5000/cours").then((response) => {
       setListCours(response.data)
     })
-  }, []) 
+  }, [])
 
   const [headerVisibility, setHeaderVisibility] = useState(true);
 
@@ -61,11 +62,21 @@ function App() {
           <Route path="/loginNidal" element={<PageLogin />} exact />
           <Route path="/pswNidal" element={<PagePasswordChange />} exact />
 
-          {/* -------------- PUBLIC ROUTES -----------------*/}
-          <Route path="/login" element={<LoginForm />} exact />
-          <Route path="/psw" element={<ChangePasswordForm />} exact />
-          <Route path='/*' element={<NotFound /> }/>
-          <Route path='/unauthorized' element={<Unauthorized/>} exact />
+
+
+          {/* -------------- ADMIN ROUTES -----------------*/}
+          <Route path='/admin/*' element={<AdminPrivateRoute/>} />
+            <Route index element={<AdminDashboard />} />
+            <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
+
+          <Route path="/call" element={<CallForm />} exact />
+          <Route path="/abs" element={<AbsPage />} exact />
+
+        {/* -------------- PUBLIC ROUTES -----------------*/}
+        <Route path="/login" element={<LoginForm />} exact />
+        <Route path="/psw" element={<ChangePasswordForm />} exact />
+        <Route path='/*' element={<NotFound /> }/>
+        <Route path='/unauthorized' element={<Unauthorized/>} exact />
       </Routes>
     </Router>
   );

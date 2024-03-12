@@ -41,8 +41,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Cours',
     // Nom de la table dans mysql
     tableName: 'COURS',
-    // Désactive les timestamps
-    timestamps: false,
   });
   return Cours;
 };
