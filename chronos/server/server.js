@@ -72,6 +72,16 @@ app.use("/add_justification_file", addJustificationWithFileRouter)
 const addJustificationRouter = require('./routes/setJustificationWithoutFile') 
 app.use("/add_justification", addJustificationRouter)
 
+// Redirection/route pour backend getFormationsSecretary (récupère les formations et élèves sous la charge de la secrétaire)
+const addGetFormationsSecretaryRouter = require('./routes/getFormationsSecretary') 
+app.use("/secretary_formation", addGetFormationsSecretaryRouter)
+
+// Redirection/route pour backend setValidAbsence (valider l'absence d'un élève)
+const addSetValidAbsenceRouter = require('./routes/setValidAbsence') 
+app.use("/set_valid_absence", addSetValidAbsenceRouter)
+
+
+
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ limit: "25mb" }));
 app.use((req, res, next) => {

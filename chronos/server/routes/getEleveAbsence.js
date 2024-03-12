@@ -5,12 +5,12 @@ const { Absence, Cours } = require('../models')
 
 router.get("/:eleveId/:coursId", async (req, res) => {
     const eleveId =  req.params.eleveId; // obtient l'id de l'élève
-    const coursId =  req.params.coursId; // obtient l'id du cours
+    const coursId =  req.params.coursId; // obtient l'id du cours 
 
     // requête SQL
     const result = await Absence.findAll({         
         include: [{
-            model: Cours, // Join Cours
+            model: Cours, // JOIN Cours
         }],
         where: { eleveId: eleveId, coursId: coursId } 
     });

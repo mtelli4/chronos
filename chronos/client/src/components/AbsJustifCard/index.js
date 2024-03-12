@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 
-const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
+const AbsJustifCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
   // Variable contenant le texte de justification de l'absence
   const [reason, setReason] = useState('');
   // Variable contenant le fichier justificatif d'absence (photo, image, pdf, ..)
@@ -76,4 +76,4 @@ const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
   );
 };
 
-export default AbsenceCard;
+export default AbsJustifCard;

@@ -17,15 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Lien associatif à la table GROUPE passant à travers la table GROUPE_ELEVE
-      Eleve.belongsToMany(models.Cours, {
-        through: 'eleve_cours',
-        foreignKey: 'coursId',
-        otherKey: 'eleveId',
-        timestamps: false
-      });
-
       Eleve.belongsToMany(models.Groupe, {
-        through: 'groupe_eleve',
+        through: models.GroupeEleve,
         foreignKey: 'eleveId',
         otherKey: 'groupeId',
         timestamps: false

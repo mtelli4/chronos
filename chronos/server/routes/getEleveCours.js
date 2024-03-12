@@ -9,15 +9,18 @@ router.get("/:id", async (req, res) => {
     // requête SQL
     const result = await Cours.findByPk(coursId, {
         attributes: { exclude: ['createdAt', 'updatedAt'] },
-
-        include: [{ // Join Groupe à travers la table associative CoursGroupe
-            model: Groupe, // La table à join Groupe
-            through: CoursGroupe, // La table intermédiaire CoursGroupe
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [{ 
+            model: Groupe, // JOIN Groupe
+            through: CoursGroupe, // Table intermédiaire CoursGroupe
+            attributes: { 
+                exclude: ['createdAt', 'updatedAt'] 
+            },
             include: [{
-                model: Eleve, // La table à join Eleve
-                through: GroupeEleve, // La table intermédiaire GroupeEleve
-                attributes: { exclude: ['createdAt', 'updatedAt'] },
+                model: Eleve, // JOIN Eleve
+                through: GroupeEleve, // Table intermédiaire GroupeEleve
+                attributes: { 
+                    exclude: ['createdAt', 'updatedAt'] 
+                },
             }],
         }],
     });

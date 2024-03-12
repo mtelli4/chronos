@@ -1,18 +1,20 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Secretaire extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
+      // Lien associatif à la table UTILISATEUR
       Secretaire.belongsTo(models.Utilisateur, {
         foreignKey: 'utilisateurId',
         onDelete: 'SET NULL',
+      });
+
+      // Lien associatif à la table FORMATION passant à travers la table FORMATION_SECRETAIRE
+      Secretaire.belongsToMany(models.Formation, {
+        through: 'FORMATION_SECRETAIRE', 
+        foreignKey: 'secretaireId', 
+        otherKey: 'formationId', 
       });
     }
   }
