@@ -9,6 +9,8 @@ const PageEdt = () => {
   const [userRoles, setUserRoles] = useState();
   const [currentRole, setCurrentRole] = useState();
   const [organizedCourses, setOrganizedCourses] = useState([])
+  const role = authService.getCurrentRole();
+  const roleId = authService.getCurrentRoleId();
 
   const handleRoleChange = (event) => {
     const selectedRole = event.target.value;
@@ -36,7 +38,7 @@ const PageEdt = () => {
   }
 
   useEffect(() => {
-    axios.get("http://localhost:5000/eleves/1/cours")
+    axios.get(`http://localhost:5000/cours/${role}/${roleId}/2024`)
     .then((response) => { //si tu veux voir tout les cours --> http://localhost:5000/cours
       console.log("DATA: " + JSON.stringify(response.data))
       setOrganizedCourses(organizeCoursesByDate(response.data))
