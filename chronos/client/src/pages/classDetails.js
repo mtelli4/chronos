@@ -1,13 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "../css/styleClassDetails.css"
-import { ajouterDuree } from "../js/calendar_script"
+import { ajouterDuree, ajouterDureeDate } from "../js/calendar_script"
 
 // Content de la popup calendar
 const ClassDetails = ({ title, heureDebut, duree, informations, color }) => {
 
-
     function ajusterCouleur(hexCode, versChaud = true) {
-        console.log(hexCode);
         // Conversion du code hexadécimal en valeurs R, G, B
         const r = parseInt(hexCode.slice(1, 3), 16);
         const g = parseInt(hexCode.slice(3, 5), 16);
@@ -113,6 +111,10 @@ const ClassDetails = ({ title, heureDebut, duree, informations, color }) => {
     const couleurChaud = ajusterCouleur(couleurFroid, true);
     const couleurOriginaleRGB = hexToRgb(color);
 
+    function formatterNombreAvecZero(n) {
+        return n < 10 ? '0' + n : '' + n;
+    }
+
   return (
     <>
         <div style={{background : "linear-gradient(" + couleurChaud + "," + couleurFroid + ")"}} className='leftBorder'></div>
@@ -120,7 +122,7 @@ const ClassDetails = ({ title, heureDebut, duree, informations, color }) => {
         <div className='classDetailsCont' style={{color : couleurFroid, background : "rgba(" + couleurOriginaleRGB.r + "," +  couleurOriginaleRGB.g + "," + couleurOriginaleRGB.b + "," + "0.5)"}}>
             <div className='classDetailsTitle'>
                 <h2>{title}</h2>
-                <p>{heureDebut} - {ajouterDuree(heureDebut, duree, false)}</p>
+                <p>{heureDebut.getUTCHours()}H{formatterNombreAvecZero(heureDebut.getUTCMinutes())} - {ajouterDureeDate(heureDebut, duree, false).getUTCHours()}H{formatterNombreAvecZero(ajouterDureeDate(heureDebut, duree, false).getUTCMinutes())}</p>
             </div>
 
             <div className='classDetailsInfo'>

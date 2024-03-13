@@ -27,46 +27,53 @@ export function couleurAleatoire() {
 // l'heure minimum est de 08h00 max et la plus tard est de 18h minimum
 export function trouverHeuresExtremes(semaine) {
     // Initialiser les heures extrêmes
-    let heureDebutPlusTot = '08h00';
-    let heureFinPlusTard = '18h00';
+    let heureDebutPlusTot = "08h00";
+    let heureFinPlusTard = "18h00";
     let dureeFinPlusTard = 0;
-
-    // Parcourir les jours de la semaine
-    semaine.forEach(jour => {
-        // Parcourir les cours de chaque jour
-        jour.classes.forEach(cours => {
-            // Convertir les heures au format "8h15" en minutes
-            const dureeFin = cours.duration;
-            const heureActuelle = cours.startHour;
-            // Mettre à jour l'heure de début la plus tôt
-            if (heureComp(heureActuelle, heureDebutPlusTot)) {
-                heureDebutPlusTot = heureActuelle;
-            }
-
-            // Mettre à jour l'heure de fin la plus tard
-            if (heureComp(ajouterDuree(heureFinPlusTard, dureeFinPlusTard, true), ajouterDuree(heureActuelle, dureeFin, true))) {
-                heureFinPlusTard = heureActuelle;
-                dureeFinPlusTard = dureeFin;
-            }
-        });
-    });
-
+  
+    // Parcourir les clés de l'objet (les jours de la semaine)
+    for (const jour in semaine) {
+      // Itérer sur les cours de chaque jour
+      semaine[jour].forEach((cours) => {
+        // Convertir les heures au format "8h15" en minutes
+        const dureeFin = cours.duration;
+        const heureActuelle = cours.startHour;
+  
+        // Mettre à jour l'heure de début la plus tôt
+        if (heureComp(heureActuelle, heureDebutPlusTot)) {
+          heureDebutPlusTot = heureActuelle;
+        }
+  
+        // Mettre à jour l'heure de fin la plus tard
+        if (
+          heureComp(
+            ajouterDuree(heureFinPlusTard, dureeFinPlusTard, true),
+            ajouterDuree(heureActuelle, dureeFin, true)
+          )
+        ) {
+          heureFinPlusTard = heureActuelle;
+          dureeFinPlusTard = dureeFin;
+        }
+      });
+    }
+  
     return {
-        heureDebutPlusTot : heureDebutPlusTot.split("h")[0] + "h" + "00",
-        heureFinPlusTard,
-        dureeFinPlusTard
+      heureDebutPlusTot: heureDebutPlusTot.split("h")[0] + "h" + "00",
+      heureFinPlusTard,
+      dureeFinPlusTard,
     };
-}
+  }
+  
 
 // Renvoie une liste des jours de la semaine présent dans l'obj en param
 export function createDaysLst(schedule) {
     // Vérifiez si l'argument passé est un tableau et s'il n'est pas vide
-    if (!Array.isArray(schedule) || schedule.length === 0) {
+    if (schedule.length === 0) {
         return [];
     }
 
     // Utilisez la méthode map pour extraire les jours de chaque élément du tableau
-    const daysList = schedule.map(day => day.day);
+    const daysList = Object.keys(schedule);
 
     return daysList;
 };
@@ -88,6 +95,10 @@ export function ajouterDuree(heureString, dureeEnHeures, flag) {
     return heureFormat;
 }
 
+export function ajouterDureeDate(date, duree) {
+  const nouvelleDate = new Date(date.getTime() + duree * 60000); // 1 minute = 60000 millisecondes
+  return nouvelleDate
+}
 
 export function createHoursLst(heure1, heure2, duree) {
     const heures = [heure1];

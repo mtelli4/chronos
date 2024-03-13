@@ -39,13 +39,10 @@ const LoginForm = () => {
 
       const userData = {email,password};
       const response  = await authService.login(userData)
-      console.log(response.data.state == 1)
       if (response?.data?.state == 2) {
         navigate('/psw'); // Si route présente dans App.js, redirige vers le composant/page associé
       } else if (response?.data?.state == 1) {
-        console.log(response?.data?.accessToken)
         if(response?.data?.accessToken){
-          console.log('Authentifié');
           authService.setToken(response.data.accessToken);
           const roles = authService.getUserRoles();
           const currentRole = Object.keys(roles)[0];
