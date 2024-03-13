@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { Op } = require("sequelize");
 const { Eleve, Utilisateur, Cours, Groupe, CoursGroupe, GroupeEleve, UtilisateurRole, Professeur,CoursProfesseur } = require('../models')
 
 router.get("/", async (req, res) => {
@@ -9,58 +8,7 @@ router.get("/", async (req, res) => {
 })
 
 
-router.get("/:id/cours", async (req, res) => {
-    try {
-        const eleveId = req.params.id;
-    
-        // Récupérer l'élève avec l'ID spécifié, avec les cours associés
-        const eleve = await Eleve.findByPk(eleveId, {
-          include: [
-            {
-              model: Groupe,
-              through: GroupeEleve,
-              include: [
-                {
-                  model: Cours,
-                  through: CoursGroupe,
-                  where:{
-                    debutCours: {
-                      [Op.and]: [
-                        { [Op.gte]: new Date('2024-01-01') },
-                        { [Op.lt]: new Date('2025-01-01') }, 
-                      ],
-                    },
-                  },
-                  include: [
-                    {
-                      model: Professeur,
-                      include:[
-                        {
-                          model: Utilisateur
-                        }
-                      ]
-                    }  
-                  ]
-                },
-              ],
-            },
-          ],
-        });
-    
-        if (!eleve) {
-          return res.status(404).json({ message: "Élève non trouvé" });
-        }
-        console.log("result")
-        console.log(eleve)
-        // Les cours associés à l'élève sont maintenant dans eleve.Groupe.Cours
-        const coursDeLEleve = eleve.Groupes.reduce((cours, groupe) => cours.concat(groupe.Cours), []);
-    
-        res.status(200).json(coursDeLEleve);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Erreur serveur" });
-    }
-})
+
 
 router.post("/insertListEleves", async (req, res) => {
     function validateArrayPattern(obj) {
