@@ -3,7 +3,7 @@ import "../css/styleClassDetails.css"
 import { ajouterDuree, ajouterDureeDate } from "../js/calendar_script"
 
 // Content de la popup calendar
-const ClassDetails = ({ title, heureDebut, duree, informations, color }) => {
+const ClassDetails = ({ title, professors, heureDebut, duree, informations, color }) => {
 
     function ajusterCouleur(hexCode, versChaud = true) {
         // Conversion du code hexadécimal en valeurs R, G, B
@@ -125,13 +125,19 @@ const ClassDetails = ({ title, heureDebut, duree, informations, color }) => {
                 <p>{heureDebut.getUTCHours()}H{formatterNombreAvecZero(heureDebut.getUTCMinutes())} - {ajouterDureeDate(heureDebut, duree, false).getUTCHours()}H{formatterNombreAvecZero(ajouterDureeDate(heureDebut, duree, false).getUTCMinutes())}</p>
             </div>
 
+            {professors?.map((professor) => (
+                <>
+                    <p>{professor.Utilisateur?.nom} {professor.Utilisateur?.prenom}</p>
+                </>
+                
+            ))}
             <div className='classDetailsInfo'>
+            
                 <ul>
                     {informations.map((item) => (
                         <li>{item}</li>
                     ))}
                 </ul>
-
                 <div className='classDetailsChatCont'></div>
             </div>
         </div>

@@ -173,7 +173,7 @@ const Calendar = ({ weekdata, onWeekChange }) => {
   
     return dayNumber;
   }
-
+  
   return (
     <CalendarCont>
       {weekdata && weekdata[currentYear] && weekdata[currentYear][currentMonthIndex] && weekdata[currentYear][currentMonthIndex][currentWeekIndex] ? (
@@ -210,6 +210,7 @@ const Calendar = ({ weekdata, onWeekChange }) => {
                     color="#fe4455"
                     duration={classData.duration/60 * (100 / hours.length)}
                     startTopPercent={getStartTop(classData.startHour)}
+                    professors={classData.professors}
                     onSelect={() => handleClick(classData)}
                   />
                 ))}
@@ -218,7 +219,7 @@ const Calendar = ({ weekdata, onWeekChange }) => {
           </>
         ) : <p>Loading...</p>}
       </CalendarMain>
-      <Popup html={<ClassDetails color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
+      <Popup html={<ClassDetails color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
     </CalendarCont>
   );
 };

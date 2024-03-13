@@ -121,13 +121,14 @@ function organizeCoursesByDate(courses) {
     if (!organizedData[year][month]) organizedData[year][month] = {};
     if (!organizedData[year][month][week]) organizedData[year][month][week] = {};
     organizedData[year][month][week][day] = organizedData[year][month][week][day] || [];
-
+    console.log("COURS: "+JSON.stringify(cours))
     organizedData[year][month][week][day].push({
       title: cours.libelle,
       room: 169, // Replace with actual room number
       startHour: cours.debutCours,
       duration: cours.duree,
       color: cours.color,
+      professors: cours.Professeurs
     });
   });
   return organizedData;
