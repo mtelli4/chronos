@@ -16,8 +16,6 @@ const StudentAbsList = ({ Student }) => {
                 const response = await axios.get(`http://localhost:5000/eleve_absence/${Student.id}`);
                 // Rempli la liste des absences de l'étudiant
                 setAbsencesList(response.data);
-                console.log("ABSENCES");
-                console.log(response);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -38,11 +36,11 @@ const StudentAbsList = ({ Student }) => {
     return (
         <div>
             <div onClick={handleClick}>
-                <h1>{`${Student.nom} ${Student.prenom}`}</h1>
+                <h3 style={{width: 400, color: '#0000FF'}}>{`${Student.Utilisateur.nom} ${Student.Utilisateur.prenom}`}</h3>
             </div>
             {isVisible && <div>
                 {absences.map((absence) => ( 
-                    (!absence.envoye && <AbsValidCard key={absence.id} Absence={absence} />)
+                    (absence.envoye && <AbsValidCard key={absence.id} Absence={absence} />)
                 ))}
             </div>}
         </div>

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Eleve, Groupe, Cours, CoursGroupe, GroupeEleve } = require('../models')
+const { Cours, Groupe, CoursGroupe, Eleve, GroupeEleve, Utilisateur } = require('../models')
 
 
 router.get("/:id", async (req, res) => {
@@ -21,6 +21,12 @@ router.get("/:id", async (req, res) => {
                 attributes: { 
                     exclude: ['createdAt', 'updatedAt'] 
                 },
+                include: [{
+                    model: Utilisateur, // JOIN Utilisateur
+                    attributes: { 
+                        exclude: ['createdAt', 'updatedAt'] 
+                    },
+                }],
             }],
         }],
     });

@@ -14,9 +14,7 @@ const ValidationAbsPage = () => {
       try {
         const response = await axios.get("http://localhost:5000/secretary_formation/1"); // 1 correspond à l'id de la secrétaire
         // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
-        setFormationsList(response.data);
-        console.log("FORMATIONS AVEC ETUDIANTS");
-        console.log(response);
+        setFormationsList(response.data.Formations);
       } catch (error) {
         console.log(error);
       } finally {

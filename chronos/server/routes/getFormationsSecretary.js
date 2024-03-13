@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Secretaire, Formation, FormationSecretaire, Groupe, GroupeFormation, Eleve, GroupeEleve } = require('../models');
+const { Secretaire, Formation, FormationSecretaire, Eleve, Utilisateur } = require('../models');
 
 
 router.get("/:id", async (req, res) => {
@@ -14,12 +14,10 @@ router.get("/:id", async (req, res) => {
             through: FormationSecretaire, // Table intermédiaire CoursGroupe
             attributes: { exclude: ['createdAt', 'updatedAt'] },
             include: [{
-                model: Groupe, // JOIN Groupe
-                through: GroupeFormation, // Table intermédiaire GroupeFormation
+                model: Eleve, // JOIN Eleve
                 attributes: { exclude: ['createdAt', 'updatedAt'] },
                 include: [{
-                    model: Eleve, // JOIN Eleve
-                    through: GroupeEleve, // Table intermédiaire GroupeEleve
+                    model: Utilisateur, // JOIN Utilisateur
                     attributes: { exclude: ['createdAt', 'updatedAt'] },
                 }],
             }],

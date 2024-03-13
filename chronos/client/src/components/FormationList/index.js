@@ -10,17 +10,16 @@ const FormationList = ({ Formation }) => {
     // Rend visible ou invisible la liste des élèves de la formation
     const handleClick = () => {
         setIsVisible(!isVisible);
+        console.log("COUCOU");
+        console.log(Formation.Eleves);
     };
 
     return (
-        <div onClick={handleClick}>
-            <div></div>
-            <h1>{Formation.libelle}</h1>
+        <div>
+            <h2 onClick={handleClick} style={{width: 600, color: '#FF0000'}}>{Formation.libelle}</h2>
             {isVisible && <div>
-                {Formation.map((group) => ( // Groupes de chaque formation
-                    group.map((student) => ( // Elève du groupe de la formation
-                        <StudentAbsList key={student.id} Student={student} />
-                    ))
+                {Formation.Eleves.map((student) => ( // Groupes de chaque formation
+                    <StudentAbsList key={student.id} Student={student} />
                 ))}
             </div>}
         </div>

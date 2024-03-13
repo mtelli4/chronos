@@ -8,13 +8,14 @@ import AbsJustifCard from '../components/AbsJustifCard';
 const JustifyAbsPage = () => {
   const [absences, setAbsencesList] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/eleve_absence/9/1"); // 9 correspond à l'id de l'élève et 1 pour l'id cours envoyé
+        const response = await axios.get("http://localhost:5000/eleve_absence/9/1"); // 9 correspond à l'id de l'utilisateur et 1 pour l'id cours envoyé
         // Rempli la liste des absences
         setAbsencesList(response.data);
+        console.log(response);
       } catch (error) {
         console.log(error);
       } finally {
@@ -39,7 +40,7 @@ const JustifyAbsPage = () => {
     <div>
       <h1>Liste des absences</h1>
       {absences.map((absence) => (
-        <AbsJustifCard key={absence.id} idStudent={absence.eleveId} idCours={absence.coursId} Absence={absence} idList={absence.id} onRemove={handleRemoveAbsence} />
+        <AbsJustifCard key={absence.id} userId={9} Absence={absence} idList={absence.id} onRemove={handleRemoveAbsence} />
       ))}
     </div>
   );
