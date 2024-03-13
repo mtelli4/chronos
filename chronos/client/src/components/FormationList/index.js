@@ -10,8 +10,6 @@ const FormationList = ({ Formation }) => {
     // Rend visible ou invisible la liste des élèves de la formation
     const handleClick = () => {
         setIsVisible(!isVisible);
-        console.log("COUCOU");
-        console.log(Formation.Eleves);
     };
 
     return (

@@ -11,9 +11,6 @@ const CallCard = ({Student, absentList, setAbsentList, setLateList}) => {
     // État local pour suivre l'état de modification
     const [isHide, setIsHide] = useState(false);
 
-    console.log("BONJOUR");
-    console.log(Student);
-
     // Fonction appelée lors du clic sur l'étudiant
     function handleClick() {
         // Changement d'absent à présent ou inversement

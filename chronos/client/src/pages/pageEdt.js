@@ -202,8 +202,6 @@ const PageEdt = () => {
   }
   const organizedCourses = organizeCoursesByDate(listCours);
 
-  console.log('aaaaaaaaaaaa')
-  console.log(userRoles)
   return (
       <>
           {/* <div className='MonthSelector'></div> */}

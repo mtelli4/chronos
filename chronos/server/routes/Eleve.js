@@ -32,8 +32,6 @@ router.get("/:id/cours", async (req, res) => {
         if (!eleve) {
           return res.status(404).json({ message: "Élève non trouvé" });
         }
-        console.log("result")
-        console.log(eleve)
         // Les cours associés à l'élève sont maintenant dans eleve.Groupe.Cours
         const coursDeLEleve = eleve.Groupes.reduce((cours, groupe) => cours.concat(groupe.Cours), []);
     
