@@ -17,11 +17,11 @@ import buttonAft from "../../images/buttonAft.svg";
 import Popup from '../Popup';
 import ClassDetails from '../../pages/classDetails';
 
-const Calendar = ({ weekdata, onWeekChange }) => {
+const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedSquare, setSelectedSquare] = useState({ color: "#000000", title: "", duration: 0, startHour: "00h00", informations: [] });
-  const [currentMonthIndex, setCurrentMonthIndex] = useState();
-  const [currentWeekIndex, setCurrentWeekIndex] = useState();
+  const [currentMonthIndex, setCurrentMonthIndex] = useState((new Date()).getMonthNumber());
+  const [currentWeekIndex, setCurrentWeekIndex] = useState((new Date()).getWeekNumber());
 
   // Fonction pour obtenir le numéro de la semaine à partir d'une date
   Date.prototype.getWeekNumber = function () {
@@ -42,22 +42,15 @@ const Calendar = ({ weekdata, onWeekChange }) => {
     return this.getMonth() + 1;
   };
 
-  const date = new Date();
-  const currentYear = date.getFullYear();
-  const month = date.getMonthNumber();
-  const week = date.getWeekNumber();
 
   const [days, setDays] = useState([]);
   const [extremeHours, setExtremeHours] = useState([]);
   const [hours, setHours] = useState([]);
 
   useEffect(() => {//INITIALISATION
-    setCurrentWeekIndex(week)
-    setCurrentMonthIndex(month)
-
-    if (weekdata && weekdata[currentYear] && weekdata[currentYear][currentMonthIndex] && weekdata[currentYear][currentMonthIndex][currentWeekIndex]) {
-      setDays(createDaysLst(weekdata[currentYear][currentMonthIndex][currentWeekIndex]));
-      setExtremeHours(trouverHeuresExtremes(weekdata[currentYear][currentMonthIndex][currentWeekIndex]));
+    if (weekdata && weekdata[year] && weekdata[year][currentMonthIndex] && weekdata[year][currentMonthIndex][currentWeekIndex]) {
+      setDays(createDaysLst(weekdata[year][currentMonthIndex][currentWeekIndex]));
+      setExtremeHours(trouverHeuresExtremes(weekdata[year][currentMonthIndex][currentWeekIndex]));
     }
     console.log(weekdata);
   }, [weekdata]);
@@ -149,10 +142,10 @@ const Calendar = ({ weekdata, onWeekChange }) => {
   function handleNav(type){
     if(type === "prev"){
       setCurrentWeekIndex((prevIndex) => prevIndex - 1)
-      setCurrentMonthIndex(getMonthNumberFromWeek(currentWeekIndex - 1, currentYear));
+      setCurrentMonthIndex(getMonthNumberFromWeek(currentWeekIndex - 1, year));
     }else if(type === "next"){
       setCurrentWeekIndex((prevIndex) => prevIndex + 1)
-      setCurrentMonthIndex(getMonthNumberFromWeek(currentWeekIndex + 1, currentYear));
+      setCurrentMonthIndex(getMonthNumberFromWeek(currentWeekIndex + 1, year));
     }
   }
 
@@ -174,7 +167,7 @@ const Calendar = ({ weekdata, onWeekChange }) => {
   }
   const changeMonth = (index)=>{
     setCurrentMonthIndex(index); 
-    let date = new Date(`${index}-01-${currentYear}`)
+    let date = new Date(`${index}-01-${year}`)
     // On veut éviter de compter de prendre le premier jour du mois s'il s'agit d'un samedi ou dimanche
     switch (date.getDay()){
       case 0:       //Dimanche
@@ -188,20 +181,26 @@ const Calendar = ({ weekdata, onWeekChange }) => {
   return (
     <>
     <div>
+      <button onClick={()=>setYear(year-1)}>
+        {year-1}
+      </button>
     {
       months.map((mois, index)=>{
         return <span style={{color: index==currentMonthIndex-1?"red":"black"}} onClick={()=>changeMonth(index+1)}> {mois} </span>
       })
     }
+    <button onClick={()=>setYear(year+1)}>
+      {year+1}
+    </button>
     </div>
     <CalendarCont>
-      {weekdata && weekdata[currentYear] && weekdata[currentYear][currentMonthIndex] && weekdata[currentYear][currentMonthIndex][currentWeekIndex] ? (
+      {weekdata && weekdata[year] && weekdata[year][currentMonthIndex] && weekdata[year][currentMonthIndex][currentWeekIndex] ? (
         <>
         <CalendarWeek>
           <CalendarButton onClick={() => handleNav("prev")} type={"prev"} src={buttonPrev} weekIndex={currentWeekIndex}/>
           <CalendarDays>
             {days.map((item) => (
-              <CalendarDay dayssize={days.length} key={item.id}>{item} {getDayNumberByLabel(item, currentWeekIndex, currentYear)}</CalendarDay>
+              <CalendarDay dayssize={days.length} key={item.id}>{item} {getDayNumberByLabel(item, currentWeekIndex, year)}</CalendarDay>
             ))}
           </CalendarDays>
           <CalendarButton onClick={() => handleNav("next")} type={"after"} src={buttonAft} weekIndex={currentWeekIndex} />
@@ -216,12 +215,12 @@ const Calendar = ({ weekdata, onWeekChange }) => {
         </CalendarHours>
       ) : <p>loading</p>}
       <CalendarMain id="calendarmain">
-        {weekdata && weekdata[currentYear] && weekdata[currentYear][currentMonthIndex] ? (
+        {weekdata && weekdata[year] && weekdata[year][currentMonthIndex] ? (
           <>
-            {Object.keys(weekdata[currentYear][currentMonthIndex][currentWeekIndex]).map(jour => (
+            {Object.keys(weekdata[year][currentMonthIndex][currentWeekIndex]).map(jour => (
 
               <CalendarMainCol dayssize={days.length}>
-                {weekdata[currentYear][currentMonthIndex][currentWeekIndex][jour].map((classData) => (
+                {weekdata[year][currentMonthIndex][currentWeekIndex][jour].map((classData) => (
                   <ClassSquare
                     key={classData.id}
                     title={classData.title}
