@@ -4,47 +4,31 @@ import { authService } from '../services/authService';
 import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
 
+export const GlobalStateContext = React.createContext();
 const PageEdt = () => {
   const [userEmail, setUserEmail] = useState();
-  const [userRoles, setUserRoles] = useState();
-  const [currentRole, setCurrentRole] = useState();
   const [organizedCourses, setOrganizedCourses] = useState([])
   const role = authService.getCurrentRole();
   const roleId = authService.getCurrentRoleId();
 
-  const handleRoleChange = (event) => {
-    const selectedRole = event.target.value;
-
-    // Mettre à jour le local storage avec le nouveau rôle sélectionné
-    authService.setCurrentRole(selectedRole);
-    setCurrentRole(selectedRole);
-
-    authService.setCurrentRoleId(userRoles[selectedRole]);
-  };
-
   useEffect(() => {
-    const roles = authService.getUserRoles()
-    setUserRoles(roles)
-
-    const currentRole = authService.getCurrentRole()
-    setCurrentRole(currentRole)
-
     const email = authService.getUserEmail()
     setUserEmail(email)
   }, []);
-  
+
+
   function handleWeekChange(type) {
     console.log("%c" + type, "color: red; font-size: 40px;");
   }
 
   useEffect(() => {
     axios.get(`http://localhost:5000/cours/${role}/${roleId}/2024`)
-    .then((response) => { //si tu veux voir tout les cours --> http://localhost:5000/cours
-      console.log("DATA: " + JSON.stringify(response.data))
-      setOrganizedCourses(organizeCoursesByDate(response.data))
-    }).catch(error => {
-      console.log("error while loading courses")
-    });
+      .then((response) => { //si tu veux voir tout les cours --> http://localhost:5000/cours
+        console.log("DATA: " + JSON.stringify(response.data))
+        setOrganizedCourses(organizeCoursesByDate(response.data))
+      }).catch(error => {
+        console.log("error while loading courses")
+      });
   }, []);
 
   // Fonction pour obtenir le libellé du jour de la semaine
@@ -79,95 +63,83 @@ const PageEdt = () => {
     return this.getMonth() + 1;
   };
 
-// Fonction pour organiser les cours dans une structure hiérarchique
-function organizeCoursesByDate(courses) {
-  const organizedData = {};
+  // Fonction pour organiser les cours dans une structure hiérarchique
+  function organizeCoursesByDate(courses) {
+    const organizedData = {};
 
-  // Process courses and populate data structure
+    // Process courses and populate data structure
 
-  // Add years without courses and populate empty months and weeks
-  const yearsWithNoCourses = Array.from(new Set(courses.map(cours => new Date(cours.debutCours).getFullYear())));
-  yearsWithNoCourses.forEach(year => {
-    if (!organizedData[year]) organizedData[year] = {};
+    // Add years without courses and populate empty months and weeks
+    const yearsWithNoCourses = Array.from(new Set(courses.map(cours => new Date(cours.debutCours).getFullYear())));
+    yearsWithNoCourses.forEach(year => {
+      if (!organizedData[year]) organizedData[year] = {};
 
-    const allMonths = Array.from({ length: 12 }, (_, i) => new Date(year, i).getMonthNumber());
-    allMonths.forEach(month => {
-      if (!organizedData[year][month]) organizedData[year][month] = {};
+      const allMonths = Array.from({ length: 12 }, (_, i) => new Date(year, i).getMonthNumber());
+      allMonths.forEach(month => {
+        if (!organizedData[year][month]) organizedData[year][month] = {};
 
-      const weeksInMonth = getWeeksInMonth(year, month);
+        const weeksInMonth = getWeeksInMonth(year, month);
 
-      for (let i = 0; i < weeksInMonth.length; i++) {
-        if (!organizedData[year][month][weeksInMonth[i]]) {
-          organizedData[year][month][weeksInMonth[i]] = {};
-        }
-         // Add days from Monday to Saturday for the week
-         const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
-         daysOfWeek.forEach(day => {
-          if(!organizedData[year][month][weeksInMonth[i]][day]){
-            organizedData[year][month][weeksInMonth[i]][day] = [];
+        for (let i = 0; i < weeksInMonth.length; i++) {
+          if (!organizedData[year][month][weeksInMonth[i]]) {
+            organizedData[year][month][weeksInMonth[i]] = {};
           }
-         });
-      }
+          // Add days from Monday to Saturday for the week
+          const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+          daysOfWeek.forEach(day => {
+            if (!organizedData[year][month][weeksInMonth[i]][day]) {
+              organizedData[year][month][weeksInMonth[i]][day] = [];
+            }
+          });
+        }
+      });
     });
-  });
 
-  courses.forEach(cours => {
-    const date = new Date(cours.debutCours);
-    const year = date.getFullYear();
-    const month = date.getMonthNumber();
-    const week = date.getWeekNumber();
-    const day = getDayLabel(cours.debutCours); // Assuming getDayLabel exists and returns day label
+    courses.forEach(cours => {
+      const date = new Date(cours.debutCours);
+      const year = date.getFullYear();
+      const month = date.getMonthNumber();
+      const week = date.getWeekNumber();
+      const day = getDayLabel(cours.debutCours); // Assuming getDayLabel exists and returns day label
 
-    // Initialize data structure
-    if (!organizedData[year]) organizedData[year] = {};
-    if (!organizedData[year][month]) organizedData[year][month] = {};
-    if (!organizedData[year][month][week]) organizedData[year][month][week] = {};
-    organizedData[year][month][week][day] = organizedData[year][month][week][day] || [];
-    console.log("COURS: "+JSON.stringify(cours))
-    organizedData[year][month][week][day].push({
-      title: cours.libelle,
-      room: 169, // Replace with actual room number
-      startHour: cours.debutCours,
-      duration: cours.duree,
-      color: cours.color,
-      professors: cours.Professeurs
+      // Initialize data structure
+      if (!organizedData[year]) organizedData[year] = {};
+      if (!organizedData[year][month]) organizedData[year][month] = {};
+      if (!organizedData[year][month][week]) organizedData[year][month][week] = {};
+      organizedData[year][month][week][day] = organizedData[year][month][week][day] || [];
+      console.log("COURS: " + JSON.stringify(cours))
+      organizedData[year][month][week][day].push({
+        title: cours.libelle,
+        room: 169, // Replace with actual room number
+        startHour: cours.debutCours,
+        duration: cours.duree,
+        color: cours.color,
+        professors: cours.Professeurs
+      });
     });
-  });
-  return organizedData;
-}
-
-
-function getWeeksInMonth(year, month) {
-  const firstDate = new Date(year, month-1, 1);
-  const lastDate = new Date(year, month, 0);
-  const weeks = [];
-  for (let i = firstDate.getDate(); i <= lastDate.getDate(); i++) {
-    const date = new Date(year, month-1, i);
-    const weekNumber = date.getWeekNumber();
-    weeks.push(weekNumber);
+    return organizedData;
   }
-  const data = weeks.filter((element, index) => weeks.indexOf(element) === index);;
-  return data;
-}
 
+
+  function getWeeksInMonth(year, month) {
+    const firstDate = new Date(year, month - 1, 1);
+    const lastDate = new Date(year, month, 0);
+    const weeks = [];
+    for (let i = firstDate.getDate(); i <= lastDate.getDate(); i++) {
+      const date = new Date(year, month - 1, i);
+      const weekNumber = date.getWeekNumber();
+      weeks.push(weekNumber);
+    }
+    const data = weeks.filter((element, index) => weeks.indexOf(element) === index);;
+    return data;
+  }
   return (
-      <>
-          {/* <div className='MonthSelector'></div> */}
-          <p>Ceci est votre role courrant: {currentRole}</p>
-          <div>
-          <label htmlFor="roleSelector">Sélecteur de role: </label>
-          <select id="roleSelector" value={currentRole} onChange={handleRoleChange}>
-              {Object.keys(userRoles ?? {}).map((role) => (
-                <option key={role} value={role}>
-                  {role}
-                </option>
-              ))}
-          </select>
-        </div>
-          <div className='calendarCont'>
-            <Calendar weekdata={organizedCourses} onWeekChange={handleWeekChange} />
-          </div>
-      </>
+    <>
+      {/* <div className='MonthSelector'></div> */}
+      <div className='calendarCont'>
+        <Calendar weekdata={organizedCourses} onWeekChange={handleWeekChange} />
+      </div>
+    </>
   )
 }
 
