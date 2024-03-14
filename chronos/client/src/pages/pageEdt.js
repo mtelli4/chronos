@@ -9,6 +9,7 @@ const PageEdt = () => {
   const [organizedCourses, setOrganizedCourses] = useState([])
   const role = authService.getCurrentRole();
   const roleId = authService.getCurrentRoleId();
+  const [year, setYear] = useState((new Date()).getFullYear())
 
   useEffect(() => {
     const email = authService.getUserEmail()
@@ -21,14 +22,14 @@ const PageEdt = () => {
   }
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/cours/${role}/${roleId}/2024`)
+    axios.get(`http://localhost:5000/cours/${role}/${roleId}/${year}`)
       .then((response) => { //si tu veux voir tout les cours --> http://localhost:5000/cours
         console.log("DATA: " + JSON.stringify(response.data))
         setOrganizedCourses(organizeCoursesByDate(response.data))
       }).catch(error => {
         console.log("error while loading courses")
       });
-  }, []);
+  }, [year]);
 
   // Fonction pour obtenir le libellé du jour de la semaine
   function getDayLabel(dateTimeString) {
@@ -136,7 +137,7 @@ const PageEdt = () => {
     <>
       {/* <div className='MonthSelector'></div> */}
       <div className='calendarCont'>
-        <Calendar weekdata={organizedCourses} onWeekChange={handleWeekChange} />
+        <Calendar weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
       </div>
     </>
   )
