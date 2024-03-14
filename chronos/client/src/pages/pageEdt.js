@@ -4,7 +4,6 @@ import { authService } from '../services/authService';
 import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
 
-export const GlobalStateContext = React.createContext();
 const PageEdt = () => {
   const [userEmail, setUserEmail] = useState();
   const [organizedCourses, setOrganizedCourses] = useState([])

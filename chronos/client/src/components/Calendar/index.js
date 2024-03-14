@@ -128,22 +128,21 @@ const Calendar = ({ weekdata, onWeekChange }) => {
     return monthNumber + 1;
   }
 
+  const months = [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre"
+  ];
   function getMonthNameByNumber(monthNumber) {
-    const months = [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre"
-    ];
-
     return months[monthNumber-1];
   }
   
@@ -173,11 +172,31 @@ const Calendar = ({ weekdata, onWeekChange }) => {
   
     return dayNumber;
   }
+  const changeMonth = (index)=>{
+    setCurrentMonthIndex(index); 
+    let date = new Date(`${index}-01-${currentYear}`)
+    // On veut éviter de compter de prendre le premier jour du mois s'il s'agit d'un samedi ou dimanche
+    switch (date.getDay()){
+      case 0:       //Dimanche
+        date.setDate(date.getDate()+1)
+      case 6:       //Samedi
+        date.setDate(date.getDate()+2)
+    }
+    setCurrentWeekIndex(date.getWeekNumber())
+  }
   
   return (
+    <>
+    <div>
+    {
+      months.map((mois, index)=>{
+        return <span style={{color: index==currentMonthIndex-1?"red":"black"}} onClick={()=>changeMonth(index+1)}> {mois} </span>
+      })
+    }
+    </div>
     <CalendarCont>
       {weekdata && weekdata[currentYear] && weekdata[currentYear][currentMonthIndex] && weekdata[currentYear][currentMonthIndex][currentWeekIndex] ? (
-        <><p>{getMonthNameByNumber(currentMonthIndex)}</p>
+        <>
         <CalendarWeek>
           <CalendarButton onClick={() => handleNav("prev")} type={"prev"} src={buttonPrev} weekIndex={currentWeekIndex}/>
           <CalendarDays>
@@ -221,6 +240,7 @@ const Calendar = ({ weekdata, onWeekChange }) => {
       </CalendarMain>
       <Popup html={<ClassDetails color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
     </CalendarCont>
+    </>
   );
 };
 
