@@ -37,14 +37,14 @@ const ChronosTable = ({ width, columns, rows, correspondance }) => { // width : 
                     return (
                         <ChronosTableRow >
                             <ChronosTableH sticky={true} rowCell={true} centered={false} key={-index}>
-                                { row.nom + " " + row.prenom }
+                                { row.Utilisateur.nom + " " + row.Utilisateur.prenom }
                                 {/* à remplacer par row.val */}
                             </ChronosTableH>
                             {columns.map((column, jndex) => {
                                 let val = ""
                                 if (correspondance.hasOwnProperty(row.id)) {
                                     if (correspondance[row.id].hasOwnProperty(column.id)) {
-                                        val = correspondance[row.id][column.id]
+                                        val = correspondance[row.id][column.id].note
                                     }
                                 }
                                 return (

@@ -1,0 +1,26 @@
+.notesFormulaireRecherche {
+    width: 97%;
+    background: #ddd;
+    padding: 20px 40px;
+    border-radius: 10px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    position: sticky;
+}
+
+.notesTableCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentContNotes {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 auto;
+    margin-top: 20px;
+}

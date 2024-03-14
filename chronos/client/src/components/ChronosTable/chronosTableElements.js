@@ -4,8 +4,8 @@ export const ChronosTableWrapper = styled.div`
     width: ${props => props.width}%;
     max-height: 80vh;
     overflow: auto;
-    margin: 0 auto;
     border-radius: 10px;
+    padding-right: 5px;
 `;
 
 export const ChronosTableCont = styled.table`
@@ -13,8 +13,8 @@ export const ChronosTableCont = styled.table`
     outline: none;
     border-spacing: 0px;
     border-radius: 10px;
+    min-width: 100%;
     background: linear-gradient(90deg, #AD6DFF, #8734DB);
-
    // background: linear-gradient(135deg, #AD6DFF, #8734DB);
 `;
 

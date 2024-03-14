@@ -3,28 +3,45 @@ import axios from 'axios'
 import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik"
 import * as Yup from "yup";
 import ChronosTable from '../components/ChronosTable';
+import "../css/styleNotes.css";
+import { authService } from "../services/authService";
+import { ChronosInputSelectOption } from '../components/ChronosInputSelect/ChronosInputSelectElements';
+import ChronosInputSelect from '../components/ChronosInputSelect';
+import ChronosButton from '../components/ChronosButton';
+import Popup from '../components/Popup/index.js';
+import ToggleButton from '../components/ToggleButton/index.js';
+import toggleIcon from "../images/plus.png"
 
 const PageNotes = () => {
-    const [notes, setNotes] = useState({ "eleves": [], "evaluations": [] })
+    const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
+    const [notesDetails, setNotesDetails] = useState({})
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
+    const [periodes, setPeriodes] = useState([])
+    const [showTable, setShowTable] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
+    const role = authService.getCurrentRole();
+    const roleId = authService.getCurrentRoleId();
 
     const [currentFormation, setCurrentFormation] = useState([""])
+
+    const formRef = useRef();
 
     const FormObserver = () => {
         const { values } = useFormikContext();
         useEffect(() => {
+            // Mise à jour des modules disponibles en fonction de la formation actuellement sélectionnée dans le formulaire pour les professeurs
             if (values.hasOwnProperty("formationId")) {
-                if (currentFormation == values.formationId) {
+                if (currentFormation === values.formationId) {
                     return
                 }
                 setCurrentFormation(values.formationId)
                 if (values.formationId === '') {
-                    axios.get("http://localhost:5000/modules").then((response) => {
+                    axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId } }).then((response) => {
                         setModules(response.data)
                     })
                 } else {
-                    axios.get(`http://localhost:5000/modules/byFormation/`, { params: { id: values.formationId } }).then((response) => {
+                    axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId, formation: values.formationId } }).then((response) => {
                         setModules(response.data)
                     })
                 }
@@ -34,18 +51,45 @@ const PageNotes = () => {
         return null;
     };
 
-    const initialValues = {
+    //Initialisation des paramètres pour le formulaire de recherche de notes
+    const initialValuesSearch = {
+        formationId: '',
+        moduleId: '',
+        periodeId: ''
     }
-
-    const onSubmit = (data) => {
+    const validationSchema = Yup.object().shape({
+        formationId: Yup.number().when([], {
+            is: () => role.includes('ROLE_SECRETARY') || role.includes('ROLE_DIRECTOR') || role.includes('ROLE_DEPARTMENT_DIRECTOR') || role.includes('ROLE_PROFESSOR'),
+            then: () => Yup.number().required("Ce champ est obligatoire."),
+            otherwise: () => Yup.number().nullable().notRequired(),
+        }),
+        moduleId: Yup.number().when([], {
+            is: () => role.includes('ROLE_PROFESSOR'),
+            then: () => Yup.number().required("Ce champ est obligatoire."),
+            otherwise: () => Yup.number().nullable().notRequired(),
+        }),
+        periodeId: Yup.number().notRequired(),
+    })
+    //Fonction de validation du formulaire de recherche de notes
+    const onSubmitSearch = (data) => {
+        //Suppression des champs vides, pour ne pas les prendre en compte dans la recherche
         Object.keys(data).forEach(key => {
             if (data[key] === '') {
                 delete data[key];
             }
         });
+
+        //Ajout du rôle actuel pour la recherche de notes
+        data["profil"] = role
+        if (role.includes('ROLE_USER')) {
+            data["eleveId"] = roleId
+        }
+
+        //Appel à l'API de récupération de notes
         axios.get("http://localhost:5000/notes", { params: data })
             .then((response) => {
-                console.log("Succès")
+                //Mise à jour des notes
+                console.log("Succès SearchNotes")
                 setNotes(response.data)
             }).catch(function (error) {
                 if (error.response) {
@@ -67,67 +111,253 @@ const PageNotes = () => {
             });
     }
 
-    const validationSchema = Yup.object().shape({
+
+    //Initialisation des paramètres pour le formulaire d'insertion d'évaluation du professeur
+    const initialValuesInsertEval = {
+        libelle: "",
+        coefficient: 1,
+        noteMaximale: 20
+    }
+    const validationSchemaInsert = Yup.object().shape({
+        libelle: Yup.string().min(5).max(50).required("Ce champ est obligatoire."),
+        coefficient: Yup.number().required("Ce champ est obligatoire."),
+        noteMaximale: Yup.number().required("Ce champ est obligatoire."),
+        periodeId: Yup.number().required("Ce champ est obligatoire."),
     })
 
-    useEffect(() => {
-        axios.get("http://localhost:5000/notes").then((response) => {
-            setNotes(response.data)
-        })
-    }, [])
+    //Fonction d'insertion d'évaluation
+    const onSubmitInsertEval = (data) => {
+        if (formRef.current.values.moduleId == "") {
+            console.log("return")
+            return
+        }
+        //Appel de l'API d'insertion d'évaluations
+        axios.post("http://localhost:5000/evaluations/insertEvaluations", { moduleId: formRef.current.values.moduleId, coefficient: data.coefficient, libelle: data.libelle, noteMaximale: data.noteMaximale, periodeId: data.periodeId })
+            .then((response) => {
+                //Appel à la fonction d'envoie de formulaire, pour mettre à jour avec la nouvelle évaluation
+                console.log("Succès InsertEvaluations")
+                onSubmitSearch(formRef.current.values);
+            }).catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
+    }
+
+    //Fonction de suppression d'évaluation
+    const deleteEvaluation = (evalId) => {
+        //Appel de l'API de suppression d'évaluations
+        axios.post("http://localhost:5000/evaluations/deleteEvaluations", { evalId: evalId })
+            .then((response) => {
+                //Appel à la fonction d'envoie de formulaire, pour mettre à jour sans l'évaluation supprimée
+                console.log("Succès DeleteEvaluations")
+                onSubmitSearch(formRef.current.values);
+            }).catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
+    }
+
+    //Mise à jour des notes, quand on change de rôle
+    // useEffect(() => {
+    //     let parameters = { "profil": role }
+    //     if (role.includes('ROLE_USER')) {
+    //         parameters["eleveId"] = roleId
+    //     }
+    //     axios.get("http://localhost:5000/notes", { params: parameters }).then((response) => {
+    //         setNotes(response.data)
+    //     })
+    // }, [role])
+
+    const getModulesDetails = (data)=>{
+        //Suppression des champs vides, pour ne pas les prendre en compte dans la recherche
+        Object.keys(data).forEach(key => {
+            if (data[key] === '') {
+                delete data[key];
+            }
+        });
+        //Appel à l'API de récupération des notes du module sélectionné
+        axios.get("http://localhost:5000/notes", { params: data})
+        .then((response) => {
+            //Mise à jour des notes
+            console.log("Succès SearchNotes")
+            setNotesDetails(response.data)
+        }).catch(function (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+        });
+    }
 
     useEffect(() => {
-        axios.get("http://localhost:5000/modules").then((response) => {
+        //Récupération des modules disponibles au lancement
+        axios.get("http://localhost:5000/modules/byFilter", { params: { role: role, roleId: roleId } }).then((response) => {
             setModules(response.data)
         })
-    }, [])
 
-    useEffect(() => {
-        axios.get("http://localhost:5000/formations").then((response) => {
+        //Récupération des formations disponibles au lancement
+        axios.get("http://localhost:5000/formations/byRole", { params: { role: role, roleId: roleId } }).then((response) => {
             setFormations(response.data)
         })
+
+        //Récupération des périodes disponibles au lancement
+        axios.get("http://localhost:5000/periodes").then((response) => {
+            setPeriodes(response.data)
+        })
+
+        if (role.includes('ROLE_USER')) {
+            onSubmitSearch(formRef.current.values);
+        }
     }, [])
+
+    //Fonction de gestion lors de la saisie/suppression/modification de notes
+    function handleChange(e, eleveId, evalId, statutId) {
+        //Lorsque l'utilisateur valide sa saisie
+        if (e.key === 'Enter') {
+            //Si la case est vide, suppression de la note, sinon insertion/modification de la note
+            if (e.target.value === "" && statutId == null) {
+                axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
+                    //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
+                    if (response.data.hasBeenDeleted) {
+                        //Appel à l'API pour mettre à jour l'affichage des notes
+                        onSubmitSearch(formRef.current.values)
+                        alert("Suppression réussie");
+                    }
+                })
+                    .catch(function (error) {
+                        if (error.response) {
+                            // The request was made and the server responded with a status code
+                            // that falls out of the range of 2xx
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        } else if (error.request) {
+                            // The request was made but no response was received
+                            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                            // http.ClientRequest in node.js
+                            console.log(error.request);
+                        } else {
+                            // Something happened in setting up the request that triggered an Error
+                            console.log('Error', error.message);
+                        }
+                        console.log(error.config);
+                        alert("UpsertError");
+                    });
+            } else {
+                let note = e.target.value
+                if (e.target.value == "") {
+                    note = null
+                }
+                axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: note, statutId: statutId }).then((response) => {
+                    //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
+                    //Appel à l'API pour mettre à jour l'affichage des notes
+                    onSubmitSearch(formRef.current.values)
+                    alert("Upsert réussi");
+                })
+                    .catch(function (error) {
+                        if (error.response) {
+                            // The request was made and the server responded with a status code
+                            // that falls out of the range of 2xx
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        } else if (error.request) {
+                            // The request was made but no response was received
+                            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                            // http.ClientRequest in node.js
+                            console.log(error.request);
+                        } else {
+                            // Something happened in setting up the request that triggered an Error
+                            console.log('Error', error.message);
+                        }
+                        console.log(error.config);
+                        alert("UpsertError");
+                    });
+
+            }
+        }
+    }
 
 
   return (
     <>
-        {/* <table>
-                <tr>
-                    <td style={{ border: "1pt solid black" }}>
-                        .
-                    </td>
+        {/* Affichage de la page pour les professeurs */}
+        {role.includes('ROLE_PROFESSOR') &&
+                <>
+                    {/* Formulaire de recherche de notes */}
+                        <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                            <Form className='notesFormulaireRecherche'>
+                                <ChronosInputSelect defaultLabel="Formation" name="formationId" label="" options={formations} />
+                                <ChronosInputSelect defaultLabel="Module" name="moduleId" label="" options={modules} />
+                                <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
+
+                                <button id="searchNote" onClick={() => setShowTable("prof")} type="submit">chercher</button>
+                                <FormObserver />
+                            </Form>
+                        </Formik>
+
+                    {/* Formulaire d'insertion d'évaluation */}
                     {
-                        notes.evaluations.map((evals) => {
-                            return (
-                                <td style={{ border: "1pt solid black" }}>{evals.libelle}</td>
-                            )
-                        })
+                        
+                        <Popup html={"hfhhhf"} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
                     }
-                </tr>
-                {notes.eleves.map((eleve) => {
-                    return (
-                        <tr>
-                            <td style={{ border: "1pt solid black" }}>{eleve.nom} {eleve.prenom}</td>
-                            {notes.evaluations.map((evals) => {
-                                let val = ""
-                                if (notes.hasOwnProperty(eleve.id)) {
-                                    if (notes[eleve.id].hasOwnProperty(evals.id)) {
-                                        val = notes[eleve.id][evals.id]
-                                    }
-                                }
-                                return (
-                                    <td style={{ border: "1pt solid black" }}>
-                                        {val}
-                                    </td>
-                                )
-                            })}
 
-                        </tr>
-                    )
-                })}
-        </table> */}
+                    {/* Tableau d'affichage des notes */}
+                    {
+                        showTable == "prof" &&
+                        (
+                            <div className='contentContNotes'>
+                                <ToggleButton src={toggleIcon} action={() => setShowPopup(true)} text="Créer une évaluation" />
+                                <div className='notesTableCont'>
+                                    <ChronosTable width={100} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} />
+                                </div>
+                            </div>
+                        )
+                    }
+                    
 
-        <ChronosTable width={90} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} />
+                </>
+        }
     </>
   )
 }

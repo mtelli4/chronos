@@ -1,9 +1,10 @@
 import React from 'react'
+import { ChronosButtonCont } from './ChronosButtonElements'
 
-const ChronosButton = () => {
+const ChronosButton = ({ id, text, type }) => {
   return (
-    <ChronosButtonCont>
-        
+    <ChronosButtonCont id={id} type={type}>
+        { text }
     </ChronosButtonCont>
   )
 }
