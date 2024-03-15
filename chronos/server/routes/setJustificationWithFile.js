@@ -24,7 +24,7 @@ router.post("/", upload.single('file'), async (req, res) => {
     const abs = req.body; // obtient le corps de la requête (format json)
 
     // Chemin d'accès au fichier déposé
-    const filePath = `uploads/r1/n${abs.userId}/${uploadedFile.filename}`;
+    const filePath = `server/uploads/r1/n${abs.userId}/${uploadedFile.filename}`;
 
     // requête SQL
     Absence.update(

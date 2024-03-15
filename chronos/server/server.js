@@ -1,12 +1,13 @@
-const express = require('express')
-const app = express()
-const db = require('./models')
+const express = require('express');
+const app = express();
+const path = require('path');
+const db = require('./models');
 const nodemailer = require("nodemailer");
 const { Sequelize } = require('sequelize');
 var cors = require('cors');
 require('dotenv').config();
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
 const sequelize = new Sequelize('ingrid', process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
   host: '127.0.0.1',
@@ -25,6 +26,9 @@ sequelize
 app.listen(5000, () => {
     console.log("listening on port 5000")
 })
+
+// Définit un répertoire statique pour servir les fichiers PDF
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const moduleCoursRouter = require('./routes/ModuleCours')
 app.use("/modules", moduleCoursRouter)
@@ -64,8 +68,8 @@ const getEleveCoursRouter = require('./routes/getEleveCours')
 app.use("/eleve_cours", getEleveCoursRouter)
 
 // Redirection/route pour backend insertAbsences (insertion d'absences d'élèves pour un cours)
-const insertAbsencesRouter = require('./routes/insertAbsences')
-app.use("/insert_abs", insertAbsencesRouter)
+const addAbsencesAndPresencesRouter = require('./routes/addAbsencesAndPresences')
+app.use("/end_call", addAbsencesAndPresencesRouter)
 
 // Redirection/route pour backend getAbsences (récupère les absences d'un élève)
 const getEleveAbsenceRouter = require('./routes/getEleveAbsence')
@@ -80,12 +84,12 @@ const addJustificationRouter = require('./routes/setJustificationWithoutFile')
 app.use("/add_justification", addJustificationRouter)
 
 // Redirection/route pour backend getFormationsSecretary (récupère les formations et élèves sous la charge de la secrétaire)
-const addGetFormationsSecretaryRouter = require('./routes/getFormationsSecretary') 
-app.use("/secretary_formation", addGetFormationsSecretaryRouter)
+const getFormationsSecretaryRouter = require('./routes/getFormationsSecretary') 
+app.use("/secretary_formation", getFormationsSecretaryRouter)
 
 // Redirection/route pour backend setValidAbsence (valider l'absence d'un élève)
-const addSetValidAbsenceRouter = require('./routes/setValidAbsence') 
-app.use("/set_valid_absence", addSetValidAbsenceRouter)
+const setValidAbsenceRouter = require('./routes/setValidAbsence') 
+app.use("/set_valid_absence", setValidAbsenceRouter)
 
 
 

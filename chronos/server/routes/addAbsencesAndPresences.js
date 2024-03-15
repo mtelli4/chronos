@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Absence } = require('../models')
+const { Absence, Professeur, Cours } = require('../models')
 
 
 router.post("/", async (req, res) => {
@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
     for (const eleveId of call.absences) {
         absentsToInsert.push({
             valide: 0,
-            justificatif: "",
+            justificatif: "", 
             message: "",
             eleveId: eleveId,
             coursId: call.coursId,
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
         }
     }
 
-    // requête SQL
+    // requête INSERT SQL
     if (absentsToInsert.length !== 0) {
         // Ajoute les absences dans la table
         await Absence.bulkCreate(absentsToInsert);
@@ -43,5 +43,15 @@ router.post("/", async (req, res) => {
         // Ajoute les retards dans la table
         await Absence.bulkCreate(latesToInsert);
     }
+
+    // requête UPDATE SQL
+    Cours.update(
+        { 
+            appel: 1 // Appel effectué
+        },
+        {
+            where: { id: call.coursId } 
+        }
+    ); 
 })
 module.exports = router

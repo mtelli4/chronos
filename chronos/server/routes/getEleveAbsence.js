@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { Absence, Cours, Eleve, Utilisateur } = require('../models')
+const { Absence, Cours, Eleve } = require('../models')
 
 
-router.get("/:userId/:coursId", async (req, res) => {
+router.get("/:userId/:isSend", async (req, res) => {
     const userId =  req.params.userId; // obtient l'id de l'élève
-    const coursId =  req.params.coursId; // obtient l'id du cours 
+    const isSend =  req.params.isSend; // obtient l'id du cours 
 
     // requête SQL
     const result = await Absence.findAll({         
@@ -15,7 +15,7 @@ router.get("/:userId/:coursId", async (req, res) => {
             model: Eleve, // JOIN Eleve
             where: { utilisateurId: userId }
         }],
-        where: { coursId: coursId, envoye: 0 } 
+        where: { envoye: isSend, valide: 0 } 
     });
     // Renvoi du résultat (objet JSON)
     res.json(result); 

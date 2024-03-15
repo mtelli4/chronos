@@ -3,8 +3,7 @@ import axios from 'axios';
 
 
 const AbsValidCard = ({ Absence }) => {
-  // Variable d'état pour enregistrer si l'absence a été validé ou non
-  const [validate, setValidate] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // État pour suivre la visibilité de la liste des absences
 
   function getFileName() {
     const filePathList = Absence.justificatif.split('/');
@@ -14,17 +13,39 @@ const AbsValidCard = ({ Absence }) => {
   const handleSubmit = () => {
     try {
       // Envoi la justification de l'absence
-      axios.post('http://localhost:5000/set_valid_absence', {"idAbsence": Absence.id})
-      // Met l'absence en validé
-      setValidate(true);
+      axios.post('http://localhost:5000/set_valid_absence', {"absId": Absence.id})
+      // Rend l'absence validé invisible
+      setIsVisible(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  return !Absence.envoye && (
+  // Fonction pour déclencher le téléchargement du fichier
+  const downloadFile = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/uploads/${Absence.justificatif}`, {
+        responseType: 'blob', // Spécifie que la réponse est un blob (fichier binaire)
+      });
+
+      // Crée un lien temporaire et télécharge le fichier
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', getFileName()); // Nom du fichier à télécharger
+      document.body.appendChild(link);
+      link.click();
+
+      // Nettoie l'URL temporaire
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Erreur lors du téléchargement du fichier :', error);
+    }
+  };
+
+  return isVisible && (
       <div>
-        <h2>
+        <h5>
           <p>
             {Absence.retard === null ? 'Absence' : `Retard de ${Absence.retard} minutes`}
           </p>
@@ -34,19 +55,19 @@ const AbsValidCard = ({ Absence }) => {
           <p>
             {Absence.Cour.debutCours}
           </p>
-        </h2>
+        </h5>
 
         <p>
-          {Absence.reason !== "" ? Absence.reason : ""}
+          Raison : {Absence.message !== "" ? Absence.message : ""}
         </p>
+        
+        <p>{Absence.justificatif === "" ? "" : "Justificatif :"}</p>
 
         {(Absence.justificatif !== "") && (
-          <a href={Absence.justificatif} download={getFileName()}>
-            Télécharger le justificatif
-          </a>
+          <button onClick={downloadFile}>Télécharger le justificatif</button>
         )}
 
-        {!validate && (
+        {(
           <button onClick={handleSubmit}>Valider l'absence</button>
         )}
       </div>

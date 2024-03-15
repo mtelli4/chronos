@@ -12,10 +12,9 @@ const JustifyAbsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/eleve_absence/9/1"); // 9 correspond à l'id de l'utilisateur et 1 pour l'id cours envoyé
+        const response = await axios.get("http://localhost:5000/eleve_absence/9/0"); // 9 correspond à l'id de l'utilisateur et 0 pour signifier que l'on cherche les absences non justifiées
         // Rempli la liste des absences
         setAbsencesList(response.data);
-        console.log(response);
       } catch (error) {
         console.log(error);
       } finally {

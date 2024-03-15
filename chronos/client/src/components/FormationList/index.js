@@ -16,8 +16,10 @@ const FormationList = ({ Formation }) => {
         <div>
             <h2 onClick={handleClick} style={{width: 600, color: '#FF0000'}}>{Formation.libelle}</h2>
             {isVisible && <div>
-                {Formation.Eleves.map((student) => ( // Groupes de chaque formation
-                    <StudentAbsList key={student.id} Student={student} />
+                {Formation.Eleves
+                    .sort((a, b) => a.Utilisateur.nom.localeCompare(b.Utilisateur.nom)) // Trie les élèves par leur nom dans l'ordre alphabétique
+                    .map((student) => ( // Groupes de chaque formation
+                        <StudentAbsList key={student.id} Student={student} />
                 ))}
             </div>}
         </div>

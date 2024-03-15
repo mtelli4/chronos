@@ -19,7 +19,7 @@ router.get("/:id", async (req, res) => {
                 include: [{
                     model: Utilisateur, // JOIN Utilisateur
                     attributes: { exclude: ['createdAt', 'updatedAt'] },
-                }],
+                }]
             }],
         }],
     });
