@@ -57,6 +57,13 @@ const CallCard = ({Student, absentList, setAbsentList, setLateList}) => {
 
     return (
         <CallCardCont>
+            <img src={`http://localhost:5000/uploads/${Student.trombinoscope}`} style={{
+                    width: '50px', // Largeur de l'image
+                    height: '50px', // Hauteur de l'image
+                    borderRadius: '5px', // Bordure arrondie
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' // Ombre portée
+                    // Vous pouvez ajouter d'autres styles selon vos besoins
+                }} />
             <div onClick={() => handleClick()}>
                 <p>{Student.Utilisateur.nom} {Student.Utilisateur.prenom}</p>
                 <p>{isAbsent?"Absent":"Présent"}</p>

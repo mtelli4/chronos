@@ -2,7 +2,10 @@ import styled from "styled-components";
 
 
 export const CallCardCont = styled.div `
+display: flex;
+flex-flow: column;
+marginBottom: 20px;
 width : 100%;
-height : 100px;
+height : 200px;
 border : 1px solid red; 
 `;
