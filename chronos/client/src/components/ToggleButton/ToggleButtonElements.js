@@ -8,11 +8,16 @@ export const ButtonToggleCont = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.25s;
+    transition: all 0.25s, background 0s;
     cursor: pointer;
 
     &:hover {
         transform: scale(1.1);
+        background: linear-gradient(180deg, #AD6DFF, #8734DB);
+    }
+
+    &:active {
+        transform: scale(0.9);
     }
 `;
 
@@ -35,7 +40,6 @@ export const ButtonToggleText = styled.div`
     z-index: -999;
     width: max-content;
 `;
-
 
 export const ButtonToggleWrap = styled.div`
     position: relative;

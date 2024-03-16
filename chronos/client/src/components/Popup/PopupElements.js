@@ -10,7 +10,7 @@ export const PopupCont = styled.div`
     transform: ${props => props.isActive ? "scale(1)" : "scale(0)"};
     position: relative;
     overflow: ${props => props.overflow};
-    max-width: 1400px;
+    max-width: ${props => props.format == "landscape" ? "1400px" : "750px"};
     max-height: 750px;
     scrollbar-gutter: unset;
 `;

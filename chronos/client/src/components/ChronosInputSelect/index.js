@@ -8,7 +8,7 @@ const ChronosInputSelect = ({ defaultLabel, label, name, options }) => {
         <ChronosInputSelectErrorMessage name={name} component="span"/>
 
         <ChronosInputSelectField component="select" name={name}>
-            <ChronosInputSelectOption defaultValue value="">
+            <ChronosInputSelectOption defaultValue disabled value="">
                 {defaultLabel || "Sélectionnez la formation"}
             </ChronosInputSelectOption>
 

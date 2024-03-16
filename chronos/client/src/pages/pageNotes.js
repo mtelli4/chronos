@@ -11,6 +11,7 @@ import ChronosButton from '../components/ChronosButton';
 import Popup from '../components/Popup/index.js';
 import ToggleButton from '../components/ToggleButton/index.js';
 import toggleIcon from "../images/plus.png"
+import PopupAddEval from './PopupAddEval.js';
 
 const PageNotes = () => {
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
@@ -327,19 +328,20 @@ const PageNotes = () => {
                     {/* Formulaire de recherche de notes */}
                         <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
                             <Form className='notesFormulaireRecherche'>
-                                <ChronosInputSelect defaultLabel="Formation" name="formationId" label="" options={formations} />
-                                <ChronosInputSelect defaultLabel="Module" name="moduleId" label="" options={modules} />
-                                <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
-
-                                <button id="searchNote" onClick={() => setShowTable("prof")} type="submit">chercher</button>
-                                <FormObserver />
+                                    <div className='notesSelectCont'>
+                                        <ChronosInputSelect defaultLabel="Formation" name="formationId" label="" options={formations} />
+                                        <ChronosInputSelect defaultLabel="Module" name="moduleId" label="" options={modules} />
+                                        <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
+                                    </div>
+                                    
+                                    <ChronosButton action={() => setShowTable("prof")} text="Chercher" type="submit" id="searchNote" />
+                                    <FormObserver />
                             </Form>
                         </Formik>
 
                     {/* Formulaire d'insertion d'évaluation */}
                     {
-                        
-                        <Popup html={"hfhhhf"} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
+                        <Popup html={<PopupAddEval formRef={formRef} initialValuesInsertEval={initialValuesInsertEval} validationSchemaInsert={validationSchema} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} />} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
                     }
 
                     {/* Tableau d'affichage des notes */}

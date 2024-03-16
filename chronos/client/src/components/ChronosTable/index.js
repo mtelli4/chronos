@@ -1,8 +1,8 @@
 import React from 'react';
 import { ChronosTableHeader, ChronosTableBody, ChronosTableCell, ChronosTableCont, ChronosTableH, ChronosTableHead, ChronosTableRow, ChronosTableWrapper } from './chronosTableElements';
 
-const ChronosTable = ({ width, columns, rows, correspondance }) => { // width : en %, correspondance : {rowID : {columnID : val, columnID: val, ...}, rowID : {...}}
-
+const ChronosTable = ({ width, columns, rows, correspondance, modifiable }) => { // width : en %, correspondance : {rowID : {columnID : val, columnID: val, ...}, rowID : {...}}
+// Content = liste de string. Chaque string est une clé de ce que je dois afficher
 
     console.log(correspondance);
 
@@ -27,6 +27,7 @@ const ChronosTable = ({ width, columns, rows, correspondance }) => { // width : 
                             )
                         })
                     }
+                    
                 </ChronosTableHeader>
             </ChronosTableHead>
 
@@ -49,8 +50,9 @@ const ChronosTable = ({ width, columns, rows, correspondance }) => { // width : 
                                 }
                                 return (
                                     <ChronosTableCell leftCorner={index == 0 && jndex == 0} num={index}>
-                                        { val }
-                                        {/* Valentin ouuuuuuuuuu ? */}
+                                        { 
+                                            
+                                        }
                                     </ChronosTableCell>
                                 )
                             })}
