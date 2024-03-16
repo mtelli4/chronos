@@ -9,8 +9,7 @@ router.post("/", async (req, res) => {
     // requête SQL
     Absence.update(
         { 
-            message: abs.reason, // Raison/message pour justifier l'absence
-            envoye: 1
+            valide: 1
         },
         {
             where: { id: abs.absId } 

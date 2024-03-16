@@ -15,17 +15,17 @@ const initialValues = {};
 
 
 const CallForm = () => {
-  /* ------------------------------------- PRE-CHARGEMENT DE LA PAGE ------------------------------------- */
   const navigate = useNavigate();
   const [studentList, setStudentList] = useState([]);
   const [absentList, setAbsentList] = useState([]);
   const [lateList, setLateList] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:5000/eleve_cours/1"); // 1 correspond à l'id du cours envoyé
+        console.log(response);
         // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
         setStudentList(
           response.data.Groupes.reduce((accumulator, currentList) => {
@@ -44,18 +44,9 @@ const CallForm = () => {
     }
   }, [isLoading]); // Déclenche le useEffect uniquement si isLoading passe à true à nouveau
 
-  /* ------------------------------------- CHARGEMENT DE LA PAGE ------------------------------------- */
-  // Liste des callcards pour chaque élève
-  const callCardList = studentList.map((student, index) => (
-    <div>
-      <CallCard student={student} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} key={student.id} />
-    </div>
-  ));
-
-  /* ------------------------------------- ENVOI ------------------------------------- */
   const handleSubmit = (absences, lates) => {
     // Envoyer les données au serveur pour authentification
-    axios.post('http://localhost:5000/insert_abs',  { 'absences': absences, 'lates': lates, 'coursId': 1 })
+    axios.post('http://localhost:5000/end_call',  { 'absences': absences, 'lates': lates, 'coursId': 1 })
     .then(() => {
       navigate('/'); // Redirige vers la page d'accueil (Calendrier)
     })
@@ -64,7 +55,6 @@ const CallForm = () => {
     })
   };
 
-  /* ------------------------------------- AFFICHAGE DE LA PAGE ------------------------------------- */
   return (
     <Formik
       onSubmit={() => handleSubmit(absentList, lateList)} // Appel de la fonction handleSubmit avec absentList comme paramètre
@@ -72,7 +62,14 @@ const CallForm = () => {
       validationSchema={validationSchema}
     >
       <Form>
-        {callCardList}
+        {studentList
+          .sort((a, b) => a.Utilisateur.nom.localeCompare(b.Utilisateur.nom)) // Trie les élèves par leur nom dans l'ordre alphabétique
+          .map((student) => (
+            <div>
+              <CallCard Student={student} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} key={student.id} />
+            </div>
+          ))
+        }
         <div>
           <button type="submit">Valider l'appel</button>
         </div>

@@ -11,7 +11,8 @@ import EmailForm from './pages/emailForm';
 import LoginForm from './pages/loginForm';
 import ChangePasswordForm from './pages/changePasswordForm';
 import CallForm from './pages/call';
-import AbsPage from './pages/absences';
+import JustifyAbsPage from './pages/justifyAbsences';
+import ValidationAbsPage from './pages/validateAbsences';
 import CSVExportPage from './pages/exportExample';
 import { PrivateRoute } from './routes/privateRoute';
 import { AdminPrivateRoute } from './routes/adminRoute';
@@ -41,15 +42,17 @@ function App() {
           <Route path="/export-csv" element={<CSVExportPage />} exact />
           <Route path="/notes" element={<Notes />} exact />
 
+          {/* Pages absences Kyrian */}
+          <Route path="/call" element={<CallForm />} exact />
+          <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+          <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+          
 
           {/* -------------- ADMIN ROUTES -----------------*/}
           <Route path='/admin/*' element={<AdminPrivateRoute/>}>
             <Route index element={<AdminDashboard />} />
             <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
           </Route>
-
-          <Route path="/call" element={<CallForm />} exact />
-          <Route path="/abs" element={<AbsPage />} exact />
         </Route>
 
         {/* -------------- PUBLIC ROUTES -----------------*/}

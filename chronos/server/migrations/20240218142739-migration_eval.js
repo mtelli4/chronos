@@ -13,7 +13,7 @@ module.exports = {
       libelle: {
         type: Sequelize.STRING
       },
-        createdAt: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
