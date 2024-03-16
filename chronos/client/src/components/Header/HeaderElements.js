@@ -23,6 +23,7 @@ export const HeaderCont = styled.div`
     transform-origin: center;
     transform: ${props => props.isVisible ? "translate(0%, 0)" : "translate(0, -100%)"};
     transition: all 0.5s;
+
 `;
 
 export const HeaderNav = styled.div`

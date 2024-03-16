@@ -7,7 +7,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
 }
 
 .notesSelectCont {
@@ -29,4 +28,24 @@
     gap: 10px;
     margin: 0 auto;
     margin-top: 20px;
+}
+
+@media screen and (max-width : 800px) {
+    
+    .notesFormulaireRecherche {
+        background: #ddd;
+        margin: 0;
+        margin-left: 5%;
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        width: fit-content;
+    }
+
+    .notesSelectCont {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
 }

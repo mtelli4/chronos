@@ -35,11 +35,12 @@ function App() {
   }, [])
 
   const [headerVisibility, setHeaderVisibility] = useState(true);
-
+  const [navVisible, setNavVisible] = useState(false);
+  
   return (
 
     <Router>
-      <Header isVisible={headerVisibility} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
+      <Header setNavVisible={setNavVisible} isVisible={headerVisibility} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
         <Routes>

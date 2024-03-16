@@ -13,6 +13,10 @@ export const PopupCont = styled.div`
     max-width: ${props => props.format == "landscape" ? "1400px" : "750px"};
     max-height: 750px;
     scrollbar-gutter: unset;
+
+    @media screen and (max-width : 870px) {
+        width: 90%;
+    }
 `;
 
 export const PopupScreen = styled.div`

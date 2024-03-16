@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const ChronosButtonCont = styled.button`
-    width: 100px;
+    width: ${props => props.width ?  props.width : "100px"};
+    height: ${props => props.height ?  props.height : ""};
     display: flex;
     align-items: center;
     justify-content: center;

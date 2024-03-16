@@ -12,6 +12,7 @@ import Popup from '../components/Popup/index.js';
 import ToggleButton from '../components/ToggleButton/index.js';
 import toggleIcon from "../images/plus.png"
 import PopupAddEval from './PopupAddEval.js';
+import PopupModifyGrade from './popupModifyGrade.js';
 
 const PageNotes = () => {
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
@@ -21,6 +22,8 @@ const PageNotes = () => {
     const [periodes, setPeriodes] = useState([])
     const [showTable, setShowTable] = useState("");
     const [showPopup, setShowPopup] = useState(false);
+    const [showChangeGrade, setShowChangeGrade] = useState(false);
+    const [selectedGrade, setSelectedGrade] = useState({evalName : "", eleveName : ""});
     const role = authService.getCurrentRole();
     const roleId = authService.getCurrentRoleId();
 
@@ -319,6 +322,12 @@ const PageNotes = () => {
         }
     }
 
+    function handleActionOnModify(eleveName, evalName) {
+        setShowChangeGrade(true);
+        console.log(evalName);
+        setSelectedGrade({evalName : evalName, eleveName : eleveName})
+    }
+
 
   return (
     <>
@@ -340,9 +349,10 @@ const PageNotes = () => {
                         </Formik>
 
                     {/* Formulaire d'insertion d'évaluation */}
-                    {
-                        <Popup html={<PopupAddEval formRef={formRef} initialValuesInsertEval={initialValuesInsertEval} validationSchemaInsert={validationSchema} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} />} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
-                    }
+                    <Popup html={<PopupAddEval formRef={formRef} initialValuesInsertEval={initialValuesInsertEval} validationSchemaInsert={validationSchema} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} />} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
+                    
+                    {/* FOrmulaire de changement de note */}
+                    <Popup html={<PopupModifyGrade evalName={selectedGrade.evalName} eleveName={selectedGrade.eleveName} />} isActive={showChangeGrade} format={"square"} setIsActive={setShowChangeGrade} overflow="auto" />
 
                     {/* Tableau d'affichage des notes */}
                     {
@@ -351,7 +361,7 @@ const PageNotes = () => {
                             <div className='contentContNotes'>
                                 <ToggleButton src={toggleIcon} action={() => setShowPopup(true)} text="Créer une évaluation" />
                                 <div className='notesTableCont'>
-                                    <ChronosTable width={100} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} />
+                                    <ChronosTable actionOnModify={handleActionOnModify} modifiable={true} width={100} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} />
                                 </div>
                             </div>
                         )

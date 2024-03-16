@@ -7,6 +7,8 @@ export const ChronosInputSelectCont = styled.div`
     width: fit-content;
     gap: 5px;
     align-items: center;
+
+    
 `;
 
 export const ChronosInputSelectLabel = styled.label`

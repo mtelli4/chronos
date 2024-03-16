@@ -1,7 +1,8 @@
 import React from 'react';
 import { ChronosTableHeader, ChronosTableBody, ChronosTableCell, ChronosTableCont, ChronosTableH, ChronosTableHead, ChronosTableRow, ChronosTableWrapper } from './chronosTableElements';
+import ChronosButton from "../ChronosButton/index.js"
 
-const ChronosTable = ({ width, columns, rows, correspondance, modifiable }) => { // width : en %, correspondance : {rowID : {columnID : val, columnID: val, ...}, rowID : {...}}
+const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, modifiable }) => { // width : en %, correspondance : {rowID : {columnID : val, columnID: val, ...}, rowID : {...}}
 // Content = liste de string. Chaque string est une clé de ce que je dois afficher
 
     console.log(correspondance);
@@ -38,7 +39,7 @@ const ChronosTable = ({ width, columns, rows, correspondance, modifiable }) => {
                     return (
                         <ChronosTableRow >
                             <ChronosTableH sticky={true} rowCell={true} centered={false} key={-index}>
-                                { row.Utilisateur.nom + " " + row.Utilisateur.prenom }
+                                { row.Utilisateur.nom + " " + row.Utilisateur.prenom + " (" + row.moyenne + ")"}
                                 {/* à remplacer par row.val */}
                             </ChronosTableH>
                             {columns.map((column, jndex) => {
@@ -48,13 +49,24 @@ const ChronosTable = ({ width, columns, rows, correspondance, modifiable }) => {
                                         val = correspondance[row.id][column.id].note
                                     }
                                 }
-                                return (
-                                    <ChronosTableCell leftCorner={index == 0 && jndex == 0} num={index}>
-                                        { 
-                                            
-                                        }
-                                    </ChronosTableCell>
-                                )
+
+                                if (modifiable) {
+                                    return (
+                                        <ChronosTableCell leftCorner={index == 0 && jndex == 0} num={index}>
+                                            { 
+                                                <ChronosButton width="100%" height="25px" action={() => actionOnModify(row.Utilisateur.nom + " " + row.Utilisateur.prenom, column.libelle)} id={jndex} text={val} type="" />
+                                            }
+                                        </ChronosTableCell>
+                                    )
+                                } else {
+                                    return (
+                                        <ChronosTableCell leftCorner={index == 0 && jndex == 0} num={index}>
+                                            { 
+                                                val
+                                            }
+                                        </ChronosTableCell>
+                                    )
+                                }
                             })}
                         </ChronosTableRow>
                     )
