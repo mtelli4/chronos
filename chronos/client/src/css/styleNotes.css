@@ -30,6 +30,19 @@
     margin-top: 20px;
 }
 
+.addEvalForm {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.addEvalButtonCont {
+    margin-top: 30px;
+}
+
 @media screen and (max-width : 800px) {
     
     .notesFormulaireRecherche {

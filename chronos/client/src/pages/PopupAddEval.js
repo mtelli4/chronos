@@ -17,20 +17,30 @@ const  PopupAddEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval, v
                         formRef.current.values.hasOwnProperty("moduleId") &&
                         formRef.current.values.moduleId != "" &&
             <Formik initialValues={initialValuesInsertEval} onSubmit={onSubmitInsertEval} validationSchema={validationSchemaInsert}>
-                <Form>
+                <Form className='addEvalForm'>
+                    <div>
                     <h4 className='addEvalSubTitle'>Libellé</h4>
-                    <ChronosInput width={"33%"} type={"text"} name={"libelle"} title="" component="div" />
+                    <ChronosInput width={"45%"} type={"text"} name={"libelle"} title="" component="div" />
+                    </div>
 
+                    <div>
                     <h4 className='addEvalSubTitle'>Coefficient</h4>
-                    <ChronosInput width={"33%"} type={"number"} name={"coefficient"} title="" component="div" />
-
+                    <ChronosInput width={"15%"} type={"number"} name={"coefficient"} title="" component="div" />
+                    </div>
+                    <div>
                     <h4 className='addEvalSubTitle'>Note maximale</h4>
-                    <ChronosInput width={"33%"} type={"number"} name={"noteMaximale"} title="" component="div" />
+                    <ChronosInput width={"15%"} type={"number"} name={"noteMaximale"} title="" component="div" />
+                    </div>
 
+                    <div>
                     <h4 className='addEvalSubTitle'>Période</h4>
                     <ChronosInputSelect defaultLabel="Sélectionner une période" name="periodeId" options={periodes} />
+                    </div>
 
-                    <ChronosButton id="insertEvaluation" text="Confirmer" type="submit" />
+                    <div className='addEvalButtonCont'>
+                      <ChronosButton width={"150px"} height={"40px"} id="insertEvaluation" text="Confirmer" type="submit" />
+                    </div>
+
                     <FormObserver />
                 </Form>
             </Formik>
