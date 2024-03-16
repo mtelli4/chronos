@@ -77,7 +77,6 @@ function App() {
             <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
 
           <Route path="/call" element={<CallForm />} exact />
-          <Route path="/abs" element={<AbsPage />} exact />
 
         {/* -------------- PUBLIC ROUTES -----------------*/}
         <Route path="/login" element={<LoginForm />} exact />

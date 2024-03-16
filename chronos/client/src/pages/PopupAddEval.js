@@ -40,7 +40,6 @@ const  PopupAddEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval, v
                     <div className='addEvalButtonCont'>
                       <ChronosButton width={"150px"} height={"40px"} id="insertEvaluation" text="Confirmer" type="submit" />
                     </div>
-
                     <FormObserver />
                 </Form>
             </Formik>
