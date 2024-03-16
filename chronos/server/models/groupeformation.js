@@ -1,45 +1,48 @@
 'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-  class ProfesseurModule extends Model {
+  class GroupeFormation extends Model {
     static associate(models) {
-      // Lien associatif à la table MODULECOURS
-      ProfesseurModule.belongsTo(models.ModuleCours, {
-        foreignKey: 'moduleId',
+      // Lien associatif à la table GROUPE
+      GroupeFormation.belongsTo(models.Groupe, {
+        foreignKey: 'groupeId',
         onDelete: 'CASCADE', 
       });
 
-      // Lien associatif à la table PROFESSEUR
-      ProfesseurModule.belongsTo(models.Professeur, {
-        foreignKey: 'professeurId',
+      // Lien associatif à la table FORMATION
+      GroupeFormation.belongsTo(models.Formation, {
+        foreignKey: 'formationId',
         onDelete: 'CASCADE', 
       });
     }
   }
-  ProfesseurModule.init({
-    presences: DataTypes.DECIMAL,
-    professeurId: {
+
+  // Définition des champs de la table GROUPE_FORMATION
+  GroupeFormation.init({
+    groupeId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Professeur',
+        model: 'Groupe',
         key: 'id',
       },
     },
-    moduleId: {
+    formationId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'ModuleCours',
+        model: 'Formation',
         key: 'id',
       },
     },
   }, {
     sequelize,
     // Nom du modèle à utiliser dans les fonctions js
-    modelName: 'ProfesseurModule',
+    modelName: 'GroupeFormation',
     // Nom de la table dans mysql
-    tableName: 'PROFESSEUR_MODULE',
+    tableName: 'GROUPE_FORMATION',
     // Désactive les timestamps
     timestamps: false,
   });
-  return ProfesseurModule;
+
+  return GroupeFormation;
 };

@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // Import des sous composants
-import AbsCard from '../components/AbsCard';
+import AbsJustifCard from '../components/AbsJustifCard';
 
 
-const AbsPage = () => {
+const JustifyAbsPage = () => {
   const [absences, setAbsencesList] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/eleve_absence/9/1"); // 9 correspond à l'id de l'élève et 1 pour l'id cours envoyé
-        // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
+        const response = await axios.get("http://localhost:5000/eleve_absence/9/0"); // 9 correspond à l'id de l'utilisateur et 0 pour signifier que l'on cherche les absences non justifiées
+        // Rempli la liste des absences
         setAbsencesList(response.data);
       } catch (error) {
         console.log(error);
@@ -39,10 +39,10 @@ const AbsPage = () => {
     <div>
       <h1>Liste des absences</h1>
       {absences.map((absence) => (
-        <AbsCard key={absence.id} idStudent={absence.eleveId} idCours={absence.coursId} Absence={absence} idList={absence.id} onRemove={handleRemoveAbsence} />
+        <AbsJustifCard key={absence.id} userId={9} Absence={absence} idList={absence.id} onRemove={handleRemoveAbsence} />
       ))}
     </div>
   );
 };
 
-export default AbsPage;
+export default JustifyAbsPage;

@@ -13,7 +13,8 @@ import PageLogin from './pages/pageLogin';
 import ChangePasswordForm from './pages/changePasswordForm';
 import PagePasswordChange from './pages/pagePasswordChange';
 import CallForm from './pages/call';
-import AbsPage from './pages/absences';
+import JustifyAbsPage from './pages/justifyAbsences';
+import ValidationAbsPage from './pages/validateAbsences';
 import CSVExportPage from './pages/exportExample';
 import { PrivateRoute } from './routes/privateRoute';
 import { AdminPrivateRoute } from './routes/adminRoute';
@@ -64,6 +65,11 @@ function App() {
           <Route path="/pswNidal" element={<PagePasswordChange />} exact />
 
 
+          {/* Pages absences Kyrian */}
+          <Route path="/call" element={<CallForm />} exact />
+          <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+          <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+          
 
           {/* -------------- ADMIN ROUTES -----------------*/}
           <Route path='/admin/*' element={<AdminPrivateRoute/>} />

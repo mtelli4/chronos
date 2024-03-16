@@ -4,16 +4,16 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.addColumn(
-      'ABSENCE',
-      'envoye',
+      'COURS',
+      'appel',
       {
-        type: Sequelize.TINYINT(1),
+        type: Sequelize.INTEGER,
         null: true
       },
     );
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.removeColumn('ABSENCE', 'envoye');
+    await queryInterface.removeColumn('COURS', 'appel');
   }
 };
