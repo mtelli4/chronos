@@ -1,0 +1,64 @@
+.notesFormulaireRecherche {
+    width: 97%;
+    background: #ddd;
+    padding: 20px 40px;
+    border-radius: 10px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notesSelectCont {
+    display: flex;
+
+}
+
+.notesTableCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentContNotes {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.addEvalForm {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.addEvalButtonCont {
+    margin-top: 30px;
+}
+
+@media screen and (max-width : 800px) {
+    
+    .notesFormulaireRecherche {
+        background: #ddd;
+        margin: 0;
+        margin-left: 5%;
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        width: fit-content;
+    }
+
+    .notesSelectCont {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+}

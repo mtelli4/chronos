@@ -1,5 +1,6 @@
 import React from 'react';
 import { ClassSquareCont, ClassSquareTitle, ClassSquareRoom, ClassSquareBorder, ClassSquareTextCont } from './classSquareElements'; 
+import { ajouterDuree, ajusterCouleur, hexToRgb } from "../../js/calendar_script";
 
 const ClassSquare = ({ color, title, room, startTopPercent, duration, professors, onSelect }) => {
 

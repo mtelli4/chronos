@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
             envoye: 1
         },
         {
-            where: { eleveId: abs.studentId, coursId: abs.coursId } 
+            where: { id: abs.absId } 
         }
     ); 
 });

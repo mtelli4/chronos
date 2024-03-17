@@ -21,18 +21,12 @@ module.exports = {
     );
     await queryInterface.removeColumn('ELEVE', 'nom');
     await queryInterface.removeColumn('ELEVE', 'prenom');
-    await queryInterface.removeColumn('ELEVE', 'mdp');
-    await queryInterface.removeColumn('ELEVE', 'email');
     
     await queryInterface.removeColumn('SECRETAIRE', 'nom');
     await queryInterface.removeColumn('SECRETAIRE', 'prenom');
-    await queryInterface.removeColumn('SECRETAIRE', 'mdp');
-    await queryInterface.removeColumn('SECRETAIRE', 'email');
     
     await queryInterface.removeColumn('PROFESSEUR', 'nom');
     await queryInterface.removeColumn('PROFESSEUR', 'prenom');
-    await queryInterface.removeColumn('PROFESSEUR', 'mdp');
-    await queryInterface.removeColumn('PROFESSEUR', 'email');
 
     await queryInterface.changeColumn('ELEVE', 'utilisateurId', {
       type: Sequelize.INTEGER,

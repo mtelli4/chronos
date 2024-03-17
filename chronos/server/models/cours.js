@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     libelle: DataTypes.STRING,
     debutCours: DataTypes.DATE,
     duree: DataTypes.INTEGER,
+    appel: DataTypes.INTEGER,
     // Clé étrangère
     moduleId: {
       type: DataTypes.INTEGER,

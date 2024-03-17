@@ -11,7 +11,7 @@ import {
   CalendarWeek
 } from './calendarElements';
 import ClassSquare from '../ClassSquare';
-import { createDaysLst, createHoursLst, trouverHeuresExtremes } from '../../js/calendar_script';
+import { createDaysLst, createHoursLst, trouverHeuresExtremes, ajouterDuree } from '../../js/calendar_script';
 import buttonPrev from "../../images/buttonPrev.svg";
 import buttonAft from "../../images/buttonAft.svg";
 import Popup from '../Popup';

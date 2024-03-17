@@ -19,6 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'groupeId',
         otherKey: 'coursId',
       });
+
+      // Lien associatif à la table FORMATION passant à travers la table GROUPE_FORMATION
+      Groupe.belongsToMany(models.Formation, {
+        through: 'GROUPE_FORMATION', 
+        foreignKey: 'groupeId', 
+        otherKey: 'formationId', 
+      });
     }
   }
 

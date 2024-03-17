@@ -4,21 +4,26 @@ import { Link as LinkR } from "react-router-dom";
 export const HeaderCont = styled.div`
     width: 95%;
     height: 10vh;
-    min-height: 100px;
+    min-height: 75px;
     max-width: 1750px;
-    position: sticky;
+    position: ${props => props.isVisible ? "sticky" : "absolute"};
     margin: 0 auto;
-    top: 0px;
+    margin-top: 10px;
+    top: 0;
     left: 0;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(20px);
     z-index: 9999;
 
     padding: 15px 40px;
-    border-radius: 25px;
+    border-radius: 15px;
     justify-content: space-between;
     align-items: center;
     display: flex;
+    transform-origin: center;
+    transform: ${props => props.isVisible ? "translate(0%, 0)" : "translate(0, -100%)"};
+    transition: all 0.5s;
+
 `;
 
 export const HeaderNav = styled.div`
@@ -27,10 +32,10 @@ export const HeaderNav = styled.div`
 `;
 
 export const HeaderProfile = styled.img`
-    width: 75px;
+    width: 50px;
     aspect-ratio: 1;
     border-radius: 10px;
-    border: 5px solid #000;
+    border: 3px solid #000;
 `;
 
 export const HeaderLinks = styled.div`
@@ -66,5 +71,5 @@ export const HeaderLinkText = styled(LinkR)`
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-decoration: none; 
-    font-size: 2rem;
+    font-size: 1.5rem;
 `;

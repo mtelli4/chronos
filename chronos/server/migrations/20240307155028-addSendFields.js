@@ -17,4 +17,3 @@ module.exports = {
     await queryInterface.removeColumn('ABSENCE', 'envoye');
   }
 };
-// 20240307155028-addSendFields.js

@@ -43,11 +43,10 @@ export const CalendarHour = styled.span`
     &:after {
         content: "";
         position: absolute;
-        width: 100px;
         height: 1px;
         background-color: #000;
         opacity: 0.15;
-        width: 90%;
+        width: 85%;
         transform: translateX(55%);
         z-index: -1;
     }

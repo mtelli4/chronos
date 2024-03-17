@@ -9,7 +9,6 @@ router.get("/", async (req, res) => {
 
 
 
-
 router.post("/insertListEleves", async (req, res) => {
     function validateArrayPattern(obj) {
       const { nom, prenom, numeroEtudiant, email, tiersTemps } = obj;

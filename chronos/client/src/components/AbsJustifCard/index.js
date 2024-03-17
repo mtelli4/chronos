@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 
-const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
+const AbsJustifCard = ({ userId, Absence, idList, onRemove }) => {
   // Variable contenant le texte de justification de l'absence
   const [reason, setReason] = useState('');
   // Variable contenant le fichier justificatif d'absence (photo, image, pdf, ..)
@@ -14,34 +14,36 @@ const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
   };
 
   const handleSubmit = () => {
-    if (file !== null) { // Si il y a fichier
-      try {
-        axios.post('http://localhost:5000/add_justification_file', {"reason": reason, "studentId": idStudent, "coursId": idCours, "file": file}, {
-          headers: {
-            'Content-Type': 'multipart/form-data', // Assurez-vous que le type de contenu est correct
-          },
-        });
-        // Supprime l'absence justifié de la liste des absences
-        onRemove(idList);
-        console.log("fichier déposé");
-      } catch (error) {
-        console.log(error);
+    if (!(file !== null) && reason === "") {
+      console.log("Veuillez remplir tous les champs")
+    } else {
+      if (file !== null) { // Si il y a fichier
+        try {
+          axios.post('http://localhost:5000/add_justification_file', {"reason": reason, "absId": Absence.id, "userId": userId, "file": file}, {
+            headers: {
+              'Content-Type': 'multipart/form-data', // Assurez-vous que le type de contenu est correct
+            },
+          });
+          console.log("fichier déposé");
+        } catch (error) {
+          console.log(error);
+        }
+      } 
+      else { // S'il n'y a pas de fichier
+        try {
+          // Envoi la justification de l'absence
+          axios.post('http://localhost:5000/add_justification', {"reason": reason, "absId": Absence.id})
+          console.log("raison envoyé");
+        } catch (error) {
+          console.log(error);
+        }
       }
-    } 
-    else { // S'il n'y a pas de fichier
-      try {
-        // Envoi la justification de l'absence
-        axios.post('http://localhost:5000/add_justification', {"reason": reason, "studentId": idStudent, "coursId": idCours}).
-        // Supprime l'absence justifié de la liste des absences
-        onRemove(idList);
-        console.log("raison envoyé");
-      } catch (error) {
-        console.log(error);
-      }
+      // Supprime l'absence justifié de la liste des absences
+      onRemove(idList);
     }
   }
 
-  return !Absence.envoye && (
+  return (
       <div>
         <h2>
           <p>
@@ -76,4 +78,4 @@ const AbsenceCard = ({ idStudent, idCours, Absence, idList, onRemove }) => {
   );
 };
 
-export default AbsenceCard;
+export default AbsJustifCard;
