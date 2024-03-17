@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -8,7 +8,7 @@ import { authService } from './services/authService';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-var headerRoutes = [
+let headerRoutes = [
   {title:"Calendrier", to:"/"},
   {title: "Notes", to:"/notes"}
 ];
@@ -22,9 +22,6 @@ if (['ROLE_SECRETARY', 'ROLE_ADMIN'].includes(currentRole)) {
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Header links={headerRoutes} />
       <App />
-    </BrowserRouter>
   </React.StrictMode>
 );

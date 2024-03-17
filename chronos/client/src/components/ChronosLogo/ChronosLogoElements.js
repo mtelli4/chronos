@@ -30,12 +30,15 @@ export const ChronosLogoCont = styled(LinkR)`
     align-items: center;
     gap: 0px;
     cursor: pointer;
+    user-select: none;
 `;
 
 export const ChronosC = styled.img`
     height: ${props => props.fontsize}rem;
     transform: translateY(-9%);
     animation: ${appearAnimImg} 0.5s cubic-bezier(.76,1.65,0,1) forwards;
+
+    ${props => props.onMedia ? "@media (max-width:" + props.onMedia.min +  "px) {height:" + props.onMedia.fontsize + "rem;}"  : ""}
 `;
 
 export const ChronosTextCont = styled.div`
@@ -47,6 +50,9 @@ export const ChronosTextCont = styled.div`
 export const ChronosText = styled.span`
     display: block;
     font-size: ${props => props.fontsize}rem;
+
+    ${props => props.onMedia ? "@media (max-width:" + props.onMedia.min +  "px) {font-size:" + props.onMedia.fontsize + "rem;}"  : ""}
+
     // animation: ${appearAnimText} 0.5s cubic-bezier(.76,1.65,0,1) forwards 0.1s;
     // line-height: ${props => props.fontsize / 1.333}rem;
 `;

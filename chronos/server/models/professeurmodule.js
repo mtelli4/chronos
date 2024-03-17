@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ProfesseurModule.init({
-    presences: DataTypes.DECIMAL,
     professeurId: {
       type: DataTypes.INTEGER,
       references: {
