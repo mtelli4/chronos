@@ -20,6 +20,7 @@ import { PrivateRoute } from './routes/privateRoute';
 import { AdminPrivateRoute } from './routes/adminRoute';
 import { ProfessorPrivateRoute } from './routes/professorRoute';
 import { SecretaryPrivateRoute } from './routes/secretaryRoute';
+import { StudentPrivateRoute } from './routes/studentRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import TestAdmin from './pages/admin/test';
 import Unauthorized from './pages/error/Unauthorized';
@@ -65,8 +66,9 @@ function App() {
             <Route exact path='/' element={<SecretaryPrivateRoute/>} >
               <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
             </Route>
-
-            <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+            <Route exact path='/' element={<StudentPrivateRoute/>}>
+              <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+            </Route>
             
             
             {/* -------------- ADMIN ROUTES -----------------*/}
