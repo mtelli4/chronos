@@ -12,7 +12,8 @@ import Popup from '../components/Popup/index.js';
 import ToggleButton from '../components/ToggleButton/index.js';
 import toggleIcon from "../images/plus.png"
 import PopupAddEval from './PopupAddEval.js';
-import PopupModifyGrade from './popupModifyGrade.js';
+import PopupModifyEval from './PopupModifyEval.js';
+import PopupModifyGrade from './popupModifyGrade.js';;
 
 const PageNotes = () => {
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
@@ -23,8 +24,10 @@ const PageNotes = () => {
     const [statusList, setStatusList] = useState([])
     const [showTable, setShowTable] = useState("");
     const [showPopup, setShowPopup] = useState(false);
+    const [showModifEval, setShowModifEval] = useState(false);
+    const [modifEvalInitialValues, setModifEvalInitialValues] = useState({});
     const [showChangeGrade, setShowChangeGrade] = useState(false);
-    const [selectedGrade, setSelectedGrade] = useState({evalName:"", eleveName:"", evalId : "", eleveId : "",maxGradeEval:"" , currentGrade: "", currentStatusId:""});
+    const [selectedGrade, setSelectedGrade] = useState({ evalName: "", eleveName: "", evalId: "", eleveId: "", maxGradeEval: "", currentGrade: "", currentStatusId: "" });
     const role = authService.getCurrentRole();
     const roleId = authService.getCurrentRoleId();
 
@@ -136,11 +139,19 @@ const PageNotes = () => {
             console.log("return")
             return
         }
+        var parameters =  { moduleId: formRef.current.values.moduleId, coefficient: data.coefficient, libelle: data.libelle, noteMaximale: data.noteMaximale, periodeId: data.periodeId }
+        if (data.hasOwnProperty("evalId")){
+            parameters.evalId = data.evalId
+        }
+        
         //Appel de l'API d'insertion d'évaluations
-        axios.post("http://localhost:5000/evaluations/insertEvaluations", { moduleId: formRef.current.values.moduleId, coefficient: data.coefficient, libelle: data.libelle, noteMaximale: data.noteMaximale, periodeId: data.periodeId })
+        axios.post("http://localhost:5000/evaluations/insertEvaluations", parameters)
             .then((response) => {
                 //Appel à la fonction d'envoie de formulaire, pour mettre à jour avec la nouvelle évaluation
                 console.log("Succès InsertEvaluations")
+                setShowPopup(false)
+                setShowModifEval(false)
+                setModifEvalInitialValues({})
                 onSubmitSearch(formRef.current.values);
             }).catch(function (error) {
                 if (error.response) {
@@ -169,6 +180,8 @@ const PageNotes = () => {
             .then((response) => {
                 //Appel à la fonction d'envoie de formulaire, pour mettre à jour sans l'évaluation supprimée
                 console.log("Succès DeleteEvaluations")
+                setShowModifEval(false)
+                setModifEvalInitialValues({})
                 onSubmitSearch(formRef.current.values);
             }).catch(function (error) {
                 if (error.response) {
@@ -190,7 +203,7 @@ const PageNotes = () => {
             });
     }
 
-    const getModulesDetails = (data)=>{
+    const getModulesDetails = (data) => {
         //Suppression des champs vides, pour ne pas les prendre en compte dans la recherche
         Object.keys(data).forEach(key => {
             if (data[key] === '') {
@@ -198,29 +211,29 @@ const PageNotes = () => {
             }
         });
         //Appel à l'API de récupération des notes du module sélectionné
-        axios.get("http://localhost:5000/notes", { params: data})
-        .then((response) => {
-            //Mise à jour des notes
-            console.log("Succès SearchNotes")
-            setNotesDetails(response.data)
-        }).catch(function (error) {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-                console.log(error.request);
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-        });
+        axios.get("http://localhost:5000/notes", { params: data })
+            .then((response) => {
+                //Mise à jour des notes
+                console.log("Succès SearchNotes")
+                setNotesDetails(response.data)
+            }).catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
     }
 
     useEffect(() => {
@@ -234,10 +247,10 @@ const PageNotes = () => {
             setFormations(response.data)
         })
 
-        var statusList= []
+        var statusList = []
 
         axios.get("http://localhost:5000/statut").then((response) => {
-          setStatusList(response.data)
+            setStatusList(response.data)
         })
 
         //Récupération des périodes disponibles au lancement
@@ -250,13 +263,13 @@ const PageNotes = () => {
         }
     }, [])
 
-    function deleteNote(evalId, eleveId){
+    function deleteNote(evalId, eleveId) {
         axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
             //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
             if (response.data.hasBeenDeleted) {
                 //Appel à l'API pour mettre à jour l'affichage des notes
                 setShowChangeGrade(false);
-                setSelectedGrade({evalName:"", eleveName:"", evalId : "", eleveId : "",maxGradeEval:"" , currentGrade: "", currentStatusId:""});
+                setSelectedGrade({ evalName: "", eleveName: "", evalId: "", eleveId: "", maxGradeEval: "", currentGrade: "", currentStatusId: "" });
                 onSubmitSearch(formRef.current.values)
                 alert("Suppression réussie");
             }
@@ -286,8 +299,8 @@ const PageNotes = () => {
     function handleChange(data) {
         const eleveId = selectedGrade.eleveId
         const evalId = selectedGrade.evalId
-        const grade = data.grade === undefined ||data.statusId ===""? null:data.grade
-        const statutId = data.statusId === undefined ||data.statusId ==="" ? null: data.statusId
+        const grade = data.grade === undefined || data.grade === "" ? null : data.grade
+        const statutId = data.statusId === undefined || data.statusId === "" ? null : data.statusId
 
         //Si la case est vide, suppression de la note, sinon insertion/modification de la note
         if (grade === null && statutId === null) {
@@ -297,7 +310,7 @@ const PageNotes = () => {
                 //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
                 //Appel à l'API pour mettre à jour l'affichage des notes
                 setShowChangeGrade(false);
-                setSelectedGrade({evalName:"", eleveName:"", evalId : "", eleveId : "",maxGradeEval:"" , currentGrade: "", currentStatusId:""});
+                setSelectedGrade({ evalName: "", eleveName: "", evalId: "", eleveId: "", maxGradeEval: "", currentGrade: "", currentStatusId: "" });
                 onSubmitSearch(formRef.current.values)
                 alert("Upsert réussi");
             })
@@ -324,16 +337,16 @@ const PageNotes = () => {
         }
     }
 
-    function handleActionOnModify(eleveName, evalName,eleveId, evalId, maxGradeEval) {
-        const newSelectedGrade = {evalName : evalName, eleveName : eleveName, evalId:evalId, eleveId:eleveId, maxGradeEval:maxGradeEval}
-        if (notes.hasOwnProperty(eleveId) && notes[eleveId].hasOwnProperty(evalId) && notes[eleveId][evalId].hasOwnProperty("note")){
+    function handleActionOnModify(eleveName, evalName, eleveId, evalId, maxGradeEval) {
+        const newSelectedGrade = { evalName: evalName, eleveName: eleveName, evalId: evalId, eleveId: eleveId, maxGradeEval: maxGradeEval }
+        if (notes.hasOwnProperty(eleveId) && notes[eleveId].hasOwnProperty(evalId) && notes[eleveId][evalId].hasOwnProperty("note")) {
             newSelectedGrade.currentGrade = notes[eleveId][evalId].note
-        }else{
+        } else {
             newSelectedGrade.currentGrade = 0
         }
-        if (notes.hasOwnProperty(eleveId) && notes[eleveId].hasOwnProperty(evalId) && notes[eleveId][evalId].hasOwnProperty("statutId")){
+        if (notes.hasOwnProperty(eleveId) && notes[eleveId].hasOwnProperty(evalId) && notes[eleveId][evalId].hasOwnProperty("statutId")) {
             newSelectedGrade.currentStatusId = notes[eleveId][evalId].statutId
-        }else{
+        } else {
             newSelectedGrade.currentStatusId = ""
         }
 
@@ -341,31 +354,39 @@ const PageNotes = () => {
         setShowChangeGrade(true);
     }
 
+    function handleOnModifyEval(evaluation){
+        setModifEvalInitialValues({evalId:evaluation.id, libelle:evaluation.libelle, coefficient:evaluation.coefficient, noteMaximale:evaluation.noteMaximale, periodeId:evaluation.Periode.id});
+        setShowModifEval(true);
+    }
 
-  return (
-    <>
-        {/* Affichage de la page pour les professeurs */}
-        {role.includes('ROLE_PROFESSOR') &&
+
+    return (
+        <>
+            {/* Affichage de la page pour les professeurs */}
+            {role.includes('ROLE_PROFESSOR') &&
                 <>
                     {/* Formulaire de recherche de notes */}
-                        <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
-                            <Form className='notesFormulaireRecherche'>
-                                    <div className='notesSelectCont'>
-                                        <ChronosInputSelect defaultLabel="Formation" name="formationId" label="" options={formations} />
-                                        <ChronosInputSelect defaultLabel="Module" name="moduleId" label="" options={modules} />
-                                        <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
-                                    </div>
-                                    
-                                    <ChronosButton action={() => setShowTable("prof")} text="Chercher" type="submit" id="searchNote" />
-                                    <FormObserver />
-                            </Form>
-                        </Formik>
+                    <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                        <Form className='notesFormulaireRecherche'>
+                            <div className='notesSelectCont'>
+                                <ChronosInputSelect defaultLabel="Formation" name="formationId" label="" options={formations} />
+                                <ChronosInputSelect defaultLabel="Module" name="moduleId" label="" options={modules} />
+                                <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
+                            </div>
+
+                            <ChronosButton action={() => setShowTable("prof")} text="Chercher" type="submit" id="searchNote" />
+                            <FormObserver />
+                        </Form>
+                    </Formik>
 
                     {/* Formulaire d'insertion d'évaluation */}
                     <Popup html={<PopupAddEval formRef={formRef} initialValuesInsertEval={initialValuesInsertEval} validationSchemaInsert={validationSchemaInsert} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} />} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
-                    
+                   
+                    {/* Formulaire de modification d'évaluation */}
+                    <Popup html={<PopupModifyEval formRef={formRef} initialValuesInsertEval={modifEvalInitialValues} validationSchemaInsert={validationSchemaInsert} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} onDelete={()=>deleteEvaluation(modifEvalInitialValues.evalId)}/>} isActive={showModifEval} format={"square"} setIsActive={setShowModifEval} overflow="auto" />
+
                     {/* Formulaire de changement de note */}
-                    <Popup html={<PopupModifyGrade evalName={selectedGrade.evalName} eleveName={selectedGrade.eleveName} maxGradeEval={selectedGrade.maxGradeEval} currentGrade={selectedGrade.currentGrade} currentStatusId={selectedGrade.currentStatusId} onSubmit={handleChange} onDelete={() => deleteNote(selectedGrade.evalId,selectedGrade.eleveId)} statusList={statusList}/>} isActive={showChangeGrade} format={"square"} setIsActive={setShowChangeGrade} overflow="auto" />
+                    <Popup html={<PopupModifyGrade evalName={selectedGrade.evalName} eleveName={selectedGrade.eleveName} maxGradeEval={selectedGrade.maxGradeEval} currentGrade={selectedGrade.currentGrade} currentStatusId={selectedGrade.currentStatusId} onSubmit={handleChange} onDelete={() => deleteNote(selectedGrade.evalId, selectedGrade.eleveId)} statusList={statusList} />} isActive={showChangeGrade} format={"square"} setIsActive={setShowChangeGrade} overflow="auto" />
 
                     {/* Tableau d'affichage des notes */}
                     {
@@ -374,17 +395,17 @@ const PageNotes = () => {
                             <div className='contentContNotes'>
                                 <ToggleButton src={toggleIcon} action={() => setShowPopup(true)} text="Créer une évaluation" />
                                 <div className='notesTableCont'>
-                                    <ChronosTable actionOnModify={handleActionOnModify} modifiable={true} width={100} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} />
+                                    <ChronosTable actionOnModify={handleActionOnModify} actionOnModifyColumn={handleOnModifyEval}modifiable={true} width={100} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} />
                                 </div>
                             </div>
                         )
                     }
-                    
+
 
                 </>
-        }
-    </>
-  )
+            }
+        </>
+    )
 }
 
 export default PageNotes

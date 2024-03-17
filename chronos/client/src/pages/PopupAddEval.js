@@ -16,7 +16,7 @@ const  PopupAddEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval, v
                         formRef.current != null &&
                         formRef.current.values.hasOwnProperty("moduleId") &&
                         formRef.current.values.moduleId != "" &&
-            <Formik initialValues={initialValuesInsertEval} onSubmit={onSubmitInsertEval} validationSchema={validationSchemaInsert}>
+            <Formik initialValues={initialValuesInsertEval} onSubmit={onSubmitInsertEval} validationSchema={validationSchemaInsert} enableReinitialize>
                 <Form className='addEvalForm'>
                     <div>
                     <h4 className='addEvalSubTitle'>Libellé</h4>
