@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ const CallForm = () => {
   useEffect(() => { 
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/eleve_cours/1"); // 1 correspond à l'id du cours envoyé
+        const response = await axios.get(`http://localhost:5000/eleve_cours/${1}`); // 1 = id du cours
         console.log(response);
         // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
         setStudentList(
@@ -48,7 +48,7 @@ const CallForm = () => {
     // Envoyer les données au serveur pour authentification
     axios.post('http://localhost:5000/end_call',  { 'absences': absences, 'lates': lates, 'coursId': 1 })
     .then(() => {
-      navigate('/'); // Redirige vers la page d'accueil (Calendrier)
+      navigate('/'); // Redirige vers la page d'accueil (index)
     })
     .catch((error) => {
       console.log(error);

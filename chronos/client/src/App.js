@@ -18,6 +18,8 @@ import ValidationAbsPage from './pages/validateAbsences';
 import CSVExportPage from './pages/exportExample';
 import { PrivateRoute } from './routes/privateRoute';
 import { AdminPrivateRoute } from './routes/adminRoute';
+import { ProfessorPrivateRoute } from './routes/professorRoute';
+import { SecretaryPrivateRoute } from './routes/secretaryRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import TestAdmin from './pages/admin/test';
 import Unauthorized from './pages/error/Unauthorized';
@@ -57,10 +59,15 @@ function App() {
             <Route path="/notes" element={<Notes />} exact />
             <Route path="/notesNidal" element={<PageNotes />} exact />
 
-            {/* Pages absences Kyrian */}
-            <Route path="/call" element={<CallForm />} exact />
+            <Route exact path='/' element={<ProfessorPrivateRoute/>} >
+              <Route path="/call" element={<CallForm />} exact />
+            </Route>
+            <Route exact path='/' element={<SecretaryPrivateRoute/>} >
+              <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+            </Route>
+
             <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
-            <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+            
             
             {/* -------------- ADMIN ROUTES -----------------*/}
             <Route path='/admin/*' element={<AdminPrivateRoute/>}>

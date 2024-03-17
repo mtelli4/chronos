@@ -4,21 +4,25 @@ const { Secretaire, Formation, FormationSecretaire, Eleve, Utilisateur } = requi
 
 
 router.get("/:id", async (req, res) => {
-    const secretaryId =  req.params.id; // obtient le corps de la requête (format json)
+    const userId =  req.params.id; // obtient le corps de la requête (format json)
 
-    // requête SQL
-    const result = await Secretaire.findByPk(secretaryId, {
+    // requête SQL SELECT WHERE ID
+    const result = await Utilisateur.findByPk(userId, {
         attributes: { exclude: ['createdAt', 'updatedAt'] },
         include: [{ 
-            model: Formation, // JOIN Formation
-            through: FormationSecretaire, // Table intermédiaire CoursGroupe
+            model: Secretaire, // JOIN Secretaire
             attributes: { exclude: ['createdAt', 'updatedAt'] },
-            include: [{
-                model: Eleve, // JOIN Eleve
+            include: [{ 
+                model: Formation, // JOIN Formation
+                through: FormationSecretaire, // Table intermédiaire CoursGroupe
                 attributes: { exclude: ['createdAt', 'updatedAt'] },
                 include: [{
-                    model: Utilisateur, // JOIN Utilisateur
+                    model: Eleve, // JOIN Eleve
                     attributes: { exclude: ['createdAt', 'updatedAt'] },
+                    include: [{
+                        model: Utilisateur, // JOIN Utilisateur
+                        attributes: { exclude: ['createdAt', 'updatedAt'] },
+                    }]
                 }]
             }],
         }],

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { authService } from '../services/authService';
 import axios from 'axios';
 
 // Import des sous composants
@@ -12,9 +13,11 @@ const ValidationAbsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/secretary_formation/1"); // 1 correspond à l'id de la secrétaire
-        // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
-        setFormationsList(response.data.Formations);
+        // Requête récupérant les élèves des formations assigné à la secrétaire
+        const response = await axios.get(`http://localhost:5000/secretary_formation/${authService.getUserId()}`);
+        // Rempli la liste avec les élèves et leurs formations
+        setFormationsList(response.data.Secretaire.Formations);
+        console.log(response.data);
       } catch (error) {
         console.log(error);
       } finally {

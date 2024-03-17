@@ -26,6 +26,15 @@ const getUserEmail = () => {
     return null;
 }
 
+const getUserId = () => {
+    const token = getToken();
+    if (token) {
+        const payload = jwtDecode(token)
+        return payload?.userId
+    }
+    return null;
+}
+
 const getUserRoles = () => {
     const token = getToken();
     if (token) {
@@ -66,5 +75,4 @@ const getCurrentRoleId = () => {
     return parseInt(localStorage.getItem('currentRoleId'));
 }
 
-
-export  const authService = { logOut, getToken, setToken, login, getUserEmail, getUserRoles, isLoggedIn, setCurrentRole, getCurrentRole, setCurrentRoleId, getCurrentRoleId};
+export  const authService = { getUserId, logOut, getToken, setToken, login, getUserEmail, getUserRoles, isLoggedIn, setCurrentRole, getCurrentRole, setCurrentRoleId, getCurrentRoleId};
