@@ -4,8 +4,9 @@ const router = express.Router();
 const { Formation, Secretaire, FormationSecretaire, Professeur, ModuleCours, FormationModule, ProfesseurModule, Directeur, FormationDirecteur } = require('../models')
 
 router.get("/", async (req, res) => {
-    const formations = await Formation.findAll()
-    res.json(formations);
+    const listFormations = await Formation.findAll();
+
+    res.json(listFormations);
 })
 
 router.get("/byRole", async (req, res) => {

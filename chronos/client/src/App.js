@@ -25,6 +25,8 @@ import NotFound from './pages/error/NotFound';
 import Header from "./components/Header"
 import PageNotes from './pages/pageNotes';
 import PageImportEleves from './pages/pageImportEleves';
+import Users from './pages/users';
+import { authService } from './services/authService';
 
 function App() {
 
@@ -37,37 +39,54 @@ function App() {
 
   const [headerVisibility, setHeaderVisibility] = useState(true);
   const [navVisible, setNavVisible] = useState(false);
+
+  let headerRoutes = [
+    {title:"Calendrier", to:"/"},
+    {title: "Notes", to:"/notes"}
+  ];
+  
+  const currentRole = authService.getCurrentRole();
+  
+  // Routes for admins/secretaires
+  if (['ROLE_SECRETARY', 'ROLE_ADMIN'].includes(currentRole)) {
+    headerRoutes.push({title: "Imports", to:'/importStudents'});
+    headerRoutes.push({title: "Utilisateurs", to:'/users'})
+  }
   
   return (
 
     <Router>
-      <Header setNavVisible={setNavVisible} isVisible={headerVisibility} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
+      <Header setNavVisible={setNavVisible} isVisible={headerVisibility} links={headerRoutes} />
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
         <Routes>
-          <Route exact path='/' element={<PrivateRoute/>} >
+          <Route exact path='/' element={<PrivateRoute/>}>
             <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
             <Route path="/createcourse" element={<CreateCourse />} exact />
-            <Route path="/" element={<PageEdt />} exact /> 
+            <Route path="/edt" element={<PageEdt />} exact /> 
             <Route path="/importStudents" element={<FileImport />} exact />
+            <Route path="/users" element={<Users />} exact />
             <Route path="/importStudentNidal" element={<PageImportEleves />} exact />
           
             <Route path="/email" element={<EmailForm />} exact />
             <Route path="/export-csv" element={<CSVExportPage />} exact />
             <Route path="/notes" element={<Notes />} exact />
             <Route path="/notesNidal" element={<PageNotes />} exact />
-
-            {/* Pages absences Kyrian */}
-            <Route path="/call" element={<CallForm />} exact />
-            <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
-            <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
-            
-            {/* -------------- ADMIN ROUTES -----------------*/}
-            <Route path='/admin/*' element={<AdminPrivateRoute/>}>
-              <Route index element={<AdminDashboard />} />
-              <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
-            </Route>
           </Route>
+          
+          {/* -------------- ADMIN ROUTES -----------------*/}
+          <Route path='/admin/*' element={<AdminPrivateRoute/>} />
+          <Route index element={<AdminDashboard />} />
+          <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
+          <Route path="/loginNidal" element={<PageLogin />} exact />
+          <Route path="/pswNidal" element={<PagePasswordChange />} exact />
+
+
+          {/* Pages absences Kyrian */}
+          <Route path="/call" element={<CallForm />} exact />
+          <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+          <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+
         {/* -------------- PUBLIC ROUTES -----------------*/}
         <Route path="/login" element={<LoginForm />} exact />
         <Route path="/psw" element={<ChangePasswordForm />} exact />

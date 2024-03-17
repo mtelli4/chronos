@@ -205,7 +205,7 @@ const PageEdt = () => {
   return (
       <>
           {/* <div className='MonthSelector'></div> */}
-          <p>Ceci est votre role courrant: {currentRole}</p>
+          <p>Ceci est votre role courant: {currentRole}</p>
           <div>
           <label htmlFor="roleSelector">Sélecteur de role: </label>
           <select id="roleSelector" value={currentRole} onChange={handleRoleChange}>

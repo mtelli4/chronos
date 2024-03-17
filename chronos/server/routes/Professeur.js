@@ -1,12 +1,29 @@
 const express = require('express');
 const router = express.Router();
+const { Op } = require('sequelize');
+
 
 const { Professeur, Utilisateur, UtilisateurRole } = require('../models')
 
 router.get("/", async (req, res) => {
-    const listProfs = await Professeur.findAll()
+    var listProfs;
+  
+     const includes = [];
+  
+     if (req.query.joinUsers === "true") {
+       includes.push({ model: Utilisateur });
+     }
+
+     const whereClause = { utilisateurId: { [Op.not]: null } };
+  
+     if (includes.length > 0) {
+       listProfs = await Professeur.findAll({ include: includes, where: whereClause });
+     } else {
+       listProfs = await Professeur.findAll();
+     }
+  
     res.json(listProfs);
- })
+  });
 
 router.post("/insertListProfs", async (req, res) => {
     function validateArrayPattern(obj) {
