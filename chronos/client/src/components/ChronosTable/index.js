@@ -22,7 +22,7 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                         columns.map((column, index) => {
                             return (
                                 <ChronosTableH rowCell={false} centered={true} key={index} rightCorner={index == columns.length - 1}>
-                                    { column.libelle } 
+                                    {column.libelle} 
                                     {/* à remplacer par column.val */}
                                 </ChronosTableH>
                             )
@@ -46,7 +46,7 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                                 let val = ""
                                 if (correspondance.hasOwnProperty(row.id)) {
                                     if (correspondance[row.id].hasOwnProperty(column.id)) {
-                                        val = correspondance[row.id][column.id].note
+                                        val = correspondance[row.id][column.id].displayValue
                                     }
                                 }
 
@@ -54,7 +54,7 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                                     return (
                                         <ChronosTableCell leftCorner={index == 0 && jndex == 0} num={index}>
                                             { 
-                                                <ChronosButton width="100%" height="25px" action={() => actionOnModify(row.Utilisateur.nom + " " + row.Utilisateur.prenom, column.libelle)} id={jndex} text={val} type="" />
+                                                <ChronosButton width="100%" height="25px" action={() => actionOnModify(row.Utilisateur.nom + " " + row.Utilisateur.prenom, column.libelle,row.id, column.id, column.noteMaximale)} id={jndex} text={val} type="" />
                                             }
                                         </ChronosTableCell>
                                     )

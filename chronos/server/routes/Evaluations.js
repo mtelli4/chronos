@@ -3,9 +3,6 @@ const router = express.Router();
 
 const db = require('../models')
 
-// router.get("/", async (req, res) => {
-// })
-
 router.post("/insertEvaluations", async (req, res) => {
   const moduleId = req.body.moduleId
   const libelle = req.body.libelle

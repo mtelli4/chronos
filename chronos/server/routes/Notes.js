@@ -165,7 +165,7 @@ const getNotesProfesseurs = async (parameters) => {
     evaluationsParameters['moduleId'] = parseInt(parameters.moduleId)
   }
   if (parameters.hasOwnProperty('formationId')) {
-    notesParameters['eleveId'] = parseInt(parameters.formationId)
+    notesParameters['$Eleve.formationId$'] = parseInt(parameters.formationId)
     eleveParameters['formationId'] = parseInt(parameters.formationId)
   }
   if (parameters.hasOwnProperty('periodeId')) {
@@ -184,11 +184,16 @@ const getNotesProfesseurs = async (parameters) => {
       {
         model: StatutNote,
         attributes:['id','libelle']
+      },
+      {
+        model: Eleve,
+        attributes:['id','formationId']
       }
     ],
     where: notesParameters,
     attributes:['id','note','eleveId','evaluationId','statutId']
   })
+  
 
   //Récupération des informations liées aux élèves concernés par la recherche du professeur
   result["eleves"] = await Eleve.findAll(
@@ -244,6 +249,18 @@ const getNotesProfesseurs = async (parameters) => {
       result[eleveId][evaluationId].statutLibelle = item.StatutNote.libelle
       result[eleveId][evaluationId].statutId = item.StatutNote.id
     }
+
+    if (item.note != null && item.StatutNote != null){
+      result[eleveId][evaluationId].displayValue = `${note} - ${item.StatutNote.libelle}`
+    }else if (item.note !=null){
+      result[eleveId][evaluationId].displayValue = `${note}`
+    }else if (item.StatutNote != null){
+      result[eleveId][evaluationId].displayValue = `${item.StatutNote.libelle}`
+    }else{
+      result[eleveId][evaluationId].displayValue = ""
+    }
+
+
 
     if (possedeNote) {
       //Préparation des données pour calculer la moyenne de chaque étudiant
@@ -379,8 +396,8 @@ const getNotesSecretaire = async (parameters) => {
   for (const [eleveId, lstMoyenneModule] of Object.entries(tmpLstMoyenneEleveParModule)) {
     result[eleveId]={}
     for (const [moduleId, moyenne] of Object.entries(lstMoyenneModule)) {
-      result[eleveId][moduleId] = (moyenne.note / moyenne.coefficient).toFixed(2)
-
+      val = (moyenne.note / moyenne.coefficient).toFixed(2)
+      result[eleveId][moduleId] = {note:val, displayValue:val}
     }
   }
   return result

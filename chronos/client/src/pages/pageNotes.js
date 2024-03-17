@@ -20,10 +20,11 @@ const PageNotes = () => {
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
     const [periodes, setPeriodes] = useState([])
+    const [statusList, setStatusList] = useState([])
     const [showTable, setShowTable] = useState("");
     const [showPopup, setShowPopup] = useState(false);
     const [showChangeGrade, setShowChangeGrade] = useState(false);
-    const [selectedGrade, setSelectedGrade] = useState({evalName : "", eleveName : ""});
+    const [selectedGrade, setSelectedGrade] = useState({evalName:"", eleveName:"", evalId : "", eleveId : "",maxGradeEval:"" , currentGrade: "", currentStatusId:""});
     const role = authService.getCurrentRole();
     const roleId = authService.getCurrentRoleId();
 
@@ -189,17 +190,6 @@ const PageNotes = () => {
             });
     }
 
-    //Mise à jour des notes, quand on change de rôle
-    // useEffect(() => {
-    //     let parameters = { "profil": role }
-    //     if (role.includes('ROLE_USER')) {
-    //         parameters["eleveId"] = roleId
-    //     }
-    //     axios.get("http://localhost:5000/notes", { params: parameters }).then((response) => {
-    //         setNotes(response.data)
-    //     })
-    // }, [role])
-
     const getModulesDetails = (data)=>{
         //Suppression des champs vides, pour ne pas les prendre en compte dans la recherche
         Object.keys(data).forEach(key => {
@@ -244,6 +234,12 @@ const PageNotes = () => {
             setFormations(response.data)
         })
 
+        var statusList= []
+
+        axios.get("http://localhost:5000/statut").then((response) => {
+          setStatusList(response.data)
+        })
+
         //Récupération des périodes disponibles au lancement
         axios.get("http://localhost:5000/periodes").then((response) => {
             setPeriodes(response.data)
@@ -254,78 +250,95 @@ const PageNotes = () => {
         }
     }, [])
 
-    //Fonction de gestion lors de la saisie/suppression/modification de notes
-    function handleChange(e, eleveId, evalId, statutId) {
-        //Lorsque l'utilisateur valide sa saisie
-        if (e.key === 'Enter') {
-            //Si la case est vide, suppression de la note, sinon insertion/modification de la note
-            if (e.target.value === "" && statutId == null) {
-                axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
-                    //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
-                    if (response.data.hasBeenDeleted) {
-                        //Appel à l'API pour mettre à jour l'affichage des notes
-                        onSubmitSearch(formRef.current.values)
-                        alert("Suppression réussie");
-                    }
-                })
-                    .catch(function (error) {
-                        if (error.response) {
-                            // The request was made and the server responded with a status code
-                            // that falls out of the range of 2xx
-                            console.log(error.response.data);
-                            console.log(error.response.status);
-                            console.log(error.response.headers);
-                        } else if (error.request) {
-                            // The request was made but no response was received
-                            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                            // http.ClientRequest in node.js
-                            console.log(error.request);
-                        } else {
-                            // Something happened in setting up the request that triggered an Error
-                            console.log('Error', error.message);
-                        }
-                        console.log(error.config);
-                        alert("UpsertError");
-                    });
-            } else {
-                let note = e.target.value
-                if (e.target.value == "") {
-                    note = null
-                }
-                axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: note, statutId: statutId }).then((response) => {
-                    //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
-                    //Appel à l'API pour mettre à jour l'affichage des notes
-                    onSubmitSearch(formRef.current.values)
-                    alert("Upsert réussi");
-                })
-                    .catch(function (error) {
-                        if (error.response) {
-                            // The request was made and the server responded with a status code
-                            // that falls out of the range of 2xx
-                            console.log(error.response.data);
-                            console.log(error.response.status);
-                            console.log(error.response.headers);
-                        } else if (error.request) {
-                            // The request was made but no response was received
-                            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                            // http.ClientRequest in node.js
-                            console.log(error.request);
-                        } else {
-                            // Something happened in setting up the request that triggered an Error
-                            console.log('Error', error.message);
-                        }
-                        console.log(error.config);
-                        alert("UpsertError");
-                    });
-
+    function deleteNote(evalId, eleveId){
+        axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
+            //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
+            if (response.data.hasBeenDeleted) {
+                //Appel à l'API pour mettre à jour l'affichage des notes
+                setShowChangeGrade(false);
+                setSelectedGrade({evalName:"", eleveName:"", evalId : "", eleveId : "",maxGradeEval:"" , currentGrade: "", currentStatusId:""});
+                onSubmitSearch(formRef.current.values)
+                alert("Suppression réussie");
             }
+        })
+            .catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+                alert("UpsertError");
+            });
+    }
+
+    //Fonction de gestion lors de la saisie/suppression/modification de notes
+    function handleChange(data) {
+        const eleveId = selectedGrade.eleveId
+        const evalId = selectedGrade.evalId
+        const grade = data.grade === undefined ||data.statusId ===""? null:data.grade
+        const statutId = data.statusId === undefined ||data.statusId ==="" ? null: data.statusId
+
+        //Si la case est vide, suppression de la note, sinon insertion/modification de la note
+        if (grade === null && statutId === null) {
+            deleteNote(evalId, eleveId)
+        } else {
+            axios.post("http://localhost:5000/notes/insertNotes", { evalId: evalId, eleveId: eleveId, note: grade, statutId: statutId }).then((response) => {
+                //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
+                //Appel à l'API pour mettre à jour l'affichage des notes
+                setShowChangeGrade(false);
+                setSelectedGrade({evalName:"", eleveName:"", evalId : "", eleveId : "",maxGradeEval:"" , currentGrade: "", currentStatusId:""});
+                onSubmitSearch(formRef.current.values)
+                alert("Upsert réussi");
+            })
+                .catch(function (error) {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                    alert("UpsertError");
+                });
+
         }
     }
 
-    function handleActionOnModify(eleveName, evalName) {
+    function handleActionOnModify(eleveName, evalName,eleveId, evalId, maxGradeEval) {
+        const newSelectedGrade = {evalName : evalName, eleveName : eleveName, evalId:evalId, eleveId:eleveId, maxGradeEval:maxGradeEval}
+        if (notes.hasOwnProperty(eleveId) && notes[eleveId].hasOwnProperty(evalId) && notes[eleveId][evalId].hasOwnProperty("note")){
+            newSelectedGrade.currentGrade = notes[eleveId][evalId].note
+        }else{
+            newSelectedGrade.currentGrade = 0
+        }
+        if (notes.hasOwnProperty(eleveId) && notes[eleveId].hasOwnProperty(evalId) && notes[eleveId][evalId].hasOwnProperty("statutId")){
+            newSelectedGrade.currentStatusId = notes[eleveId][evalId].statutId
+        }else{
+            newSelectedGrade.currentStatusId = ""
+        }
+
+        setSelectedGrade(newSelectedGrade)
         setShowChangeGrade(true);
-        console.log(evalName);
-        setSelectedGrade({evalName : evalName, eleveName : eleveName})
     }
 
 
@@ -351,8 +364,8 @@ const PageNotes = () => {
                     {/* Formulaire d'insertion d'évaluation */}
                     <Popup html={<PopupAddEval formRef={formRef} initialValuesInsertEval={initialValuesInsertEval} validationSchemaInsert={validationSchemaInsert} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} />} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
                     
-                    {/* FOrmulaire de changement de note */}
-                    <Popup html={<PopupModifyGrade evalName={selectedGrade.evalName} eleveName={selectedGrade.eleveName} />} isActive={showChangeGrade} format={"square"} setIsActive={setShowChangeGrade} overflow="auto" />
+                    {/* Formulaire de changement de note */}
+                    <Popup html={<PopupModifyGrade evalName={selectedGrade.evalName} eleveName={selectedGrade.eleveName} maxGradeEval={selectedGrade.maxGradeEval} currentGrade={selectedGrade.currentGrade} currentStatusId={selectedGrade.currentStatusId} onSubmit={handleChange} onDelete={() => deleteNote(selectedGrade.evalId,selectedGrade.eleveId)} statusList={statusList}/>} isActive={showChangeGrade} format={"square"} setIsActive={setShowChangeGrade} overflow="auto" />
 
                     {/* Tableau d'affichage des notes */}
                     {

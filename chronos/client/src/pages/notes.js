@@ -376,7 +376,7 @@ function Notes() {
                                         let note = ""
                                         if (notes.hasOwnProperty(eleve.id)) {
                                             if (notes[eleve.id].hasOwnProperty(module.id)) {
-                                                note = notes[eleve.id][module.id]
+                                                note = notes[eleve.id][module.id].note
                                             }
                                         }
                                         return (
