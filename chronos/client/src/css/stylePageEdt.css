@@ -1,4 +1,5 @@
 .calendarCont {
-    width: 100%;
-    height: 90vh;
+    width: 95%;
+    height: 85vh;
+    min-height: 550px;
 }
