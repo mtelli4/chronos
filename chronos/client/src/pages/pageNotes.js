@@ -99,6 +99,7 @@ const PageNotes = () => {
                 //Mise à jour des notes
                 console.log("Succès SearchNotes")
                 setNotes(response.data)
+                setNotesDetails({})
             }).catch(function (error) {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -139,11 +140,11 @@ const PageNotes = () => {
             console.log("return")
             return
         }
-        var parameters =  { moduleId: formRef.current.values.moduleId, coefficient: data.coefficient, libelle: data.libelle, noteMaximale: data.noteMaximale, periodeId: data.periodeId }
-        if (data.hasOwnProperty("evalId")){
+        var parameters = { moduleId: formRef.current.values.moduleId, coefficient: data.coefficient, libelle: data.libelle, noteMaximale: data.noteMaximale, periodeId: data.periodeId }
+        if (data.hasOwnProperty("evalId")) {
             parameters.evalId = data.evalId
         }
-        
+
         //Appel de l'API d'insertion d'évaluations
         axios.post("http://localhost:5000/evaluations/insertEvaluations", parameters)
             .then((response) => {
@@ -203,7 +204,13 @@ const PageNotes = () => {
             });
     }
 
-    const getModulesDetails = (data) => {
+    const getModulesDetails = (moduleId) => {
+        const data = {
+            moduleId: moduleId,
+            formationId: formRef.current.values.formationId,
+            periodeId: formRef.current.values.periodeId,
+            getDetails: true
+        }
         //Suppression des champs vides, pour ne pas les prendre en compte dans la recherche
         Object.keys(data).forEach(key => {
             if (data[key] === '') {
@@ -296,7 +303,7 @@ const PageNotes = () => {
     }
 
     //Fonction de gestion lors de la saisie/suppression/modification de notes
-    function handleChange(data) {
+    function changeNote(data) {
         const eleveId = selectedGrade.eleveId
         const evalId = selectedGrade.evalId
         const grade = data.grade === undefined || data.grade === "" ? null : data.grade
@@ -354,14 +361,58 @@ const PageNotes = () => {
         setShowChangeGrade(true);
     }
 
-    function handleOnModifyEval(evaluation){
-        setModifEvalInitialValues({evalId:evaluation.id, libelle:evaluation.libelle, coefficient:evaluation.coefficient, noteMaximale:evaluation.noteMaximale, periodeId:evaluation.Periode.id});
+    function handleOnModifyEval(evaluation) {
+        setModifEvalInitialValues({ evalId: evaluation.id, libelle: evaluation.libelle, coefficient: evaluation.coefficient, noteMaximale: evaluation.noteMaximale, periodeId: evaluation.Periode.id });
         setShowModifEval(true);
     }
 
 
     return (
         <>
+            {/* Affichage de la page pour les professeurs */}
+            {(role.includes('ROLE_SECRETARY') || role.includes('ROLE_DIRECTOR') || role.includes('ROLE_DEPARTMENT_DIRECTOR')) &&
+                <>
+                    {/* Formulaire de recherche de notes */}
+                    <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                        <Form className='notesFormulaireRecherche'>
+                            <div className='notesSelectCont'>
+                                <ChronosInputSelect defaultLabel="Formation" name="formationId" label="" options={formations} />
+                                <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
+                            </div>
+
+                            <ChronosButton action={() => setShowTable("secretary")} text="Chercher" type="submit" id="searchNote" />
+                            <FormObserver />
+                        </Form>
+                    </Formik>
+
+                    {/* Tableau d'affichage des notes */}
+                    {
+                        showTable == "secretary" &&
+                        (
+                            <div className='contentContNotes'>
+                                <div className='notesTableCont'>
+                                    <ChronosTable width={100} correspondance={notes} columns={notes.modules} rows={notes.eleves} showColumnAdditionalInfo={false} actionOpenDetails={getModulesDetails} />
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {/* Tableau d'affichage du détails des notes */}
+                    {
+                        notesDetails.hasOwnProperty("evaluations") && notesDetails.hasOwnProperty("eleves") &&
+                        (
+                            <div className='contentContNotes'>
+                                <div className='notesTableCont'>
+                                    <ChronosTable modifiable={false} width={100} correspondance={notesDetails} columns={notesDetails.evaluations} rows={notesDetails.eleves} showColumnAdditionalInfo={true} />
+                                </div>
+                            </div>
+                        )
+                    }
+
+
+                </>
+            }
+
             {/* Affichage de la page pour les professeurs */}
             {role.includes('ROLE_PROFESSOR') &&
                 <>
@@ -381,12 +432,12 @@ const PageNotes = () => {
 
                     {/* Formulaire d'insertion d'évaluation */}
                     <Popup html={<PopupAddEval formRef={formRef} initialValuesInsertEval={initialValuesInsertEval} validationSchemaInsert={validationSchemaInsert} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} />} isActive={showPopup} format={"square"} setIsActive={setShowPopup} overflow="auto" />
-                   
+
                     {/* Formulaire de modification d'évaluation */}
-                    <Popup html={<PopupModifyEval formRef={formRef} initialValuesInsertEval={modifEvalInitialValues} validationSchemaInsert={validationSchemaInsert} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} onDelete={()=>deleteEvaluation(modifEvalInitialValues.evalId)}/>} isActive={showModifEval} format={"square"} setIsActive={setShowModifEval} overflow="auto" />
+                    <Popup html={<PopupModifyEval formRef={formRef} initialValuesInsertEval={modifEvalInitialValues} validationSchemaInsert={validationSchemaInsert} periodes={periodes} FormObserver={FormObserver} onSubmitInsertEval={onSubmitInsertEval} onDelete={() => deleteEvaluation(modifEvalInitialValues.evalId)} />} isActive={showModifEval} format={"square"} setIsActive={setShowModifEval} overflow="auto" />
 
                     {/* Formulaire de changement de note */}
-                    <Popup html={<PopupModifyGrade evalName={selectedGrade.evalName} eleveName={selectedGrade.eleveName} maxGradeEval={selectedGrade.maxGradeEval} currentGrade={selectedGrade.currentGrade} currentStatusId={selectedGrade.currentStatusId} onSubmit={handleChange} onDelete={() => deleteNote(selectedGrade.evalId, selectedGrade.eleveId)} statusList={statusList} />} isActive={showChangeGrade} format={"square"} setIsActive={setShowChangeGrade} overflow="auto" />
+                    <Popup html={<PopupModifyGrade evalName={selectedGrade.evalName} eleveName={selectedGrade.eleveName} maxGradeEval={selectedGrade.maxGradeEval} currentGrade={selectedGrade.currentGrade} currentStatusId={selectedGrade.currentStatusId} onSubmit={changeNote} onDelete={() => deleteNote(selectedGrade.evalId, selectedGrade.eleveId)} statusList={statusList} />} isActive={showChangeGrade} format={"square"} setIsActive={setShowChangeGrade} overflow="auto" />
 
                     {/* Tableau d'affichage des notes */}
                     {
@@ -395,7 +446,7 @@ const PageNotes = () => {
                             <div className='contentContNotes'>
                                 <ToggleButton src={toggleIcon} action={() => setShowPopup(true)} text="Créer une évaluation" />
                                 <div className='notesTableCont'>
-                                    <ChronosTable actionOnModify={handleActionOnModify} actionOnModifyColumn={handleOnModifyEval}modifiable={true} width={100} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} />
+                                    <ChronosTable actionOnModify={handleActionOnModify} actionOnModifyColumn={handleOnModifyEval} modifiable={true} width={100} correspondance={notes} columns={notes.evaluations} rows={notes.eleves} showColumnAdditionalInfo={true} />
                                 </div>
                             </div>
                         )

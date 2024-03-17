@@ -82,6 +82,7 @@ function Notes() {
                 //Mise à jour des notes
                 console.log("Succès SearchNotes")
                 setNotes(response.data)
+                setNotesDetails({})
             }).catch(function (error) {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -419,7 +420,7 @@ function Notes() {
                             <tr>
                                 {/* Affichage du nom de l'élève et de sa moyenne */}
                                 <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.Utilisateur.nom} {eleve.Utilisateur.prenom}</td>
-                                <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
+                                <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.additionalValue}</td>
 
                                 {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}
                                 {notesDetails.evaluations.map((evals) => {
@@ -455,7 +456,7 @@ function Notes() {
                         {
                             notesDetails.evaluations.map((evals) => {
                                 return (
-                                    <td key={"MoyenneNote" + evals.id} style={{ border: "1pt solid black" }}>{evals.moyenne}</td>
+                                    <td key={"MoyenneNote" + evals.id} style={{ border: "1pt solid black" }}>{evals.additionalValue}</td>
                                 )
                             })
                         }
@@ -568,7 +569,7 @@ function Notes() {
                                 <tr>
                                     {/* Affichage du nom de l'élève et de sa moyenne */}
                                     <td key={"eleveIdentite" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.Utilisateur.nom} {eleve.Utilisateur.prenom}</td>
-                                    <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.moyenne}</td>
+                                    <td key={"eleveMoyenne" + eleve.id} style={{ border: "1pt solid black" }}>{eleve.additionalValue}</td>
 
                                     {/* Affichage de toutes les notes de l'élève, pour toutes les évaluations */}
                                     {notes.evaluations.map((evals) => {
@@ -606,7 +607,7 @@ function Notes() {
                             {
                                 notes.evaluations.map((evals) => {
                                     return (
-                                        <td key={"MoyenneNote" + evals.id} style={{ border: "1pt solid black" }}>{evals.moyenne}</td>
+                                        <td key={"MoyenneNote" + evals.id} style={{ border: "1pt solid black" }}>{evals.additionalValue}</td>
                                     )
                                 })
                             }

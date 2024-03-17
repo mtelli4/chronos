@@ -2,10 +2,10 @@ import React from 'react';
 import { ChronosTableHeader, ChronosTableBody, ChronosTableCell, ChronosTableCont, ChronosTableH, ChronosTableHead, ChronosTableRow, ChronosTableWrapper } from './chronosTableElements';
 import ChronosButton from "../ChronosButton/index.js"
 
-const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, modifiable, actionOnModifyColumn }) => { // width : en %, correspondance : {rowID : {columnID : val, columnID: val, ...}, rowID : {...}}
+const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, modifiable, actionOnModifyColumn, actionOpenDetails, showColumnAdditionalInfo }) => { // width : en %, correspondance : {rowID : {columnID : val, columnID: val, ...}, rowID : {...}}
     // Content = liste de string. Chaque string est une clé de ce que je dois afficher
-
     console.log(correspondance);
+
 
     return (
         <ChronosTableWrapper width={width}>
@@ -23,7 +23,8 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                                 return (
                                     <ChronosTableH rowCell={false} centered={true} key={index} rightCorner={index == columns.length - 1}>
                                         {column.libelle}
-                                        {modifiable && <ChronosButton width="100%" height="25px" action={() => actionOnModifyColumn(column)} text={"Modifier"} type="" />}
+                                        {modifiable && actionOnModifyColumn!=undefined && <ChronosButton width="100%" height="25px" action={() => actionOnModifyColumn(column)} text={"Modifier"} type="" />}
+                                        {actionOpenDetails!=undefined && <ChronosButton width="100%" height="25px" action={() => actionOpenDetails(column.id)} text={"Accéder aux détails"} type="" />}
                                         {/* à remplacer par column.val */}
                                     </ChronosTableH>
                                 )
@@ -40,7 +41,7 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                         return (
                             <ChronosTableRow >
                                 <ChronosTableH sticky={true} rowCell={true} centered={false} key={-index}>
-                                    {row.Utilisateur.nom + " " + row.Utilisateur.prenom + " (" + row.moyenne + ")"}
+                                    {row.numeroEtudiant + " - " + row.Utilisateur.nom + " " + row.Utilisateur.prenom + " (" + row.additionalValue + ")"}
                                     {/* à remplacer par row.val */}
                                 </ChronosTableH>
                                 {columns.map((column, jndex) => {
@@ -72,18 +73,22 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                             </ChronosTableRow>
                         )
                     })}
-                    <ChronosTableH sticky={true} rowCell={true} centered={false}>
-                        Moyenne par éval:
-                    </ChronosTableH>
-                    {
-                        columns.map((column, index) => {
-                            return (
-                                <ChronosTableCell leftCorner={false} num={rows.length}>
-                                    {column.moyenne}
-                                </ChronosTableCell>
-                            )
-                        })
-                    }
+                    {showColumnAdditionalInfo &&
+                        <ChronosTableRow >
+
+                            <ChronosTableH sticky={true} rowCell={true} centered={false}>
+                                Moyennes:
+                            </ChronosTableH>
+                            {
+                                columns.map((column, index) => {
+                                    return (
+                                        <ChronosTableCell leftCorner={false} num={rows.length}>
+                                            {column.additionalValue}
+                                        </ChronosTableCell>
+                                    )
+                                })
+                            }
+                        </ChronosTableRow>}
                 </ChronosTableBody>
 
             </ChronosTableCont>
