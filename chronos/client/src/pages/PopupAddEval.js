@@ -34,7 +34,7 @@ const  PopupAddEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval, v
 
                     <div>
                     <h4 className='addEvalSubTitle'>Période</h4>
-                    <ChronosInputSelect defaultLabel="Sélectionner une période" name="periodeId" options={periodes} />
+                    <ChronosInputSelect defaultLabel="Sélectionner une période" name="periodeAddEvalId" options={periodes} />
                     </div>
 
                     <div className='addEvalButtonCont'>

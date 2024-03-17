@@ -51,7 +51,7 @@ function App() {
           <Route path="/edt" element={<PageEdt />} exact /> 
           <Route path="/importStudents" element={<FileImport />} exact />
           <Route path="/importStudentNidal" element={<PageImportEleves />} exact />
-          <Route path="/call" element={<CallForm />} exact />
+        
           <Route path="/email" element={<EmailForm />} exact />
           <Route path="/export-csv" element={<CSVExportPage />} exact />
           <Route path="/notes" element={<Notes />} exact />
