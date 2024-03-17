@@ -13,7 +13,8 @@ import ToggleButton from '../components/ToggleButton/index.js';
 import toggleIcon from "../images/plus.png"
 import PopupAddEval from './PopupAddEval.js';
 import PopupModifyEval from './PopupModifyEval.js';
-import PopupModifyGrade from './popupModifyGrade.js';;
+import PopupModifyGrade from './popupModifyGrade.js';
+import { CSVLink } from 'react-csv';
 
 const PageNotes = () => {
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
@@ -22,6 +23,7 @@ const PageNotes = () => {
     const [modules, setModules] = useState([])
     const [periodes, setPeriodes] = useState([])
     const [statusList, setStatusList] = useState([])
+    const [csvData, setCsvData] = useState({ headers: [], data: [] })
     const [showTable, setShowTable] = useState("");
     const [showPopup, setShowPopup] = useState(false);
     const [showModifEval, setShowModifEval] = useState(false);
@@ -270,6 +272,33 @@ const PageNotes = () => {
         }
     }, [])
 
+    //Permet de garder les données liées aux notes à jour dans l'export CSV du secrétariat
+    useEffect(() => {
+        if (role.includes('ROLE_SECRETARY')) {
+            const data = []
+            const headers = []
+            headers.push({ label: 'Élève', key: 'student' })
+            notes.modules.forEach((module) => {
+                headers.push({ label: `${module.codeApogee} - ${module.libelle}`, key: `${module.id}` })
+            })
+
+            notes.eleves.forEach((eleve) => {
+                let obj = {}
+                obj.student = `${eleve.numeroEtudiant} - ${eleve.Utilisateur.nom} ${eleve.Utilisateur.prenom}`;
+                notes.modules.forEach((module) => {
+                    if (notes.hasOwnProperty(eleve.id) && notes[eleve.id].hasOwnProperty(module.id)) {
+                        obj[`${module.id}`] = notes[eleve.id][module.id].note.replace(".", ",")
+                    }
+                })
+                data.push(obj)
+            })
+
+            setCsvData({ data: data, headers: headers })
+
+        }
+    }, [notes])
+
+
     function deleteNote(evalId, eleveId) {
         axios.post("http://localhost:5000/notes/deleteNote", { evalId: evalId, eleveId: eleveId }).then((response) => {
             //APPARITION POP UP DE CONFIMATION A CUSTOM("Upsert réussi")
@@ -388,13 +417,15 @@ const PageNotes = () => {
                     {/* Tableau d'affichage des notes */}
                     {
                         showTable == "secretary" &&
-                        (
+                        
                             <div className='contentContNotes'>
+                                <CSVLink style={{ textDecoration: 'none' }} data={csvData.data} headers={csvData.headers} filename={'example.csv'}>
+                                    <ChronosButton action={() => { }} text="Exporter en CSV" type="button" id="exportCSV" />
+                                </CSVLink>
                                 <div className='notesTableCont'>
                                     <ChronosTable width={100} correspondance={notes} columns={notes.modules} rows={notes.eleves} showColumnAdditionalInfo={false} actionOpenDetails={getModulesDetails} />
                                 </div>
                             </div>
-                        )
                     }
 
                     {/* Tableau d'affichage du détails des notes */}

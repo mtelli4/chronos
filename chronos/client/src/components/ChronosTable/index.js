@@ -22,7 +22,10 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                             columns.map((column, index) => {
                                 return (
                                     <ChronosTableH rowCell={false} centered={true} key={index} rightCorner={index == columns.length - 1}>
-                                        {column.libelle}
+                                        <p>{column.libelle}</p>
+                                        {column.hasOwnProperty("coefficient") && <p> Coefficient: {column.coefficient}</p>}
+                                        {column.hasOwnProperty("noteMaximale") && <p> Notée sur: {column.noteMaximale}</p>}
+                                        {column.hasOwnProperty("nombreNote") && <p> Notes saisies: {column.nombreNote}/{rows.length}</p>}
                                         {modifiable && actionOnModifyColumn!=undefined && <ChronosButton width="100%" height="25px" action={() => actionOnModifyColumn(column)} text={"Modifier"} type="" />}
                                         {actionOpenDetails!=undefined && <ChronosButton width="100%" height="25px" action={() => actionOpenDetails(column.id)} text={"Accéder aux détails"} type="" />}
                                         {/* à remplacer par column.val */}

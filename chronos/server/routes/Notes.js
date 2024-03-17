@@ -294,8 +294,10 @@ const getNotesProfesseurs = async (parameters) => {
   result["evaluations"].forEach(item => {
     if (tmpLstEvalMoyenne.hasOwnProperty(item.id)) {
       item.dataValues["additionalValue"] = (tmpLstEvalMoyenne[item.id].note / tmpLstEvalMoyenne[item.id].coefficient).toFixed(2)
+      item.dataValues["nombreNote"] = tmpLstEvalMoyenne[item.id].coefficient
     } else {
       item.dataValues["additionalValue"] = '...'
+      item.dataValues["nombreNote"] = 0
     }
   })
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { CSVLink } from 'react-csv';
 import axios from 'axios'
 import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik"
 import * as Yup from "yup";
@@ -11,6 +12,8 @@ function Notes() {
     const [formations, setFormations] = useState([])
     const [modules, setModules] = useState([])
     const [periodes, setPeriodes] = useState([])
+    const [csvData, setCsvData] = useState({headers:[], data:[]})
+
     const role = authService.getCurrentRole();
     const roleId = authService.getCurrentRoleId();
 
@@ -242,6 +245,31 @@ function Notes() {
         }
     }, [])
 
+    useEffect(()=>{
+        if (role.includes('ROLE_SECRETARY')) {
+            const data = []
+            const headers = []
+            headers.push({label:'Élève', key:'student'})
+            notes.modules.forEach((module) => {
+                headers.push({label:`${module.codeApogee} - ${module.libelle}`, key:`${module.id}`})
+            })
+
+            notes.eleves.forEach((eleve)=>{
+                let obj = {}
+                obj.student = `${eleve.numeroEtudiant} - ${eleve.Utilisateur.nom} ${eleve.Utilisateur.prenom}`;
+                notes.modules.forEach((module)=>{
+                    if (notes.hasOwnProperty(eleve.id) && notes[eleve.id].hasOwnProperty(module.id)){
+                        obj[`${module.id}`] = notes[eleve.id][module.id].note.replace(".",",")
+                    }
+                })
+                data.push(obj)
+            })
+
+            setCsvData({data:data, headers:headers})
+
+        }
+    }, [notes])
+
     //Fonction de gestion lors de la saisie/suppression/modification de notes
     function handleChange(e, eleveId, evalId, statutId) {
         //Lorsque l'utilisateur valide sa saisie
@@ -391,6 +419,12 @@ function Notes() {
                             )
                         })}
                     </table>
+                    <div>
+                    <h1>Export</h1>
+                    <CSVLink data={csvData.data} headers={csvData.headers} filename={'example.csv'}>
+                        Exporter
+                    </CSVLink>
+                    </div>
 
 
                     {/* Tableau d'affichage du détails des notes */}
@@ -410,6 +444,7 @@ function Notes() {
                                         {evals.libelle}<br />
                                         Coeff:{evals.coefficient}<br />
                                         Max:{evals.noteMaximale}<br />
+                                        Notes saisies:{evals.nombreNote}/{notesDetails.eleves.length}<br />
                                     </td>
                                 )
                             })
@@ -558,6 +593,7 @@ function Notes() {
                                             {evals.libelle}<br />
                                             Coeff:{evals.coefficient}<br />
                                             Max:{evals.noteMaximale}<br />
+                                            Notes saisies:{evals.nombreNote}/{notes.eleves.length}<br />
                                             <button onClick={() => { deleteEvaluation(evals.id) }}> Supprimer</button>
                                         </td>
                                     )
