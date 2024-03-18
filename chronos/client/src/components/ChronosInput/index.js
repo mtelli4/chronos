@@ -3,7 +3,7 @@ import { ChronosInputFieldCont, ChronosEye, ChronosInputCont, ChronosInputErrorM
 import eyeOpened from "../../images/eye-opened-icon.png";
 import eyeClosed from "../../images/eye-closed-icon.png";
 
-const ChronosInput = ({ width, type, name, title, component, value, onChange }) => {
+const ChronosInput = ({ width, height, type, name, title, component, value, onChange }) => {
 
   const [eyeIcon, setEyeIcon] = useState(eyeClosed);
 
@@ -18,7 +18,7 @@ const ChronosInput = ({ width, type, name, title, component, value, onChange }) 
   }
 
   return (
-    <ChronosInputCont width={width}>
+    <ChronosInputCont height={height} width={width}>
         <ChronosInputTitle htmlFor={name}>{title}</ChronosInputTitle>
         <ChronosInputFieldCont>
           <ChronosInputField onChange={onChange} value={value} type={type == "password" ? (eyeIcon === eyeOpened ? "text" : type) : type} name={name}></ChronosInputField>

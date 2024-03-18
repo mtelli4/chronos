@@ -26,6 +26,7 @@ const appear = keyframes`
 
 export const ChronosInputCont = styled.div`
     width: ${props => props.width};
+    height: ${props => props.height};
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -50,6 +51,7 @@ export const ChronosInputField = styled(Field)`
     outline: none;
     padding-left: 10px;
     font-size: 1.25rem;
+    background: none;
 
     &:active {
         border: 3px solid #000;
@@ -67,7 +69,7 @@ export const ChronosInputErrorMessage = styled(ErrorMessage)`
 
 export const ChronosInputFieldCont = styled.div`
     width: 100%;
-    height: 40px;
+    height: 100%;
 
     position: relative;
 `;
