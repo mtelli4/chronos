@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { authService } from '../services/authService';
 
 const MessageForm = ({ onMessageSubmit }) => {
   const [content, setContent] = useState('');
@@ -27,21 +28,26 @@ const MessageList = ({ messages }) => (
   <ul>
     {messages.map((message) => (
       <li key={message.id}>
-        <strong>{message.UtilisateurId}</strong>: {message.content}
+        <strong>{message.Utilisateur.nom} {message.Utilisateur.prenom}</strong>: {message.content}
       </li>
     ))}
   </ul>
 );
 
-const MessageApp = ({ moduleId }) => {
+const MessageApp = ({coursId ,moduleId }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [canSendMessage, setCanSendMessage] = useState(false);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/messages/${moduleId}`);
         setMessages(response.data);
+        const role = authService.getCurrentRole()
+        const roleId = authService.getCurrentRoleId()
+        const response2 = await axios.get(`http://localhost:5000/messages/canSendMessage/${moduleId}/${coursId}/${role}/${roleId}`);
+        setCanSendMessage(response2.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching messages:', error);
@@ -61,7 +67,7 @@ const MessageApp = ({ moduleId }) => {
     try {
       await axios.post('http://localhost:5000/messages/send', {
         content,
-        UtilisateurId: 1,
+        UtilisateurId: authService.getUserId(),
         ModuleId: moduleId,
       });
 
@@ -80,7 +86,7 @@ const MessageApp = ({ moduleId }) => {
       ) : (
         <>
           <MessageList messages={messages} />
-          <MessageForm onMessageSubmit={handleSendMessage} />
+          {canSendMessage && <MessageForm onMessageSubmit={handleSendMessage} />}
         </>
       )}
     </div>

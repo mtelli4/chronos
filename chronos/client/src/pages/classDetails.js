@@ -4,7 +4,7 @@ import { ajouterDuree, ajouterDureeDate } from "../js/calendar_script"
 import MessageApp from './messages';
 
 // Content de la popup calendar
-const ClassDetails = ({ title, professors, heureDebut, duree, informations, color }) => {
+const ClassDetails = ({ coursId, title, professors, heureDebut, duree, informations, color, moduleId }) => {
 
     function ajusterCouleur(hexCode, versChaud = true) {
         // Conversion du code hexadécimal en valeurs R, G, B
@@ -142,7 +142,7 @@ const ClassDetails = ({ title, professors, heureDebut, duree, informations, colo
                 <div className='classDetailsChatCont'></div>
             </div>
 
-            <MessageApp moduleId={2} />
+            <MessageApp coursId={coursId} moduleId={moduleId} />
         </div>
     </>
   )

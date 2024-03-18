@@ -114,7 +114,8 @@ const PageEdt = () => {
         startHour: cours.debutCours,
         duration: cours.duree,
         color: cours.color,
-        professors: cours.Professeurs
+        professors: cours.Professeurs,
+        moduleId: cours.moduleId,
       });
     });
     return organizedData;

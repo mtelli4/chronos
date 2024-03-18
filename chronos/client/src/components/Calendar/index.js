@@ -19,7 +19,7 @@ import ClassDetails from '../../pages/classDetails';
 
 const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
   const [isActive, setIsActive] = useState(false);
-  const [selectedSquare, setSelectedSquare] = useState({ color: "#000000", title: "", duration: 0, startHour: "00h00", informations: [] });
+  const [selectedSquare, setSelectedSquare] = useState({ id: "",color: "#000000", title: "", duration: 0, startHour: "00h00", informations: [], moduleId :"" });
   const [currentMonthIndex, setCurrentMonthIndex] = useState((new Date()).getMonthNumber());
   const [currentWeekIndex, setCurrentWeekIndex] = useState((new Date()).getWeekNumber());
 
@@ -220,7 +220,7 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
             {Object.keys(weekdata[year][currentMonthIndex][currentWeekIndex]).map(jour => (
 
               <CalendarMainCol dayssize={days.length}>
-                {weekdata[year][currentMonthIndex][currentWeekIndex][jour].map((classData) => (
+                {weekdata[year][currentMonthIndex][currentWeekIndex][jour].map((classData) => (                  
                   <ClassSquare
                     key={classData.id}
                     title={classData.title}
@@ -237,7 +237,7 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
           </>
         ) : <p>Loading...</p>}
       </CalendarMain>
-      <Popup html={<ClassDetails color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} />} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
+      <Popup html={<ClassDetails coursId={selectedSquare.id} color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
     </CalendarCont>
     </>
   );

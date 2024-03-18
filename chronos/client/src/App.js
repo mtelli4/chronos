@@ -85,7 +85,6 @@ function App() {
         <Route path='/*' element={<NotFound /> }/>
         <Route path='/unauthorized' element={<Unauthorized/>} exact />
         <Route path="/call" element={<CallForm />} exact />
-        <Route path="/messages" element={<MessageApp moduleId={2} />} exact />
 
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
 
