@@ -21,7 +21,7 @@ export const ChronosCallCardCont = styled.div`
     background: ${props => props.isAbsent ? "#eee" : "linear-gradient(90deg, #AD6DFF, #8734DB)"};
     display: flex;
     align-items: center;
-    gap : 10px;
+    gap : 30px;
     position : relative;
     cursor: pointer;
     margin: 0 auto;
@@ -30,17 +30,19 @@ export const ChronosCallCardCont = styled.div`
     transition: all 0.5s ease;
 
 
-    @media screen and (max-width: 650px) {
+    @media screen and (max-width: 775px) {
         min-height: 200px;
         align-items: flex-start;
     }
 
     @media screen and (max-width: 450px) {
         padding: 20px 30px;
+        gap : 10px;
     }
 
-    @media screen and (max-width: 360px) {
+    @media screen and (max-width: 400px) {
         padding: 20px 20px;
+        gap : 5px;
     }
 
     overflow: hidden;
@@ -89,13 +91,13 @@ export const ChronosCallCardStatus = styled.div`
     transform: translateY(-50%);
     user-select: none;
 
-    @media screen and (max-width : 650px) {
+    @media screen and (max-width : 775px) {
         transform: translateY(10%);
         left: 40px;
         right: auto;
     }
 
-    @media screen and (max-width: 360px) {
+    @media screen and (max-width: 400px) {
         right: auto;
         left: 50%;
         top: 60%;

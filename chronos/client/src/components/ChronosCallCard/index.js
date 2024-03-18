@@ -60,16 +60,16 @@ const ChronosCallCard = ({ Student, absentList, setAbsentList, setLateList }) =>
     <ChronosCallCardCont isAbsent={isAbsent} onClick={() => handleClick()}>
         <ChronosCallCardImg src={test} />
         <ChronosCallCardTextCont>
-        <ChronosCallCardText>
-            Idrissi Nidal
-        </ChronosCallCardText>
+          <ChronosCallCardText>
+              Idrissi Nidal
+          </ChronosCallCardText>
 
-        <ChronosCallCardStatus isAbsent={isAbsent}>
-            {isAbsent ? "Absent" : "Présent"}
-        </ChronosCallCardStatus>
+          <ChronosCallCardStatus isAbsent={isAbsent}>
+              {isAbsent ? "Absent" : "Présent"}
+          </ChronosCallCardStatus>
 
-        <ChronosCallCardSubTitle>Retard (minutes)</ChronosCallCardSubTitle>
-        <ChronosInput width={"75px"} height="30px" onChange={(e) => handleInputChange(e)} type={"number"} name="lateTime"  />
+          <ChronosCallCardSubTitle>Retard (minutes)</ChronosCallCardSubTitle>
+          <ChronosInput width={"75px"} height="30px" onChange={(e) => handleInputChange(e)} type={"number"} name="lateTime"  />
 
         </ChronosCallCardTextCont>
     </ChronosCallCardCont>
