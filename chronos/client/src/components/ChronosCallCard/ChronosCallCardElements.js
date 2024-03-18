@@ -18,7 +18,7 @@ export const ChronosCallCardCont = styled.div`
     color: ${props => props.isAbsent ? "#000" : "#fff"};
     padding: 20px 40px;
     border-radius: 10px;
-    background: ${props => props.isAbsent ? "#ddd" : "linear-gradient(90deg, #AD6DFF, #8734DB)"};
+    background: ${props => props.isAbsent ? "#eee" : "linear-gradient(90deg, #AD6DFF, #8734DB)"};
     display: flex;
     align-items: center;
     gap : 10px;
@@ -80,12 +80,12 @@ export const ChronosCallCardTextCont = styled.div`
 `;
 
 export const ChronosCallCardStatus = styled.div`
-    opacity: 0.5;
+    opacity: 0.25;
     font-size: 4rem;
     position: absolute;
     top: 50%;
     right: 40px;
-    color: ${props => props.isAbsent ? "#999" : "#fff"};
+    color: ${props => props.isAbsent ? "#000" : "#000"};
     transform: translateY(-50%);
     user-select: none;
 

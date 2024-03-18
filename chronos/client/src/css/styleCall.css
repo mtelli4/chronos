@@ -7,13 +7,13 @@
     gap: 20px;
     margin-left: 20px;
     margin-bottom: 60px;
-    height: 60vh;
+    height: 75vh;
     padding-right: 10px;
     overflow: auto;
 }
 
 .callTitle {
-    background: #ddd;
+    background: #eee;
     padding: 30px 40px;
     border-radius: 10px;
     width: 100%;
@@ -33,7 +33,7 @@
 .callWrap {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 45px;
     width: 90%;
     margin-left: 60px;
     max-width: 1200px;
