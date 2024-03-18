@@ -23,6 +23,8 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                                 return (
                                     <ChronosTableH rowCell={false} centered={true} key={index} rightCorner={index == columns.length - 1}>
                                         <p>{column.libelle}</p>
+                                        {column.hasOwnProperty("codeApogee") && <p>{column.codeApogee}</p>}
+
                                         {column.hasOwnProperty("coefficient") && <p> Coefficient: {column.coefficient}</p>}
                                         {column.hasOwnProperty("noteMaximale") && <p> Notée sur: {column.noteMaximale}</p>}
                                         {column.hasOwnProperty("nombreNote") && <p> Notes saisies: {column.nombreNote}/{rows.length}</p>}

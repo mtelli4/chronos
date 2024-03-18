@@ -267,7 +267,7 @@ const PageNotes = () => {
             setPeriodes(response.data)
         })
 
-        if (role.includes('ROLE_USER')) {
+        if (role.includes('ROLE_USER') && formRef.hasOwnProperty("current") && formRef.current.hasOwnProperty("values")) {
             onSubmitSearch(formRef.current.values);
         }
     }, [])

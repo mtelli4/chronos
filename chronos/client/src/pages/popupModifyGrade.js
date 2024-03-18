@@ -38,7 +38,7 @@ const PopupModifyGrade = ({ eleveName, evalName, currentGrade, currentStatusId, 
             <ChronosButton width={"150px"} height={"40px"} id="insertGrade" text="Confirmer" type="submit" />
           </div>
           <div className='addEvalButtonCont'>
-            <ChronosButton width={"150px"} height={"40px"} id="deleteGrade" text="Supprimer" action={onDelete} type="button"/>
+            <ChronosButton width={"150px"} height={"40px"} id="deleteGrade" text="Réinitialiser" action={onDelete} type="button"/>
           </div>
         </Form>
       </Formik>
