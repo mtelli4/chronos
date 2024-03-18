@@ -17,7 +17,6 @@
     padding: 30px 40px;
     border-radius: 10px;
     width: 100%;
-    max-width: 1200px;
 }
 
 .callTitle h3 {
@@ -41,6 +40,28 @@
     max-width: 1200px;
 }
 
+.justifyCont {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.justifyCardCont {
+    display: grid;
+    width: 95%;
+    margin: 0 auto;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+}
+
+@media (max-width : 1100px) {
+    .justifyCardCont {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width : 900px) {
     .callWrap {
         display: flex;
@@ -49,11 +70,21 @@
     }
 }
 
+@media (max-width : 750px) {
+    .justifyCardCont {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
 @media (max-width : 600px) {
     .callTitle {
         border-radius: 0px;
         width: 100%;
         max-width: none;
+    }
+
+    .justifyCont {
+        width: 100%;
     }
 
     .callTitle h3 {

@@ -26,6 +26,7 @@ import Header from "./components/Header"
 import PageNotes from './pages/pageNotes';
 import PageImportEleves from './pages/pageImportEleves';
 import PageCall from './pages/pageCall';
+import PageJustify from './pages/pageJustify';
 
 function App() {
 
@@ -69,6 +70,8 @@ function App() {
           {/* Pages absences Kyrian */}
           <Route path="/callNidal" element={<PageCall />} exact />
           <Route path="/call" element={<CallForm />} exact />
+
+          <Route path="/justify" element={<PageJustify />} exact />
           <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
           <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
           

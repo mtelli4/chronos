@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ButtonToggleCont = styled.div`
+export const ButtonToggleCont = styled.button`
     width: 100%;
     aspect-ratio: 1;
     background: #000;
@@ -10,6 +10,8 @@ export const ButtonToggleCont = styled.div`
     align-items: center;
     transition: all 0.25s, background 0s;
     cursor: pointer;
+    outline: none;
+    border: none;
 
     &:hover {
         transform: scale(1.1);

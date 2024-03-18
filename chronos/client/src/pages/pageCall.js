@@ -75,9 +75,7 @@ const PageCall = () => {
                     <ChronosCallCard Student={student} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} />
                 ))
                 }
-                <ChronosCallCard Student={"rrr"} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} />
-                <ChronosCallCard Student={"rrr"} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} />
-                <ChronosCallCard Student={"rrr"} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} />
+
 
                 <ChronosButton width="200px" type="submit" text={"Valider l'appel"} />
 
