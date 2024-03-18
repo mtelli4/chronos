@@ -32,8 +32,8 @@ const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : s
   };
 
   return (
-    <HeaderCont>
-        <ChronosLogo fontsize={3} />
+    <HeaderCont isVisible={isVisible}>
+        <ChronosLogo fontsize={2.25} />
         <label htmlFor="roleSelector">Sélecteur de role: </label>
           <select id="roleSelector" value={authService.getCurrentRole()} onChange={handleRoleChange}>
               {Object.keys(userRoles ?? {}).map((role) => (
