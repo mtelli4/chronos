@@ -26,6 +26,7 @@ import Header from "./components/Header"
 import PageNotes from './pages/pageNotes';
 import PageImportEleves from './pages/pageImportEleves';
 
+import MessageApp from './pages/messages';
 function App() {
 
   const [listCours, setListCours] = useState([]);
@@ -83,6 +84,15 @@ function App() {
         <Route path="/psw" element={<ChangePasswordForm />} exact />
         <Route path='/*' element={<NotFound /> }/>
         <Route path='/unauthorized' element={<Unauthorized/>} exact />
+        <Route path="/call" element={<CallForm />} exact />
+        <Route path="/messages" element={<MessageApp moduleId={2} />} exact />
+
+        {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
+
+        <Route path="/email" element={<EmailForm />} exact />
+        <Route path="/export-csv" element={<CSVExportPage />} exact />
+        {/* test branch notes lucas */}
+        <Route path="/notes" element={<Notes />} exact />
       </Routes>
     </Router>
   );

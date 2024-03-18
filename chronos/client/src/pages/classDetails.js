@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "../css/styleClassDetails.css"
 import { ajouterDuree, ajouterDureeDate } from "../js/calendar_script"
+import MessageApp from './messages';
 
 // Content de la popup calendar
 const ClassDetails = ({ title, professors, heureDebut, duree, informations, color }) => {
@@ -140,6 +141,8 @@ const ClassDetails = ({ title, professors, heureDebut, duree, informations, colo
                 </ul>
                 <div className='classDetailsChatCont'></div>
             </div>
+
+            <MessageApp moduleId={2} />
         </div>
     </>
   )
