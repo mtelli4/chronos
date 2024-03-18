@@ -16,7 +16,7 @@ const  PopupAddEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval, v
                         formRef.current != null &&
                         formRef.current.values.hasOwnProperty("moduleId") &&
                         formRef.current.values.moduleId != "" &&
-            <Formik initialValues={initialValuesInsertEval} onSubmit={onSubmitInsertEval} validationSchema={validationSchemaInsert}>
+            <Formik initialValues={initialValuesInsertEval} onSubmit={onSubmitInsertEval} validationSchema={validationSchemaInsert} enableReinitialize>
                 <Form className='addEvalForm'>
                     <div>
                     <h4 className='addEvalSubTitle'>Libellé</h4>
@@ -34,7 +34,7 @@ const  PopupAddEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval, v
 
                     <div>
                     <h4 className='addEvalSubTitle'>Période</h4>
-                    <ChronosInputSelect defaultLabel="Sélectionner une période" name="periodeAddEvalId" options={periodes} />
+                    <ChronosInputSelect defaultLabel="Sélectionner une période" name="periodeId" options={periodes} />
                     </div>
 
                     <div className='addEvalButtonCont'>

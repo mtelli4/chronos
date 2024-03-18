@@ -2,7 +2,8 @@ const { Op } = require("sequelize");
 const express = require('express');
 const router = express.Router();
 
-const { Note, Eleve, Formation, ModuleCours, FormationModule,StatutNote, Periode, Evaluation, Utilisateur } = require('../models')
+const { Note, Eleve, Formation, ModuleCours, FormationModule,StatutNote, Periode, Evaluation, Utilisateur, Absence, Cours } = require('../models');
+const eleve = require("../models/eleve");
 
 router.get("/", async (req, res) => {
   const parameters = req.query
@@ -132,18 +133,18 @@ const getNotesEleves = async (parameters) => {
   //Ajout de la moyenne pour chaque évaluation
   result["evaluations"].forEach(item => {
     if (tmpLstEvaluationsMoyenne.hasOwnProperty(item.id)) {
-      item.dataValues["moyenne"] = (tmpLstEvaluationsMoyenne[item.id].note / tmpLstEvaluationsMoyenne[item.id].coefficient).toFixed(2)
+      item.dataValues["additionalValue"] = (tmpLstEvaluationsMoyenne[item.id].note / tmpLstEvaluationsMoyenne[item.id].coefficient).toFixed(2)
     } else {
-      item.dataValues["moyenne"] = '...'
+      item.dataValues["additionalValue"] = '...'
     }
   })
 
   //Ajout de la moyenne de chaque module
   result["modules"].forEach(item => {
     if (tmpLstModulesMoyenne.hasOwnProperty(item.id)) {
-      item.dataValues["moyenne"] = (tmpLstModulesMoyenne[item.id].note / tmpLstModulesMoyenne[item.id].coefficient).toFixed(2)
+      item.dataValues["additionalValue"] = (tmpLstModulesMoyenne[item.id].note / tmpLstModulesMoyenne[item.id].coefficient).toFixed(2)
     } else {
-      item.dataValues["moyenne"] = '...'
+      item.dataValues["additionalValue"] = '...'
     }
   })
 
@@ -165,7 +166,7 @@ const getNotesProfesseurs = async (parameters) => {
     evaluationsParameters['moduleId'] = parseInt(parameters.moduleId)
   }
   if (parameters.hasOwnProperty('formationId')) {
-    notesParameters['eleveId'] = parseInt(parameters.formationId)
+    notesParameters['$Eleve.formationId$'] = parseInt(parameters.formationId)
     eleveParameters['formationId'] = parseInt(parameters.formationId)
   }
   if (parameters.hasOwnProperty('periodeId')) {
@@ -184,11 +185,16 @@ const getNotesProfesseurs = async (parameters) => {
       {
         model: StatutNote,
         attributes:['id','libelle']
+      },
+      {
+        model: Eleve,
+        attributes:['id','formationId']
       }
     ],
     where: notesParameters,
     attributes:['id','note','eleveId','evaluationId','statutId']
   })
+  
 
   //Récupération des informations liées aux élèves concernés par la recherche du professeur
   result["eleves"] = await Eleve.findAll(
@@ -245,6 +251,18 @@ const getNotesProfesseurs = async (parameters) => {
       result[eleveId][evaluationId].statutId = item.StatutNote.id
     }
 
+    if (item.note != null && item.StatutNote != null){
+      result[eleveId][evaluationId].displayValue = `${note} - ${item.StatutNote.libelle}`
+    }else if (item.note !=null){
+      result[eleveId][evaluationId].displayValue = `${note}`
+    }else if (item.StatutNote != null){
+      result[eleveId][evaluationId].displayValue = `${item.StatutNote.libelle}`
+    }else{
+      result[eleveId][evaluationId].displayValue = ""
+    }
+
+
+
     if (possedeNote) {
       //Préparation des données pour calculer la moyenne de chaque étudiant
       if (!tmpLstEleveMoyenne[eleveId]) {
@@ -266,18 +284,20 @@ const getNotesProfesseurs = async (parameters) => {
   //Ajout de la moyenne de chaque étudiant
   result["eleves"].forEach(item => {
     if (tmpLstEleveMoyenne.hasOwnProperty(item.id)) {
-      item.dataValues["moyenne"] = (tmpLstEleveMoyenne[item.id].note / tmpLstEleveMoyenne[item.id].coefficient).toFixed(2)
+      item.dataValues["additionalValue"] = (tmpLstEleveMoyenne[item.id].note / tmpLstEleveMoyenne[item.id].coefficient).toFixed(2)
     } else {
-      item.dataValues["moyenne"] = '...'
+      item.dataValues["additionalValue"] = '...'
     }
   })
 
   //Ajout de la moyenne pour chaque évaluation
   result["evaluations"].forEach(item => {
     if (tmpLstEvalMoyenne.hasOwnProperty(item.id)) {
-      item.dataValues["moyenne"] = (tmpLstEvalMoyenne[item.id].note / tmpLstEvalMoyenne[item.id].coefficient).toFixed(2)
+      item.dataValues["additionalValue"] = (tmpLstEvalMoyenne[item.id].note / tmpLstEvalMoyenne[item.id].coefficient).toFixed(2)
+      item.dataValues["nombreNote"] = tmpLstEvalMoyenne[item.id].coefficient
     } else {
-      item.dataValues["moyenne"] = '...'
+      item.dataValues["additionalValue"] = '...'
+      item.dataValues["nombreNote"] = 0
     }
   })
 
@@ -331,6 +351,16 @@ const getNotesSecretaire = async (parameters) => {
           model: Utilisateur,
           attributes: ['id','nom','prenom']
         },
+        {
+          model:Absence,
+          attributes:["id","valide"],
+          include:[
+            {
+              model:Cours,
+              attributes:["id","duree"]
+            }
+          ]
+        }
       ],
       attributes:['id','numeroEtudiant','trombinoscope','tiersTemps']
     }
@@ -379,10 +409,24 @@ const getNotesSecretaire = async (parameters) => {
   for (const [eleveId, lstMoyenneModule] of Object.entries(tmpLstMoyenneEleveParModule)) {
     result[eleveId]={}
     for (const [moduleId, moyenne] of Object.entries(lstMoyenneModule)) {
-      result[eleveId][moduleId] = (moyenne.note / moyenne.coefficient).toFixed(2)
-
+      val = (moyenne.note / moyenne.coefficient).toFixed(2)
+      result[eleveId][moduleId] = {note:val, displayValue:val}
     }
   }
+
+  result["eleves"].forEach(eleve => {
+    var nbAbsence = 0;
+    var dureeAbsence = 0;
+    if (eleve.hasOwnProperty("Absences")){
+      eleve.Absences.forEach(absence => {
+        if (!(absence.valide)){
+          nbAbsence += 1
+          dureeAbsence += absence.Cour.duree
+        }
+      })
+    }
+    eleve.dataValues["additionalValue"] = `${nbAbsence} absence(s) ~ ${Math.floor(dureeAbsence/60)}h${dureeAbsence%60}`
+  })
   return result
 }
 
