@@ -5,12 +5,9 @@ import axios from 'axios';
 import CreateCourse from './pages/createCourse';
 import Agenda from './pages/agenda';
 import PageEdt from './pages/pageEdt';
-import FileImport from './pages/fileImport';
 import Notes from './pages/notes';
 import EmailForm from './pages/emailForm';
-import LoginForm from './pages/loginForm';
 import PageLogin from './pages/pageLogin';
-import ChangePasswordForm from './pages/changePasswordForm';
 import PagePasswordChange from './pages/pagePasswordChange';
 import CallForm from './pages/call';
 import JustifyAbsPage from './pages/justifyAbsences';
@@ -27,6 +24,7 @@ import PageNotes from './pages/pageNotes';
 import PageImportEleves from './pages/pageImportEleves';
 import Users from './pages/users';
 import { authService } from './services/authService';
+import ForgotPasswordPage from './pages/forgotPassword';
 
 import MessageApp from './pages/messages';
 function App() {
@@ -49,7 +47,7 @@ function App() {
   const currentRole = authService.getCurrentRole();
   
   // Routes for admins/secretaires
-  if (['ROLE_SECRETARY', 'ROLE_ADMIN'].includes(currentRole)) {
+  if (['ROLE_SECRETARY', 'ROLE_ADMIN', 'ROLE_SUPERADMIN'].includes(currentRole)) {
     headerRoutes.push({title: "Imports", to:'/importStudents'});
     headerRoutes.push({title: "Utilisateurs", to:'/users'})
   }
@@ -65,14 +63,14 @@ function App() {
             <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
             <Route path="/createcourse" element={<CreateCourse />} exact />
             <Route path="/" element={<PageEdt />} exact /> 
-            <Route path="/importStudents" element={<FileImport />} exact />
+            <Route path="/importStudents" element={<PageImportEleves />} exact />
             <Route path="/users" element={<Users />} exact />
-            <Route path="/importStudentNidal" element={<PageImportEleves />} exact />
           
             <Route path="/email" element={<EmailForm />} exact />
             <Route path="/export-csv" element={<CSVExportPage />} exact />
             <Route path="/notes" element={<Notes />} exact />
             <Route path="/notesNidal" element={<PageNotes />} exact />
+
             {/* Pages absences Kyrian */}
             <Route path="/call" element={<CallForm />} exact />
             <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
@@ -82,14 +80,11 @@ function App() {
               <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
             </Route>
           </Route>
-          
-
 
         {/* -------------- PUBLIC ROUTES -----------------*/}
-        <Route path="/login" element={<LoginForm />} exact />
-        <Route path="/psw" element={<ChangePasswordForm />} exact />
-        <Route path="/loginNidal" element={<PageLogin />} exact />
-        <Route path="/pswNidal" element={<PagePasswordChange />} exact />
+        <Route path="/login" element={<PageLogin />} exact />
+        <Route path="/psw" element={<PagePasswordChange />} exact />
+        <Route path="/forgotPassword" element={<ForgotPasswordPage />} exact />
         <Route path='/*' element={<NotFound /> }/>
         <Route path='/unauthorized' element={<Unauthorized/>} exact />
        

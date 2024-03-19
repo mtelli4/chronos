@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       Utilisateur.hasOne(models.Directeur, {
         foreignKey: 'utilisateurId',
       });
+
+      // Lien associatif à la table UTILISATEURSEAV
+      Utilisateur.hasOne(models.UtilisateursEAV, {
+        foreignKey: 'utilisateurId',
+      });
     }
   }
   Utilisateur.init({

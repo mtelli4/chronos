@@ -101,6 +101,7 @@ const UserList = () => {
       setUsers(usersResponse.data);
       setProfessors(professorsResponse.data);
       setStudents(studentsResponse.data);
+      console.log(studentsResponse.data)
       setSortedStudents(studentsResponse.data);
       setSecretaries(secretariesResponse.data);
       setFormations(formationsResponse.data);
@@ -190,6 +191,7 @@ const UserList = () => {
             {view === 'prof' && <th>Vacataire</th>}
             {view === 'eleves' && <th>Numéro étudiant</th>}
             {view === 'eleves' && <th>Tiers temps</th>}
+            {view === 'eleves' && <th>Délégué</th>}
             {view === 'eleves' && <th>Formation</th>}
             <th>Actions</th>
           </tr>
@@ -204,6 +206,7 @@ const UserList = () => {
               {view === 'prof' && <td>{user.vacataire ? 'Oui' : 'Non'}</td>}
               {view === 'eleves' && <td>{user.numeroEtudiant ?? ''}</td>}
               {view === 'eleves' && <td>{user.tiersTemps ? 'Oui' : 'Non'}</td>}
+              {view === 'eleves' && <td>{user.delegue ? 'Oui' : 'Non'}</td>}
               {view === 'eleves' && <td>{user.Formation.libelle ?? ''}</td>}
               <td>
                 <button onClick={() => updateUser(user.id)}>Éditer</button>
