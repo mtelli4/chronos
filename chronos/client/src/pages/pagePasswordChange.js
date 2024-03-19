@@ -37,22 +37,34 @@ const PagePasswordChange = () => {
         setSubmitting(false);
         return;
       }
-  
-      // Envoyer les données au serveur pour authentification
-      axios.post("http://localhost:5000/newPsw", { 'email': values.email, 'password': values.password })
-        .then((response) => {
-          console.log("Succès");
-          console.log(response);
-          const result = response.data;
-          if (result === 1) {
-            navigate('/login'); // Si route présente dans App.js, redirige vers le composant/page associé
-          } else {
-            console.log("Erreur lors du changement de mot de passe");
-          }
-        }).catch(function (error) {
-          console.log("Echec");
-          console.log(error);
-        });
+
+      // Mauvais code
+      axios.get("http://localhost:5000/usersEAV/exists", { params: { userEmail: values.email, attribute: 'verificationCode', value: values.verificationCode } })
+      .then((response) => {
+        const { exists } = response.data;
+        if (! exists) {
+          alert('RATÉ');
+          setSubmitting(false);
+          return;
+        } else {
+          // Envoyer les données au serveur pour authentification
+          axios.post("http://localhost:5000/newPsw", { 'email': values.email, 'password': values.password, value: values.verificationCode })
+          .then((response) => {
+            console.log("Succès");
+            console.log(response);
+            const result = response.data;
+            if (result === 1) {
+              alert('Mot de passe changé avec succès !')
+              navigate('/login'); // Si route présente dans App.js, redirige vers le composant/page associé
+            } else {
+              console.log("Erreur lors du changement de mot de passe");
+            }
+          }).catch(function (error) {
+            console.log("Echec");
+            console.log(error);
+          });
+        }
+      });
     };  
   
     return (
@@ -72,7 +84,9 @@ const PagePasswordChange = () => {
                 >
                     <Form className='LoginFormCont'>
                       <ChronosInput width="100%" type="email" name="email" component="div" title="Email :" />
+                      <ChronosInput width="100%" type="verificationCode" name="verificationCode" component="div" title="Code de vérification à 6 chiffres :" />
                       <ChronosInput width="100%" type="password" name="password" component="div" title="Nouveau mot de passe :"/>
+                      <p>(Doit contenir un caractère spécial parmi ceux-ci : @$!%*#?&)</p>
                       <ChronosInput width="100%" type="password" name="confirmPassword" component="div" title="Confirmez le mot de passe :"/>
           
                   

@@ -63,6 +63,8 @@ app.use("/statut", statutsRouter)
 const evaluationsRouter = require('./routes/Evaluations')
 app.use("/evaluations", evaluationsRouter)
 
+const usersEAVrouter = require('./routes/UtilisateursEAV')
+app.use("/usersEAV", usersEAVrouter)
 
 // Redirection/route pour backend Login (analyse email et mdp)
 const loginRouter = require('./routes/Login')
@@ -99,6 +101,10 @@ app.use("/secretary_formation", getFormationsSecretaryRouter)
 const setValidAbsenceRouter = require('./routes/setValidAbsence') 
 app.use("/set_valid_absence", setValidAbsenceRouter)
 
+// Redirection/route pour backend setValidAbsence (valider l'absence d'un élève)
+const apiRouter = require('./routes/api') 
+app.use("/api", apiRouter)
+
 const getMessageRouter = require('./routes/Message')
 app.use("/messages", getMessageRouter)
 
@@ -108,71 +114,4 @@ app.use(express.urlencoded({ limit: "25mb" }));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
-});
-
-var software_mail = process.env.SENDER_EMAIL;
-var software_password = process.env.APPLICATION_PASSWORD;
-
-function sendEmail({recipient_email, subject, message}) {
-  return new Promise((resolve, reject) => {
-    var transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: software_mail,
-        pass: software_password,
-      },
-    });
-    
-    const mail_configs = {
-      from: software_mail,
-      to: recipient_email,
-      subject: subject,
-      html: `<!DOCTYPE html>
-                <html lang="en" >
-                <head>
-                  <meta charset="UTF-8">
-                  <title>CodePen - OTP Email Template</title>
-                </head>
-                <body>
-                <!-- partial:index.partial.html -->
-                <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
-                  <div style="margin:50px auto;width:70%;padding:20px 0">
-                    <div style="border-bottom:1px solid #eee">
-                      <img style="width:300px; height:auto" src="cid:logo@logo">
-                    </div>
-                    <p style="font-size:1.1em">Bonjour,</p>
-                    <p>Ceci est un e-mail test. Il peut être utilisé pour envoyer des mails d'information classique, des notifications ou des messages tel que des réinitialisation de mot de passe.</p>
-                    <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">Ici peut être inséré un message custom récupéré dans la fonction <br>${message}</h2>
-                    <p style="font-size:0.9em;">Cordialement,<br />L'équipe CHRONOS</p>
-                    <hr style="border:none;border-top:1px solid #eee" />
-                    <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
-                      <p>Night friends Inc</p>
-                    </div>
-                  </div>
-                </div>
-                </body>
-              </html>`,
-        attachments: [
-          {
-            filename: 'logo.png', // Nom de fichier à utiliser dans l'e-mail
-            path: __dirname +"\\images\\logo.png", //mettre logo chronos à la place
-            cid: 'logo@logo'
-          },
-        ],
-      };
-    transporter.sendMail(mail_configs, function (error, info) {
-      if (error) {
-        console.log(error);
-        return reject({ message: `An error has occured` });
-      }
-      return resolve({ message: "Email sent succesfuly" });
-    });
-  });
-}
-
-//API ROUTE FOR MAILING
-app.post("/send_email", (req, res) => {
-  sendEmail(req.body)
-    .then((response) => res.send(response.message))
-    .catch((error) => res.status(500).send(error.message));
 });

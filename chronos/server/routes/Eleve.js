@@ -57,6 +57,8 @@ router.post("/insertListEleves", async (req, res) => {
 
       // Creating user array
       const utilisateur = {
+          nom: eleve.nom,
+          prenom: eleve.prenom,
           email: eleve.email,
       }
 
@@ -88,8 +90,14 @@ router.post("/insertListEleves", async (req, res) => {
       eleve.tiersTemps = tiersTemps;
       eleve.formationId = formationId;
 
+      const eleveToInsert = {
+        numeroEtudiant: eleve.numeroEtudiant,
+        tiersTemps: eleve.tiersTemps,
+        formationId: eleve.formationId
+      }
+
       if (user) {
-        eleve.utilisateurId = user.id;
+        eleveToInsert.utilisateurId = user.id;
 
         // Update or create student
         await Eleve
@@ -97,14 +105,14 @@ router.post("/insertListEleves", async (req, res) => {
         .then(async function (foundItem) {
             if (!foundItem) {
                 // Item not found, create a new one
-                await Eleve.create(eleve);
+                await Eleve.create(eleveToInsert);
             } else {
                 // Found an item, update it
-                await Eleve.update(eleve, {where: {utilisateurId: user.id}});
+                await Eleve.update(eleveToInsert, {where: {utilisateurId: user.id}});
             }
         });
       } else {
-        await Eleve.create(eleve);
+        await Eleve.create(eleveToInsert);
       }     
     }
     res.json(errors);
