@@ -78,7 +78,7 @@ export const CalendarButton = styled.img`
     top: 50%;
     transform: translateY(-50%);
     transition: all 0.25s;
-
+    display:${props => props.weekIndex == 1 && props.type == "prev" || props.weekIndex == 52 && props.type == "after"? "none" : "block"};
     &:hover {
         transform: scale(1.1) translateY(-50%);
     }
