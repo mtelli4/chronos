@@ -1,0 +1,118 @@
+.callForm {
+    width: 90%;
+    max-width: 850px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-left: 20px;
+    margin-bottom: 60px;
+    height: 75vh;
+    padding-right: 10px;
+    overflow: auto;
+}
+
+.callTitle {
+    background: #eee;
+    padding: 30px 40px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.callTitle h3 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    width: 60%;
+}
+
+.callTitle h4 {
+    font-size: 1.25rem;
+    font-weight: normal;
+    width: 60%;
+}
+
+.callWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+    width: 90%;
+    margin-left: 60px;
+    max-width: 1200px;
+}
+
+.justifyCont {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.justifyCardCont {
+    display: grid;
+    width: 95%;
+    margin: 0 auto;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin-bottom: 60px;
+}
+
+@media (max-width : 1100px) {
+    .justifyCardCont {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width : 900px) {
+    .callWrap {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width : 750px) {
+    .justifyCardCont {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (max-width : 600px) {
+    .callTitle {
+        border-radius: 0px;
+        width: 100%;
+        max-width: none;
+    }
+
+    .justifyCont {
+        width: 100%;
+    }
+
+    .callTitle h3 {
+        font-size: 1.75rem;
+        font-weight: normal;
+    }
+    
+    .callTitle h4 {
+        font-size: 1rem;
+        font-weight: normal;
+    }
+
+    .callWrap {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        margin-left: 0px;
+        max-width: none;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .callTitle {
+        padding: 20px 30px;
+        border-radius: 0px;
+        width: 100%;
+        max-width: none;
+    }
+}

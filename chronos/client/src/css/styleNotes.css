@@ -11,7 +11,7 @@
 
 .notesSelectCont {
     display: flex;
-
+    gap: 5px;
 }
 
 .notesTableCont {

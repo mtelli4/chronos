@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 // Import des sous composants
 import StudentAbsList from '../StudentAbsList';
+import ChronosValidateCard from '../ChronosValidateCard';
 
 
 const FormationList = ({ Formation }) => {
@@ -21,6 +22,7 @@ const FormationList = ({ Formation }) => {
                     .map((student) => ( // Groupes de chaque formation
                         <StudentAbsList key={student.id} Student={student} />
                 ))}
+                
             </div>}
         </div>
     );

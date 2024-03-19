@@ -57,6 +57,9 @@ app.use("/formations", formationsRouter)
 const periodesRouter = require('./routes/Periode')
 app.use("/periodes", periodesRouter)
 
+const statutsRouter = require('./routes/Statut')
+app.use("/statut", statutsRouter)
+
 const evaluationsRouter = require('./routes/Evaluations')
 app.use("/evaluations", evaluationsRouter)
 

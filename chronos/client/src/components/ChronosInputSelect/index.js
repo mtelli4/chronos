@@ -1,13 +1,13 @@
 import React from 'react'
 import { ChronosInputSelectCont, ChronosInputSelectErrorMessage, ChronosInputSelectField, ChronosInputSelectLabel, ChronosInputSelectOption } from './ChronosInputSelectElements'
 
-const ChronosInputSelect = ({ defaultLabel, label, name, options }) => {
+const ChronosInputSelect = ({ defaultLabel, label, name, options, id }) => {
   return (
     <ChronosInputSelectCont>
         <ChronosInputSelectLabel htmlFor={name}>{label}</ChronosInputSelectLabel>
         <ChronosInputSelectErrorMessage name={name} component="span"/>
 
-        <ChronosInputSelectField component="select" name={name}>
+        <ChronosInputSelectField component="select" id={id} name={name}>
 
             <ChronosInputSelectOption defaultValue value="">
                 {defaultLabel || "Sélectionnez la formation"}

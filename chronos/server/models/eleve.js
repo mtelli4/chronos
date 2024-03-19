@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'groupeId',
         timestamps: false
       });
+
+      
+      Eleve.hasMany(models.Absence, { 
+        foreignKey: 'eleveId', 
+        onDelete: 'SET NULL' 
+      });
     }
   }
 

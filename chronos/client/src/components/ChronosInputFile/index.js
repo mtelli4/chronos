@@ -8,9 +8,9 @@ const ChronosInputFile = ({ name, accept, handleFileChange }) => {
     const [text, setText] = React.useState("...");
 
     function handleChange(e) {
-        handleFileChange();
+        handleFileChange(e);
         console.log(e);
-        setText("Fichier");
+        setText(e.target.files[0].name);
     }
 
     return (
@@ -18,8 +18,9 @@ const ChronosInputFile = ({ name, accept, handleFileChange }) => {
         <ChronosInputFileLabel for={name} onMouseLeave={() => setIsHovered(false)} onMouseEnter={() => setIsHovered(true)}>
             <ChronosInputFileImg src={isHovered ? iconWhite : iconBlack} />
         </ChronosInputFileLabel>
+        
         <ChronosInputFileText>{ text }</ChronosInputFileText>
-        <ChronosInputFileInput id={name} name={name} type="file" accept={accept} onChange={(e) => handleChange(e)} />
+        <ChronosInputFileInput id={name} name={name} type="file" accept={accept} onChange={(event) => handleChange(event)} />
     </>
   )
 }

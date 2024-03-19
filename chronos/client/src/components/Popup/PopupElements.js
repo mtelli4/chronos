@@ -17,6 +17,10 @@ export const PopupCont = styled.div`
     @media screen and (max-width : 870px) {
         width: 90%;
     }
+
+    @media screen and (max-width : 400px) {
+        width: 95%;
+    }
 `;
 
 export const PopupScreen = styled.div`

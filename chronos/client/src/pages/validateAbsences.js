@@ -31,7 +31,7 @@ const ValidationAbsPage = () => {
     <div>
       <h1>Liste des absences</h1>
       {formations.map((formation) => ( 
-        <FormationList key={formation.id} Formation={formation}  />
+        <FormationList key={formation.id} Formation={formation} />
       ))}
     </div>
   );

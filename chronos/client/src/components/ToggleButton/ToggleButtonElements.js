@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ButtonToggleCont = styled.div`
+export const ButtonToggleCont = styled.button`
     width: 100%;
     aspect-ratio: 1;
     background: #000;
@@ -8,12 +8,14 @@ export const ButtonToggleCont = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.25s, background 0s;
+    transition: all 0.25s;
     cursor: pointer;
+    outline: none;
+    border: none;
 
     &:hover {
         transform: scale(1.1);
-        background: linear-gradient(180deg, #AD6DFF, #8734DB);
+        background: ${props => props.color ? props.color : "linear-gradient(180deg, #AD6DFF, #8734DB)"};
     }
 
     &:active {

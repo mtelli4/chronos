@@ -45,11 +45,12 @@ export const ChronosInputTitle = styled.label`
 export const ChronosInputField = styled(Field)`
     width: 100%;
     border: 3px solid #000;
-    height: 100%;
+    height: ${props => props.height ? props.height : "40px"};
     border-radius: 6px;
     outline: none;
     padding-left: 10px;
     font-size: 1.25rem;
+    background: none;
 
     &:active {
         border: 3px solid #000;
@@ -67,7 +68,7 @@ export const ChronosInputErrorMessage = styled(ErrorMessage)`
 
 export const ChronosInputFieldCont = styled.div`
     width: 100%;
-    height: 40px;
+    height: 100%;
 
     position: relative;
 `;
