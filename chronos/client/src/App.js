@@ -21,7 +21,7 @@ import Unauthorized from './pages/error/Unauthorized';
 import NotFound from './pages/error/NotFound';
 import Header from "./components/Header"
 import PageNotes from './pages/pageNotes';
-import PageImportEleves from './pages/pageImportEleves';
+import PageImportEleves from './pages/fileImport';
 import Users from './pages/users';
 import { authService } from './services/authService';
 import ForgotPasswordPage from './pages/forgotPassword';
