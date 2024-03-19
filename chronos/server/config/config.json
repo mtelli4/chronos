@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "Tototiti123",
+    "password": "",
     "database": "ingrid",
     "host": "127.0.0.1",
     "dialect": "mysql"
