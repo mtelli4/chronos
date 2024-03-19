@@ -8,7 +8,7 @@ import pic from "../../images/test.jpg";
 import ChronosButton from "../ChronosButton"
 import grid from "../../images/la-grille.png";
  
-const Header = ({ currentRole, handleRoleChange, userRoles, setNavVisible, links, isVisible }) => { // links = [{title : string, to : string}]
+const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : string, to : string}]
   const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -35,7 +35,7 @@ const Header = ({ currentRole, handleRoleChange, userRoles, setNavVisible, links
     authService.setCurrentRoleId(userRoles[selectedRole]);
     window.location.reload();
   };
-""
+
   return (
     <>
       <div style={{height: "15vh"}}></div>

@@ -1,12 +1,12 @@
 import React from 'react'
 import { ButtonToggleCont, ButtonToggleImg, ButtonToggleText, ButtonToggleWrap } from './ToggleButtonElements'
 
-const ToggleButton = ({ type, src, action, text }) => {
+const ToggleButton = ({ color, type, src, action, text }) => {
     const [showText, setShowText] = React.useState(false);
 
   return (
     <ButtonToggleWrap>
-        <ButtonToggleCont type={type} onMouseEnter={() => setShowText(true)} onMouseLeave={() => setShowText(false)} onClick={() => action()}>
+        <ButtonToggleCont color={color} type={type} onMouseEnter={() => setShowText(true)} onMouseLeave={() => setShowText(false)} onClick={() => action()}>
             <ButtonToggleImg src={src} />
         </ButtonToggleCont>
 

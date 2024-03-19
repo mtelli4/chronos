@@ -18,10 +18,10 @@ const ChronosInput = ({ width, height, type, name, title, component, value, onCh
   }
 
   return (
-    <ChronosInputCont height={height} width={width}>
+    <ChronosInputCont width={width}>
         <ChronosInputTitle htmlFor={name}>{title}</ChronosInputTitle>
         <ChronosInputFieldCont>
-          <ChronosInputField onChange={onChange} value={value} type={type == "password" ? (eyeIcon === eyeOpened ? "text" : type) : type} name={name}></ChronosInputField>
+          <ChronosInputField height={height} onChange={onChange} value={value} type={type == "password" ? (eyeIcon === eyeOpened ? "text" : type) : type} name={name}></ChronosInputField>
           {
             type == "password" ? (<ChronosEye onClick={() => {handleClick()}} src={eyeIcon} />) : ""
           }

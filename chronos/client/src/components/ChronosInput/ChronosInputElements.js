@@ -26,7 +26,6 @@ const appear = keyframes`
 
 export const ChronosInputCont = styled.div`
     width: ${props => props.width};
-    height: ${props => props.height};
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -46,7 +45,7 @@ export const ChronosInputTitle = styled.label`
 export const ChronosInputField = styled(Field)`
     width: 100%;
     border: 3px solid #000;
-    height: 100%;
+    height: ${props => props.height ? props.height : "40px"};
     border-radius: 6px;
     outline: none;
     padding-left: 10px;

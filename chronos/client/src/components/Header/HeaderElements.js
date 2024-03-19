@@ -155,8 +155,8 @@ export const HeaderWrap = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: ${props => props.isActive ? "100vh" : "15vh"};
+    height: ${props => props.isActive ? "100vh" : "11vh"};
     transition: all ${props => props.isActive ? " 0s linear 0s" : " 0s linear 0.25s"};
     overflow: hidden;
-    z-index: 99999;
+    z-index: 999;
 `;

@@ -2,7 +2,6 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import React, {useEffect,useState} from 'react';
 import axios from 'axios';
-import { authService } from './services/authService';
 import CreateCourse from './pages/createCourse';
 import Agenda from './pages/agenda';
 import PageEdt from './pages/pageEdt';
@@ -33,6 +32,7 @@ import Users from './pages/users';
 import { authService } from './services/authService';
 
 import MessageApp from './pages/messages';
+import PageEmail from './pages/pageEmail';
 function App() {
 
   const [listCours, setListCours] = useState([]);
@@ -67,7 +67,6 @@ function App() {
 
     // Mettre à jour le local storage avec le nouveau rôle sélectionné
     authService.setCurrentRole(selectedRole);
-    setCurrentRole(selectedRole);
 
     authService.setCurrentRoleId(userRoles[selectedRole]);
   };
@@ -77,7 +76,6 @@ function App() {
     setUserRoles(roles)
 
     const currentRole = authService.getCurrentRole()
-    setCurrentRole(currentRole)
 
     const email = authService.getUserEmail()
     setUserEmail(email)
@@ -86,7 +84,7 @@ function App() {
   return (
 
     <Router>
-      <Header currentRole={currentRole} handleRoleChange={handleRoleChange} userRoles={userRoles} setNavVisible={setNavVisible} isVisible={headerVisibility} links={[{title:"Calendrier", to:"/edt"}, {title: "notes", to:"/notesNidal"}]} />
+      <Header currentRole={currentRole} setNavVisible={setNavVisible} isVisible={headerVisibility} links={[{title:"Calendrier", to:"/edt"}, {title: "notes", to:"/notesNidal"}]} />
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
         <Routes>
@@ -134,6 +132,7 @@ function App() {
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
 
         <Route path="/email" element={<EmailForm />} exact />
+        <Route path="/emailNidal" element={<PageEmail />} exact />
         <Route path="/export-csv" element={<CSVExportPage />} exact />
         {/* test branch notes lucas */}
         <Route path="/notes" element={<Notes />} exact />
