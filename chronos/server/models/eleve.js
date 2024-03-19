@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     numeroEtudiant: DataTypes.STRING,
     trombinoscope: DataTypes.STRING,
     tiersTemps: DataTypes.BOOLEAN,
+    delegue: DataTypes.BOOLEAN,
     formationId: {
       type: DataTypes.INTEGER,
       references: {

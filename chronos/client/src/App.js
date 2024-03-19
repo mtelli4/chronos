@@ -29,7 +29,10 @@ import PageImportEleves from './pages/pageImportEleves';
 import PageCall from './pages/pageCall';
 import PageJustify from './pages/pageJustify';
 import PageValidate from './pages/pageValidate';
+import Users from './pages/users';
+import { authService } from './services/authService';
 
+import MessageApp from './pages/messages';
 function App() {
 
   const [listCours, setListCours] = useState([]);
@@ -41,10 +44,22 @@ function App() {
 
   const [headerVisibility, setHeaderVisibility] = useState(true);
   const [navVisible, setNavVisible] = useState(false);
+
+  let headerRoutes = [
+    {title:"Calendrier", to:"/"},
+    {title: "Notes", to:"/notes"}
+  ];
+  
+  const currentRole = authService.getCurrentRole();
+  
+  // Routes for admins/secretaires
+  if (['ROLE_SECRETARY', 'ROLE_ADMIN'].includes(currentRole)) {
+    headerRoutes.push({title: "Imports", to:'/importStudents'});
+    headerRoutes.push({title: "Utilisateurs", to:'/users'})
+  }
   
   const [userEmail, setUserEmail] = useState();
   const [userRoles, setUserRoles] = useState();
-  const [currentRole, setCurrentRole] = useState();
   const [currentWeek, setCurrentWeek] = useState([]);
 
   const handleRoleChange = (event) => {
@@ -75,18 +90,20 @@ function App() {
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
         <Routes>
-          <Route exact path='/' element={<PrivateRoute/>} />
-          <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
-          <Route path="/createcourse" element={<CreateCourse />} exact />
-          <Route path="/edt" element={<PageEdt />} exact /> 
-          <Route path="/importStudents" element={<FileImport />} exact />
-          <Route path="/importStudentNidal" element={<PageImportEleves />} exact />
-        
-          <Route path="/email" element={<EmailForm />} exact />
-          <Route path="/export-csv" element={<CSVExportPage />} exact />
-          <Route path="/notes" element={<Notes />} exact />
-          <Route path="/notesNidal" element={<PageNotes />} exact />
-
+          <Route exact path='/' element={<PrivateRoute/>}>
+            <Route path="/ade" element={<Agenda listCours={listCours}/>} exact />
+            <Route path="/createcourse" element={<CreateCourse />} exact />
+            <Route path="/edt" element={<PageEdt />} exact /> 
+            <Route path="/importStudents" element={<FileImport />} exact />
+            <Route path="/users" element={<Users />} exact />
+            <Route path="/importStudentNidal" element={<PageImportEleves />} exact />
+          
+            <Route path="/email" element={<EmailForm />} exact />
+            <Route path="/export-csv" element={<CSVExportPage />} exact />
+            <Route path="/notes" element={<Notes />} exact />
+            <Route path="/notesNidal" element={<PageNotes />} exact />
+          </Route>
+          
           {/* -------------- ADMIN ROUTES -----------------*/}
           <Route path='/admin/*' element={<AdminPrivateRoute/>} />
           <Route index element={<AdminDashboard />} />
@@ -104,20 +121,22 @@ function App() {
 
           <Route path="/validate" element={<PageValidate />} exact />
           <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
-          
-
-          {/* -------------- ADMIN ROUTES -----------------*/}
-          <Route path='/admin/*' element={<AdminPrivateRoute/>} />
-            <Route index element={<AdminDashboard />} />
-            <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
-
-          <Route path="/call" element={<CallForm />} exact />
 
         {/* -------------- PUBLIC ROUTES -----------------*/}
         <Route path="/login" element={<LoginForm />} exact />
         <Route path="/psw" element={<ChangePasswordForm />} exact />
+        <Route path="/loginNidal" element={<PageLogin />} exact />
+        <Route path="/pswNidal" element={<PagePasswordChange />} exact />
         <Route path='/*' element={<NotFound /> }/>
         <Route path='/unauthorized' element={<Unauthorized/>} exact />
+        <Route path="/call" element={<CallForm />} exact />
+
+        {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
+
+        <Route path="/email" element={<EmailForm />} exact />
+        <Route path="/export-csv" element={<CSVExportPage />} exact />
+        {/* test branch notes lucas */}
+        <Route path="/notes" element={<Notes />} exact />
       </Routes>
     </Router>
   );

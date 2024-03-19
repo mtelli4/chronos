@@ -25,6 +25,17 @@ const Header = ({ currentRole, handleRoleChange, userRoles, setNavVisible, links
     navigate('/login');
   } 
 
+  const userRoles = authService.getUserRoles();
+
+  const handleRoleChange = (event) => {
+    const selectedRole = event.target.value;
+
+    // Mettre à jour le local storage avec le nouveau rôle sélectionné
+    authService.setCurrentRole(selectedRole);
+    authService.setCurrentRoleId(userRoles[selectedRole]);
+    window.location.reload();
+  };
+""
   return (
     <>
       <div style={{height: "15vh"}}></div>
@@ -37,9 +48,9 @@ const Header = ({ currentRole, handleRoleChange, userRoles, setNavVisible, links
 
         <HeaderNav isActive={isActive}>
           <HeaderProfile src={pic} />
-          <HeaderSelect id="roleSelector" value={currentRole} onChange={handleRoleChange}>
+          <HeaderSelect id="roleSelector" value={authService.getCurrentRole()} onChange={handleRoleChange}>
                 {Object.keys(userRoles ?? {}).map((role) => (
-                  <option onClick={() => {window.location.reload(true); console.log("ggggg")}} key={role} value={role}>
+                  <option key={role} value={role}>
                     {role}
                   </option>
                 ))}

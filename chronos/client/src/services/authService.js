@@ -17,6 +17,15 @@ const login = (userData) => {
     return axios.post("http://localhost:5000/login", userData)
 }
 
+const getUserId = () => {
+    const token = getToken();
+    if (token) {
+        const payload = jwtDecode(token)
+        return payload?.userId
+    }
+    return null;
+}
+
 const getUserEmail = () => {
     const token = getToken();
     if (token) {
@@ -67,4 +76,4 @@ const getCurrentRoleId = () => {
 }
 
 
-export  const authService = { logOut, getToken, setToken, login, getUserEmail, getUserRoles, isLoggedIn, setCurrentRole, getCurrentRole, setCurrentRoleId, getCurrentRoleId};
+export  const authService = { getUserId, logOut, getToken, setToken, login, getUserEmail, getUserRoles, isLoggedIn, setCurrentRole, getCurrentRole, setCurrentRoleId, getCurrentRoleId};

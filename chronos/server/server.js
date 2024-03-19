@@ -39,6 +39,12 @@ app.use("/cours", coursRouter)
 const notesRouter = require('./routes/Notes')
 app.use("/notes", notesRouter)
 
+const utilisateursRouter = require('./routes/Utilisateur')
+app.use("/utilisateurs", utilisateursRouter)
+
+const secretairesRouter = require('./routes/Secretaire')
+app.use("/secretaires", secretairesRouter)
+
 const elevesRouter = require('./routes/Eleve')
 app.use("/eleves", elevesRouter)
 
@@ -62,7 +68,6 @@ app.use("/evaluations", evaluationsRouter)
 const loginRouter = require('./routes/Login')
 app.use("/login", loginRouter)
 
-// Redirection/route pour backend newPassword (changement de mot de passe)
 const newPasswordRouter = require('./routes/newPassword')
 app.use("/newpsw", newPasswordRouter)
 
@@ -94,10 +99,12 @@ app.use("/secretary_formation", getFormationsSecretaryRouter)
 const setValidAbsenceRouter = require('./routes/setValidAbsence') 
 app.use("/set_valid_absence", setValidAbsenceRouter)
 
-
+const getMessageRouter = require('./routes/Message')
+app.use("/messages", getMessageRouter)
 
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ limit: "25mb" }));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
