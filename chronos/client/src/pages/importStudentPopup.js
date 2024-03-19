@@ -20,7 +20,7 @@ const ImportStudentPopup = ({ initialValues, validationSchemaStudent, formations
               <Form className="importStudentFormCont">
                 {/* Compo select */}
                 <h4 className='importStudentSubTitle'>Formation</h4>
-                <ChronosInputSelect name={"name"} label={"Veuillez renseigner la formation ..."} options={formations} />
+                <ChronosInputSelect id="formationSelect" name={"name"} label={"Veuillez renseigner la formation ..."} options={formations} />
                 <a className='importStudentLink' href="/import_eleve_vierge.xlsx" download>
                   Modèle d'import élève
                 </a>
