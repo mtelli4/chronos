@@ -27,6 +27,7 @@ import PageNotes from './pages/pageNotes';
 import PageImportEleves from './pages/pageImportEleves';
 import PageCall from './pages/pageCall';
 import PageJustify from './pages/pageJustify';
+import PageValidate from './pages/pageValidate';
 
 function App() {
 
@@ -73,6 +74,8 @@ function App() {
 
           <Route path="/justify" element={<PageJustify />} exact />
           <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+
+          <Route path="/validate" element={<PageValidate />} exact />
           <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
           
 

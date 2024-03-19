@@ -68,6 +68,7 @@ export const ChronosJustifyCardReason = styled.div`
 export const ChronosJustifyCardButton = styled.div`
     position: absolute;
     top: 20px;
+    z-index: 999;
     right: 20px;
 
     transition: all 0.25s cubic-bezier(.76,1.65,0,1);
