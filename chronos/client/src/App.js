@@ -98,23 +98,24 @@ function App() {
           <Route path="/notes" element={<PageNotes />} exact />
 
           {/* Pages absences Kyrian */}
+          <Route path="/callNidal" element={<PageCall />} exact />
           <Route path="/call" element={<CallForm />} exact />
+
+          <Route path="/justify" element={<PageJustify />} exact />
+          <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+
+          <Route path="/validate" element={<PageValidate />} exact />
+          <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+
+          <Route path="/emailLaura" element={<EmailForm />} exact />
+          <Route path="/email" element={<PageEmail />} exact />
+          <Route path="/export-csv" element={<CSVExportPage />} exact />
+
           <Route path='/admin/*' element={<AdminPrivateRoute />}>
             <Route index element={<AdminDashboard />} />
             <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
           </Route>
         </Route>
-
-        {/* Pages absences Kyrian */}
-        <Route path="/callNidal" element={<PageCall />} exact />
-        <Route path="/call" element={<CallForm />} exact />
-
-        <Route path="/justify" element={<PageJustify />} exact />
-        <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
-
-        <Route path="/validate" element={<PageValidate />} exact />
-        <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
-
         {/* -------------- PUBLIC ROUTES -----------------*/}
         <Route path="/login" element={<PageLogin />} exact />
         <Route path="/psw" element={<PagePasswordChange />} exact />
@@ -123,10 +124,6 @@ function App() {
         <Route path='/unauthorized' element={<Unauthorized />} exact />
 
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
-
-        <Route path="/emailLaura" element={<EmailForm />} exact />
-        <Route path="/email" element={<PageEmail />} exact />
-        <Route path="/export-csv" element={<CSVExportPage />} exact />
       </Routes>
     </Router>
   );
