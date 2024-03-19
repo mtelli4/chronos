@@ -1,12 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const { Eleve, Utilisateur, Cours, Groupe, CoursGroupe, GroupeEleve, UtilisateurRole, Professeur,CoursProfesseur } = require('../models')
+const { Op } = require('sequelize');
+const { Eleve, Utilisateur, Cours, Groupe, CoursGroupe, GroupeEleve, UtilisateurRole, Formation, Professeur,CoursProfesseur } = require('../models')
 
 router.get("/", async (req, res) => {
-   const listEleves = await Eleve.findAll()
-   res.json(listEleves);
-})
+  var listEleves;
 
+   const includes = [];
+
+   if (req.query.joinUsers === "true") {
+     includes.push({ model: Utilisateur });
+   }
+
+   if (req.query.joinFormations === "true") {
+     includes.push({ model: Formation });
+   }
+
+   const whereClause = { utilisateurId: { [Op.not]: null } };
+
+   if (includes.length > 0) {
+     listEleves = await Eleve.findAll({ include: includes, where: whereClause });
+   } else {
+     listEleves = await Eleve.findAll();
+   }
+
+  res.json(listEleves);
+});
 
 
 router.post("/insertListEleves", async (req, res) => {

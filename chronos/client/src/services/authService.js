@@ -17,20 +17,20 @@ const login = (userData) => {
     return axios.post("http://localhost:5000/login", userData)
 }
 
-const getUserEmail = () => {
-    const token = getToken();
-    if (token) {
-        const payload = jwtDecode(token)
-        return payload?.email
-    }
-    return null;
-}
-
 const getUserId = () => {
     const token = getToken();
     if (token) {
         const payload = jwtDecode(token)
         return payload?.userId
+    }
+    return null;
+}
+
+const getUserEmail = () => {
+    const token = getToken();
+    if (token) {
+        const payload = jwtDecode(token)
+        return payload?.email
     }
     return null;
 }

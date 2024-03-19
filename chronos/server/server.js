@@ -39,6 +39,12 @@ app.use("/cours", coursRouter)
 const notesRouter = require('./routes/Notes')
 app.use("/notes", notesRouter)
 
+const utilisateursRouter = require('./routes/Utilisateur')
+app.use("/utilisateurs", utilisateursRouter)
+
+const secretairesRouter = require('./routes/Secretaire')
+app.use("/secretaires", secretairesRouter)
+
 const elevesRouter = require('./routes/Eleve')
 app.use("/eleves", elevesRouter)
 
