@@ -2,6 +2,7 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import React, {useEffect,useState} from 'react';
 import axios from 'axios';
+import { authService } from './services/authService';
 import CreateCourse from './pages/createCourse';
 import Agenda from './pages/agenda';
 import PageEdt from './pages/pageEdt';
@@ -41,10 +42,36 @@ function App() {
   const [headerVisibility, setHeaderVisibility] = useState(true);
   const [navVisible, setNavVisible] = useState(false);
   
+  const [userEmail, setUserEmail] = useState();
+  const [userRoles, setUserRoles] = useState();
+  const [currentRole, setCurrentRole] = useState();
+  const [currentWeek, setCurrentWeek] = useState([]);
+
+  const handleRoleChange = (event) => {
+    const selectedRole = event.target.value;
+
+    // Mettre à jour le local storage avec le nouveau rôle sélectionné
+    authService.setCurrentRole(selectedRole);
+    setCurrentRole(selectedRole);
+
+    authService.setCurrentRoleId(userRoles[selectedRole]);
+  };
+
+  useEffect(() => {
+    const roles = authService.getUserRoles()
+    setUserRoles(roles)
+
+    const currentRole = authService.getCurrentRole()
+    setCurrentRole(currentRole)
+
+    const email = authService.getUserEmail()
+    setUserEmail(email)
+  }, []);
+
   return (
 
     <Router>
-      <Header setNavVisible={setNavVisible} isVisible={headerVisibility} links={[{title:"Calendrier", to:"/"}, {title: "notes", to:"/note"}]} />
+      <Header currentRole={currentRole} handleRoleChange={handleRoleChange} userRoles={userRoles} setNavVisible={setNavVisible} isVisible={headerVisibility} links={[{title:"Calendrier", to:"/edt"}, {title: "notes", to:"/notesNidal"}]} />
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
         <Routes>

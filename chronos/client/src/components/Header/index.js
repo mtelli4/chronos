@@ -1,18 +1,23 @@
 import React, {isValidElement, useState} from 'react'
 import { useNavigate } from "react-router-dom"
 import ChronosLogo from '../ChronosLogo';
-import { HeaderCont, HeaderNav, HeaderLinks, HeaderLink, HeaderProfile, HeaderLinkText, HeaderLinkBorder, HeaderBurger, HeaderBurgerLinks, HeaderScreen, HeaderBurgerNav } from "./HeaderElements.js";
+import { HeaderSelect, HeaderWrap, HeaderBurger, HeaderCont, HeaderLink, HeaderLinkBorder, HeaderLinkText, HeaderLinks, HeaderProfile, HeaderNav, HeaderScreen } from "./HeaderElements.js";
 import ProfilePic from '../ProfilePic/index.js';
 import { authService } from "../../services/authService";
 import pic from "../../images/test.jpg";
+import ChronosButton from "../ChronosButton"
+import grid from "../../images/la-grille.png";
  
-const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : string, to : string}]
+const Header = ({ currentRole, handleRoleChange, userRoles, setNavVisible, links, isVisible }) => { // links = [{title : string, to : string}]
   const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-  function handleClick(index) {
+  const handleClick = async (index) => {
     setSelected(index);
+    await sleep(500);
+    setIsActive(false);
   }
 
   const logout = ()=> {
@@ -21,27 +26,45 @@ const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : s
   } 
 
   return (
-    <HeaderCont isVisible={isVisible}>
-        <ChronosLogo fontsize={2.25} />
+    <>
+      <div style={{height: "15vh"}}></div>
+      <HeaderWrap isActive={isActive}>
+        <HeaderCont isVisible={isVisible}>
+          <ChronosLogo fontsize={2.25} />
 
-        <HeaderNav>
-            <HeaderLinks>
-                {links.map((item, index) => (
-                    <HeaderLink key={item.id}>
-                      <HeaderLinkText selected={selected == index} to={item.to} onClick={() => handleClick(index)}>
-                        {item.title}
-                      </HeaderLinkText>
+          <HeaderBurger src={grid} onClick={() => setIsActive(true)} />
+        </HeaderCont>
 
-                      <HeaderLinkBorder selected={selected == index}></HeaderLinkBorder>
-                    </HeaderLink>
+        <HeaderNav isActive={isActive}>
+          <HeaderProfile src={pic} />
+          <HeaderSelect id="roleSelector" value={currentRole} onChange={handleRoleChange}>
+                {Object.keys(userRoles ?? {}).map((role) => (
+                  <option onClick={() => {window.location.reload(true); console.log("ggggg")}} key={role} value={role}>
+                    {role}
+                  </option>
                 ))}
-                <button className="btn btn-danger" onClick={()=> logout()}>
-                    Déconnexion
-                </button>
-            </HeaderLinks>
-            <HeaderProfile isActive={isActive} src={pic} onClick={setNavVisible(true)} />
+          </HeaderSelect>
+
+          <HeaderLinks>
+            {links.map((item, index) => (
+                <HeaderLink key={item.id}>
+                  <HeaderLinkText selected={selected == index} to={item.to} onClick={() => handleClick(index)}>
+                    {item.title}
+                  </HeaderLinkText>
+
+                  <HeaderLinkBorder selected={selected == index}></HeaderLinkBorder>
+                </HeaderLink>
+            ))}
+          </HeaderLinks>
+
+            
+          <ChronosButton action={logout} text="Déconnexion" />
         </HeaderNav>
-    </HeaderCont>
+
+
+        <HeaderScreen isActive={isActive} onClick={() => setIsActive(false)}></HeaderScreen>
+    </HeaderWrap>
+  </>
   )
 }
 

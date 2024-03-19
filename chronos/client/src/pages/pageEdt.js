@@ -5,31 +5,6 @@ import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
 
 const PageEdt = () => {
-  const [userEmail, setUserEmail] = useState();
-  const [userRoles, setUserRoles] = useState();
-  const [currentRole, setCurrentRole] = useState();
-  const [currentWeek, setCurrentWeek] = useState([]);
-
-  const handleRoleChange = (event) => {
-    const selectedRole = event.target.value;
-
-    // Mettre à jour le local storage avec le nouveau rôle sélectionné
-    authService.setCurrentRole(selectedRole);
-    setCurrentRole(selectedRole);
-
-    authService.setCurrentRoleId(userRoles[selectedRole]);
-  };
-
-  useEffect(() => {
-    const roles = authService.getUserRoles()
-    setUserRoles(roles)
-
-    const currentRole = authService.getCurrentRole()
-    setCurrentRole(currentRole)
-
-    const email = authService.getUserEmail()
-    setUserEmail(email)
-  }, []);
 
   let weekLst = 
   [
@@ -203,23 +178,13 @@ const PageEdt = () => {
   const organizedCourses = organizeCoursesByDate(listCours);
 
   return (
-      <>
+      <div className='edtCont'>
           {/* <div className='MonthSelector'></div> */}
-          <p>Ceci est votre role courrant: {currentRole}</p>
-          <div>
-          <label htmlFor="roleSelector">Sélecteur de role: </label>
-          <select id="roleSelector" value={currentRole} onChange={handleRoleChange}>
-              {Object.keys(userRoles ?? {}).map((role) => (
-                <option key={role} value={role}>
-                  {role}
-                </option>
-              ))}
-          </select>
-        </div>
+          
           <div className='calendarCont'>
             <Calendar weekdata={weekLst} onWeekChange={handleWeekChange} />
           </div>
-      </>
+      </div>
   )
 }
 
