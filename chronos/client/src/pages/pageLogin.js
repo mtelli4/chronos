@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ChronosInput from '../components/ChronosInput';
 import ChronosLogo from '../components/ChronosLogo';
 import "../css/styleLogin.css";
-
+import { Link } from 'react-router-dom';
 import { authService } from "../services/authService";
 
 const PageLogin = () => {
@@ -81,6 +81,9 @@ const PageLogin = () => {
             </Form>
             
           </Formik>
+          <button>
+              <Link to="/forgotPassword">Mot de passe oublié ou première connexion ?</Link>
+          </button>
         </div>
       </div>
     </>
