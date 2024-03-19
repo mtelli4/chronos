@@ -10,11 +10,16 @@ module.exports = (sequelize, DataTypes) => {
 
       // Lien associatif à la table MODULECOURS passant à travers la table PROFESSEUR_MODULE
       Professeur.belongsToMany(models.ModuleCours, {
-        through: {
-          model: models.ProfesseurModule,
-        },
+        through: models.ProfesseurModule,
         foreignKey: 'professeurId',
         otherKey: 'moduleId',
+      });
+
+      // Lien associatif à la table COURS passant à travers la table COURS_PROFESSEUR
+      Professeur.belongsToMany(models.Cours, {
+        through: models.CoursProfesseur, 
+        foreignKey: 'professeurId', 
+        otherKey: 'coursId', 
       });
     }
   }

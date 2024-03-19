@@ -56,8 +56,7 @@ const isLoggedIn = () => {
 
 const logOut = ()=> {
     localStorage.clear();
- }
-
+}
 
 const setCurrentRole = (role) => {
     localStorage.setItem('currentRole', role);

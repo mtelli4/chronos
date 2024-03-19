@@ -15,6 +15,7 @@ import PagePasswordChange from './pages/pagePasswordChange';
 import CallForm from './pages/call';
 import JustifyAbsPage from './pages/justifyAbsences';
 import ValidationAbsPage from './pages/validateAbsences';
+import ProfessorList from './pages/professorPresences';
 import CSVExportPage from './pages/exportExample';
 import { PrivateRoute } from './routes/privateRoute';
 import { AdminPrivateRoute } from './routes/adminRoute';
@@ -65,6 +66,7 @@ function App() {
             </Route>
             <Route exact path='/' element={<SecretaryPrivateRoute/>} >
               <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+              <Route path="/prof-pres" element={<ProfessorList />} exact />
             </Route>
             <Route exact path='/' element={<StudentPrivateRoute/>}>
               <Route path="/justif-abs" element={<JustifyAbsPage />} exact />

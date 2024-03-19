@@ -18,11 +18,22 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'coursId',
         otherKey: 'groupeId',
       });
+      
+      // Lien associatif à la table PROFESSEUR passant à travers la table COURS_PROFESSEUR
+      Cours.belongsToMany(models.Professeur, {
+        through: models.CoursProfesseur, 
+        foreignKey: 'coursId', 
+        otherKey: 'professeurId', 
+      });
     }
   }
 
   // Définition des champs de la table COURS
   Cours.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
     // Champ classique
     libelle: DataTypes.STRING,
     debutCours: DataTypes.DATE,
