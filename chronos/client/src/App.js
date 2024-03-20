@@ -96,6 +96,7 @@ function App() {
           <Route path="/email" element={<EmailForm />} exact />
           <Route path="/export-csv" element={<CSVExportPage />} exact />
           <Route path="/notes" element={<PageNotes />} exact />
+          <Route path="/notesLucas" element={<Notes />} exact />
 
           {/* Pages absences Kyrian */}
           <Route path="/callNidal" element={<PageCall />} exact />

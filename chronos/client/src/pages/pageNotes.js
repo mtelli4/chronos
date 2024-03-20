@@ -15,6 +15,8 @@ import PopupAddEval from './PopupAddEval.js';
 import PopupModifyEval from './PopupModifyEval.js';
 import PopupModifyGrade from './popupModifyGrade.js';
 import { CSVLink } from 'react-csv';
+import StudentNoteCard from '../components/StudentNoteCard/index.js';
+import "../css/styleCall.css";
 
 const PageNotes = () => {
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
@@ -484,6 +486,53 @@ const PageNotes = () => {
                     }
 
 
+                </>
+            }
+
+
+            {/* Affichage de la page pour les élèves */}
+            {
+                role.includes('ROLE_USER') &&
+                <>
+                    {/* Formulaire de recherche de notes */}
+                    <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                        <Form className='notesFormulaireRecherche'>
+                        <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
+                        <ChronosButton action={() => setShowTable("user")} text="Chercher" type="submit" id="searchNote" />
+                            <FormObserver />
+                        </Form>
+                    </Formik>
+                    <div className='justifyCardCont'>
+                        {/* Affichage des notes pour chaque évaluation triées par modules  */}
+                        {notes.modules.map((module) => {
+                            // return <>
+                            //     {/* Affichage du nom du module et de la moyenne de l'élève dans ce dernier */}
+                            //     <h1 key={"NomModule" + module.id}>{module.libelle} ({module.moyenne})</h1>
+
+                            //     {notes.evaluations.map((evaluation) => {
+                            //         {/* Affichage du nom de l'évaluation, la moyenne pour celle ci et la note de l'élève*/ }
+                            //         if (notes.hasOwnProperty(module.id) && notes[module.id].hasOwnProperty(evaluation.id)) {
+                            //             return (
+                            //                 <>
+                            //                     <div key={"EvaluationsInfos" + evaluation.id}>
+                            //                         <h3>{evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}):</h3>
+                            //                         <p>
+                            //                             {notes[module.id][evaluation.id].note}/{evaluation.noteMaximale}
+                            //                             {notes[module.id][evaluation.id].hasOwnProperty("statut") && <> {notes[module.id][evaluation.id].statut}</>}
+                            //                         </p>
+                            //                     </div>
+                            //                 </>
+                            //             );
+                            //         }
+                            //         return (<></>);
+                            //     })}
+                            // </>
+
+                            return <StudentNoteCard />
+                        }
+                        )
+                        }
+                    </div>
                 </>
             }
         </>
