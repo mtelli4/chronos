@@ -15,8 +15,6 @@ const ProfessorList = () => {
       try {
         // Requête récupérant les élèves des formations assigné à la secrétaire
         const response = await axios.get(`http://localhost:5000/secretary_professor/${authService.getUserId()}`);
-        console.log("TEST 1");
-        console.log(response);
         // Rempli la liste avec les élèves et leurs formations
         setFormationsList(response.data.Secretaire.Formations);
         console.log(response.data);

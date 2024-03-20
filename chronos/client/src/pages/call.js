@@ -24,8 +24,7 @@ const CallForm = () => {
   useEffect(() => { 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/eleve_cours/${1}`); // 1 = id du cours
-        console.log(response);
+        const response = await axios.get(`http://localhost:5000/eleve_cours/${1}`);
         // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
         setStudentList(
           response.data.Groupes.reduce((accumulator, currentList) => {

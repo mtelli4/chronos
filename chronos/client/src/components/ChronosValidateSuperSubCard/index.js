@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ChronosValidateSuperSubCardButtons, ChronosValidateSuperSubCardCont, ChronosValidateSuperSubCardReason, ChronosValidateSuperSubCardSubTitle, ChronosValidateSuperSubCardTitle } from './ChronosValidateSuperSubCardElements'
 import ChronosButton from '../ChronosButton';
+import { setFormattedDate } from '../../js/utils';
 
 const ChronosValidateSuperSubCard = ({ absence }) => {
 
@@ -52,7 +53,7 @@ const ChronosValidateSuperSubCard = ({ absence }) => {
         </ChronosValidateSuperSubCardTitle>
 
         <ChronosValidateSuperSubCardSubTitle>
-            {absence.Cour.libelle + " - " + absence.Cour.debutCours}
+            {absence.Cour.libelle + " - " + setFormattedDate(absence.Cour.debutCours)}
         </ChronosValidateSuperSubCardSubTitle>
 
         <ChronosValidateSuperSubCardReason>

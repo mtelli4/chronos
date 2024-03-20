@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Secretaire, Formation, FormationSecretaire, ModuleCours, FormationModule, Professeur, ProfesseurModule, Cours, CoursProfesseur, Utilisateur } = require('../models')
+const { Secretaire, Formation, FormationSecretaire, ModuleCours, FormationModule, Professeur, ProfesseurModule, Utilisateur } = require('../models')
 
 
 router.get("/:id", async (req, res) => {

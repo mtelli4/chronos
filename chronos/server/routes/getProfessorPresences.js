@@ -6,8 +6,7 @@ const { Op } = require('sequelize');
 
 router.get("/:id", async (req, res) => {
     const profId =  req.params.id; // obtient le corps de la requête (format json)
-
-    console.log("\n\nTEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST\n\n");
+    
     const now = new Date();
     // Formatage au format de date de la bdd
     const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;

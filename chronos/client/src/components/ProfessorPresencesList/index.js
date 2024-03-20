@@ -14,8 +14,6 @@ const ProfessorPresencesList = ({ Professor }) => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://localhost:5000/professor_presences/${Professor.id}`);
-                console.log("TEST 2");
-                console.log(response);
                 // Rempli la liste des absences de l'étudiant
                 setCoursList(response.data);
             } catch (error) {
