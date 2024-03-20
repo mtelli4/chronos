@@ -12,32 +12,31 @@ router.get("/:id", async (req, res) => {
     // Formatage au format de date de la bdd
     const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-    // requête SQL SELECT
-    const result = await Professeur.findByPk(profId, { 
+    const result = await Cours.findAll({ 
         include: [
             {
-                model: Cours,
-                attributes: [ // Pour récupérer des champs spécifiques
-                    'libelle',
-                    [sequelize.fn('SUM', sequelize.col('Cours.duree')), 'duree'], // Nombre d'appels effectués
-                ],
+                model: Professeur,
+                attributes: [], // Pour ne pas récupérer les champs du professeur
                 through: {
                     model: CoursProfesseur,
                     attributes: { 
                         exclude: ['createdAt', 'updatedAt', 'professeurId', 'coursId'] 
                     },
                 },
-                where: {
-                    debutCours: {
-                        [Op.lt]: formattedDate
-                    }
-                },
+                where: { 'id': profId }
             } 
         ],
-        attributes: [], // Pour ne pas récupérer les champs du professeur
+        attributes: [ // Pour récupérer des champs spécifiques
+            'libelle',
+            [sequelize.fn('SUM', sequelize.col('Cours.duree')), 'duree'], // Nombre d'appels effectués
+        ],
+        where: {
+            appel: 1
+        },
         group: ['Cours.libelle'], // GROUP BY libellé de cours
         raw: true,
     })
+
     console.log(result);
     // Renvoi du résultat (objet JSON)
     res.json(result);
