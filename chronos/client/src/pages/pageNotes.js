@@ -284,6 +284,7 @@ const PageNotes = ({setHeaderVisibility}) => {
             const data = []
             const headers = []
             headers.push({ label: 'Élève', key: 'student' })
+            headers.push({label:'Absences', key:'absence'})
             notes.modules.forEach((module) => {
                 headers.push({ label: `${module.codeApogee} - ${module.libelle}`, key: `${module.id}` })
             })
@@ -291,6 +292,7 @@ const PageNotes = ({setHeaderVisibility}) => {
             notes.eleves.forEach((eleve) => {
                 let obj = {}
                 obj.student = `${eleve.numeroEtudiant} - ${eleve.Utilisateur.nom} ${eleve.Utilisateur.prenom}`;
+                obj.absence = `${eleve.additionalValue}`;
                 notes.modules.forEach((module) => {
                     if (notes.hasOwnProperty(eleve.id) && notes[eleve.id].hasOwnProperty(module.id)) {
                         obj[`${module.id}`] = notes[eleve.id][module.id].note.replace(".", ",")
