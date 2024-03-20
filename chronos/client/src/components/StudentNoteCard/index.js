@@ -1,41 +1,36 @@
 import React from 'react'
 import { StudentNoteCardTitleMoy, StudentNoteCardTitleCont, StudentNoteCardTitle, StudentNoteCardCont, StudentNoteCardContent, StudentNoteCardContentSection, StudentNoteCardContentSectionNote, StudentNoteCardContentSectionTitle } from './StudentNoteCardElemets'
 
-const StudentNoteCard= () => {
+const StudentNoteCard= ({ notes, module }) => {
 
 
   return (
     <StudentNoteCardCont>
         <StudentNoteCardTitleCont>
             <StudentNoteCardTitle>
-                Anglais
+                {module.libelle}
             </StudentNoteCardTitle>
 
             <StudentNoteCardTitleMoy>
-                ( ... )
+                ( {module.moyenne} )
             </StudentNoteCardTitleMoy>
         </StudentNoteCardTitleCont> 
 
         <StudentNoteCardContent>
-            <StudentNoteCardContentSection>
-                <StudentNoteCardContentSectionTitle>
-                    English Oral (Moyenne : /15):
-                </StudentNoteCardContentSectionTitle>
+            {notes.evaluations.map((evaluation) => {
+                if (notes.hasOwnProperty(module.id) && notes[module.id].hasOwnProperty(evaluation.id)) {
+                    return (
+                <StudentNoteCardContentSection>
+                    <StudentNoteCardContentSectionTitle>
+                        {evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}) :
+                    </StudentNoteCardContentSectionTitle>
 
-                <StudentNoteCardContentSectionNote>
-                    15/15
-                </StudentNoteCardContentSectionNote>
-            </StudentNoteCardContentSection> 
-
-            <StudentNoteCardContentSection>
-                <StudentNoteCardContentSectionTitle>
-                    English Oral (Moyenne : /15):
-                </StudentNoteCardContentSectionTitle>
-
-                <StudentNoteCardContentSectionNote>
-                    15/15
-                </StudentNoteCardContentSectionNote>
-            </StudentNoteCardContentSection> 
+                    <StudentNoteCardContentSectionNote>
+                    {notes[module.id][evaluation.id].note}/{evaluation.noteMaximale}
+                    {notes[module.id][evaluation.id].hasOwnProperty("statut") && <> {notes[module.id][evaluation.id].statut}</>}
+                    </StudentNoteCardContentSectionNote>
+                </StudentNoteCardContentSection> )}
+            })}
         </StudentNoteCardContent>
     </StudentNoteCardCont>
   )

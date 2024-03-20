@@ -35,11 +35,18 @@ export const StudentNoteCardTitleCont = styled.div`
 export const StudentNoteCardTitle = styled.h3`
     font-weight: normal;
     font-size: 2rem;
+    width: 75%;
+    display: flex;
+    align-items: center;
 `;
 
 export const StudentNoteCardTitleMoy = styled.div`
     margin-bottom: 4px;
     font-size: 1.5rem;
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
 `;
 
 export const StudentNoteCardContent = styled.div`

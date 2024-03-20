@@ -512,29 +512,7 @@ const PageNotes = ({setHeaderVisibility}) => {
                     <div className='justifyCardCont'>
                         {/* Affichage des notes pour chaque évaluation triées par modules  */}
                         {notes.modules.map((module) => {
-                            // return <>
-                            //     {/* Affichage du nom du module et de la moyenne de l'élève dans ce dernier */}
-                            //     <h1 key={"NomModule" + module.id}>{module.libelle} ({module.moyenne})</h1>
-
-                            //     {notes.evaluations.map((evaluation) => {
-                            //         {/* Affichage du nom de l'évaluation, la moyenne pour celle ci et la note de l'élève*/ }
-                            //         if (notes.hasOwnProperty(module.id) && notes[module.id].hasOwnProperty(evaluation.id)) {
-                            //             return (
-                            //                 <>
-                            //                     <div key={"EvaluationsInfos" + evaluation.id}>
-                            //                         <h3>{evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}):</h3>
-                            //                         <p>
-                            //                             {notes[module.id][evaluation.id].note}/{evaluation.noteMaximale}
-                            //                             {notes[module.id][evaluation.id].hasOwnProperty("statut") && <> {notes[module.id][evaluation.id].statut}</>}
-                            //                         </p>
-                            //                     </div>
-                            //                 </>
-                            //             );
-                            //         }
-                            //         return (<></>);
-                            //     })}
-                            // </>
-                            return <StudentNoteCard />
+                            return <StudentNoteCard key={"NomModule" + module.id} notes={notes} module={module} />
                         }
                         )
                         }
