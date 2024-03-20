@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ChronosJustifyCard from '../components/ChronosJustifyCard'
 
-const PageJustify = () => {
+const PageJustify = ({ setHeaderVisibility}) => {
+
+    React.useEffect(() => {
+        setHeaderVisibility();
+      });
 
     const [absences, setAbsencesList] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement

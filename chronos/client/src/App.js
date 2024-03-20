@@ -41,7 +41,6 @@ function App() {
   }, [])
 
   const [headerVisibility, setHeaderVisibility] = useState(true);
-  const [navVisible, setNavVisible] = useState(false);
 
   let headerRoutes = [
     { title: "Calendrier", to: "/" },
@@ -82,47 +81,47 @@ function App() {
   return (
 
     <Router>
-      <Header currentRole={currentRole} setNavVisible={setNavVisible} isVisible={headerVisibility} links={[{ title: "Calendrier", to: "/edt" }, { title: "notes", to: "/notes" }]} />
+      <Header isVisible={headerVisibility} links={[{ title: "Calendrier", to: "/" }, { title: "notes", to: "/notes" }]} />
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
       <Routes>
         <Route exact path='/' element={<PrivateRoute />}>
           {/* <Route path="/ade" element={<Agenda listCours={listCours} />} exact /> */}
-          <Route path="/createcourse" element={<CreateCourse />} exact />
-          <Route path="/" element={<PageEdt />} exact />
-          <Route path="/importStudents" element={<PageImportEleves />} exact />
-          <Route path="/users" element={<Users />} exact />
+          <Route path="/createcourse" element={<CreateCourse setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+          <Route path="/" element={<PageEdt setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+          <Route path="/importStudents" element={<PageImportEleves setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+          <Route path="/users" element={<Users setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
 
           <Route path="/email" element={<EmailForm />} exact />
-          <Route path="/export-csv" element={<CSVExportPage />} exact />
-          <Route path="/notes" element={<PageNotes />} exact />
+          <Route path="/export-csv" element={<CSVExportPage setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+          <Route path="/notes" element={<PageNotes setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/notesLucas" element={<Notes />} exact />
 
           {/* Pages absences Kyrian */}
-          <Route path="/callNidal" element={<PageCall />} exact />
+          <Route path="/callNidal" element={<PageCall setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/call" element={<CallForm />} exact />
 
-          <Route path="/justify" element={<PageJustify />} exact />
+          <Route path="/justify" element={<PageJustify setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
 
-          <Route path="/validate" element={<PageValidate />} exact />
+          <Route path="/validate" element={<PageValidate setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
 
           <Route path="/emailLaura" element={<EmailForm />} exact />
           <Route path="/email" element={<PageEmail />} exact />
-          <Route path="/export-csv" element={<CSVExportPage />} exact />
+          <Route path="/export-csv" element={<CSVExportPage setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
 
           <Route path='/admin/*' element={<AdminPrivateRoute />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
+            <Route index element={<AdminDashboard setHeaderVisibility={() => setHeaderVisibility(true)} />} />
+            <Route path='test' element={<TestAdmin setHeaderVisibility={() => setHeaderVisibility(true)} />} />{/* pour une URL de type /admin/test */}
           </Route>
         </Route>
         {/* -------------- PUBLIC ROUTES -----------------*/}
-        <Route path="/login" element={<PageLogin />} exact />
-        <Route path="/psw" element={<PagePasswordChange />} exact />
-        <Route path="/forgotPassword" element={<ForgotPasswordPage />} exact />
-        <Route path='/*' element={<NotFound />} />
-        <Route path='/unauthorized' element={<Unauthorized />} exact />
+        <Route path="/login" element={<PageLogin setHeaderVisibility={() => setHeaderVisibility(false)} />} exact />
+        <Route path="/psw" element={<PagePasswordChange setHeaderVisibility={() => setHeaderVisibility(false)} />} exact />
+        <Route path="/forgotPassword" element={<ForgotPasswordPage setHeaderVisibility={() => setHeaderVisibility(false)} />} exact />
+        <Route path='/*' element={<NotFound setHeaderVisibility={() => setHeaderVisibility(false)} />} />
+        <Route path='/unauthorized' element={<Unauthorized setHeaderVisibility={() => setHeaderVisibility(false)} />} exact />
 
         {/* <Route path="/" element={<ClassSquare height={300} />} exact /> */}
       </Routes>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-function NotFound() {
+function NotFound({setHeaderVisibility}) {
+
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
 
   return (<>
     <div>

@@ -4,7 +4,12 @@ import { authService } from '../services/authService';
 import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
 
-const PageEdt = () => {
+const PageEdt = ({setHeaderVisibility}) => {
+  
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
+
   const [userEmail, setUserEmail] = useState();
   const [organizedCourses, setOrganizedCourses] = useState([])
   const role = authService.getCurrentRole();
@@ -134,6 +139,7 @@ const PageEdt = () => {
     const data = weeks.filter((element, index) => weeks.indexOf(element) === index);;
     return data;
   }
+  
   return (
     <>
       {/* <div className='MonthSelector'></div> */}

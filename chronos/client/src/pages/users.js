@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { authService } from "../services/authService";
 
-const UserList = () => {
+const UserList = ({setHeaderVisibility}) => {
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
+
   const [users, setUsers] = useState([]);
   const [professors, setProfessors] = useState([]);
   const [students, setStudents] = useState([]);

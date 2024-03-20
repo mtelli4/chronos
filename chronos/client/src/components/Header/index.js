@@ -8,7 +8,7 @@ import pic from "../../images/test.jpg";
 import ChronosButton from "../ChronosButton"
 import grid from "../../images/la-grille.png";
  
-const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : string, to : string}]
+const Header = ({ links, isVisible }) => { // links = [{title : string, to : string}]
   const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -22,6 +22,7 @@ const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : s
 
   const logout = ()=> {
     authService.logOut();
+    setIsActive(false)
     navigate('/login');
   } 
 
@@ -36,10 +37,14 @@ const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : s
     window.location.reload();
   };
 
+  
+
   return (
     <>
-      <div style={{height: "15vh"}}></div>
-      <HeaderWrap isActive={isActive}>
+      {
+        isVisible &&  <div style={{height: "11vh"}}></div>
+      }
+      <HeaderWrap isVisible={isVisible} isActive={isActive}>
         <HeaderCont isVisible={isVisible}>
           <ChronosLogo fontsize={2.25} />
 

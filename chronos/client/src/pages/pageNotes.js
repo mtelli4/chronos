@@ -18,7 +18,11 @@ import { CSVLink } from 'react-csv';
 import StudentNoteCard from '../components/StudentNoteCard/index.js';
 import "../css/styleCall.css";
 
-const PageNotes = () => {
+const PageNotes = ({setHeaderVisibility}) => {
+
+    React.useEffect(() => {
+        setHeaderVisibility();
+      });
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
     const [notesDetails, setNotesDetails] = useState({})
     const [formations, setFormations] = useState([])

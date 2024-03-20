@@ -2,13 +2,15 @@ import styled from "styled-components";
 
 export const CalendarCont = styled.div`
     width: 100%;
-    min-height: 100%; // TODO mettre en %
+    min-height: 100%;
 
     display: grid;
     grid-template-columns: 10% 90%;
     grid-template-rows: 12% 88%;
     row-gap: 20px;
+    position: relative;
 `;
+
 
 export const CalendarDays = styled.div`
     display: flex;
@@ -22,6 +24,14 @@ export const CalendarDay = styled.span`
     align-items: center;
     font-size: 1.75rem;
     border-bottom: 4px solid black;
+
+    @media (max-width: 900px) {
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 550px) {
+        font-size: 0.75rem;
+    }
 `;
 
 export const CalendarHours = styled.div`
@@ -91,4 +101,60 @@ export const CalendarWeek = styled.div`
     display: flex;
     justify-content: center;
     position: relative;
+`;
+
+export const CalendarSelector = styled.div`
+    width: 90%;
+    max-width: 1250px;
+    margin-left: 40px;
+    height: 90px;
+    display: flex;
+    padding: 0px 30px;
+    align-items: center;
+    gap: 40px;
+    overflow-x: auto;
+    background: #ddd;
+    border-radius: 10px;
+
+    @media (max-width: 750px) {
+        margin: 0 auto;
+        max-width: none;
+    }
+`;
+
+export const CalendarYearButton = styled.img`
+    height: 25%;
+    user-select: none;
+    transition: all 0.25s;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.2);
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+`;
+
+export const CalendarMonth = styled.div`
+    font-size: ${props => props.selected ? "1.75rem" : "1.5rem"};
+    display: block;
+    user-select: none;
+    cursor: pointer;
+    background:  ${props => props.selected ? "linear-gradient(#AD6DFF, #8734DB)" : "#000"};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: font-size 0.5s;
+`;
+
+export const CalendarYearText = styled.div`
+    font-size: 4rem;
+    font-weight: bold;
+    font-style: italic;
+    user-select: none;
+    background: linear-gradient(#AD6DFF, #8734DB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 50px;
 `;
