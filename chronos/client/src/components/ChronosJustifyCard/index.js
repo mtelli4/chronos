@@ -4,9 +4,10 @@ import ChronosInputFile from '../ChronosInputFile'
 import { ChronosJustifyCardTextarea, ChronosJustifyCardButton, ChronosJustifyCardReason, ChronosJustifyCardCont, ChronosJustifyCardSubTitle, ChronosJustifyCardSuperSubTitle, ChronosJustifyCardTextCont, ChronosJustifyCardTitle } from './ChronosJustifyCardElements';
 import ToggleButton from '../ToggleButton';
 import icon from "../../images/coche.png";
+import { setFormattedDate } from '../../js/utils';
 
 const ChronosJustifyCard = ({ Absence, userId, onRemove, idList }) => {
-    // Variable contenant le texte de justification de l'absence
+  // Variable contenant le texte de justification de l'absence
   const [reason, setReason] = useState('');
   // Variable contenant le fichier justificatif d'absence (photo, image, pdf, ..)
   const [file, setFile] = useState(null);
@@ -18,8 +19,6 @@ const ChronosJustifyCard = ({ Absence, userId, onRemove, idList }) => {
     console.log(event)
     setFile(event.target.files[0]);
   };
-
-  console.log(userId);
 
   const handleSubmit = () => {
     if (!(file !== null) && reason === "") {
@@ -57,9 +56,9 @@ const ChronosJustifyCard = ({ Absence, userId, onRemove, idList }) => {
         <ChronosJustifyCardTextCont>
             <ChronosJustifyCardTitle>{Absence.retard === null ? 'Absence' : `Retard de ${Absence.retard} minutes`}</ChronosJustifyCardTitle>
             <ChronosJustifyCardSubTitle>{Absence.Cour.libelle}</ChronosJustifyCardSubTitle>
-            <ChronosJustifyCardSuperSubTitle>{Absence.Cour.debutCours}</ChronosJustifyCardSuperSubTitle>
+            <ChronosJustifyCardSuperSubTitle>{setFormattedDate(Absence.Cour.debutCours)}</ChronosJustifyCardSuperSubTitle>
         </ChronosJustifyCardTextCont>
-
+ 
 
         <ChronosJustifyCardReason>
             <ChronosJustifyCardSubTitle>Raison de l'absence</ChronosJustifyCardSubTitle>

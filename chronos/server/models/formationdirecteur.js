@@ -20,12 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-// Nom du modèle à utiliser dans les fonctions js
+    // Nom du modèle à utiliser dans les fonctions js
     modelName: 'FormationDirecteur',
     // Nom de la table dans mysql
     tableName: 'FORMATION_DIRECTEUR',
     // Désactive les timestamps
-  timestamps: false,
+    timestamps: false,
   });
   return FormationDirecteur;
 };

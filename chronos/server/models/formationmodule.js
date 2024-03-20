@@ -1,39 +1,45 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class FormationModule extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      // Lien associatif à la table FORMATION
+      FormationModule.belongsTo(models.Formation, {
+        foreignKey: 'formationId',
+        onDelete: 'CASCADE', 
+      });
+
+      // Lien associatif à la table MODULE_COURS
+      FormationModule.belongsTo(models.ModuleCours, {
+        foreignKey: 'moduleId',
+        onDelete: 'CASCADE', 
+      });
     }
   }
   FormationModule.init({
-    FormationId:{
+    formationId:{
       type:DataTypes.INTEGER,
       primaryKey: true,
       references:{
-        model:'Formule',
+        model: 'Formation',
         key: 'id'
       }
     },
-    ModuleCoursId: {
+    moduleId: {
       type : DataTypes.INTEGER,
       primaryKey: true,
       references:{
-        model:'ModuleCours',
+        model: 'ModuleCours',
         key: 'id'
       }
     }
   }, {
     sequelize,
     modelName: 'FormationModule',
-    tableName: 'FORMATION_MODULE'
+    tableName: 'FORMATION_MODULE',
+    // Désactive les timestamps
+    timestamps: false,
   });
   return FormationModule;
 };

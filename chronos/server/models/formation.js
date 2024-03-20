@@ -4,13 +4,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Formation extends Model {
     static associate(models) {
-      // Liens associatif à la table MODULE_COURS
-      const { ModuleCours, FormationModule } = models
-      Formation.belongsToMany(ModuleCours, {
-        through:FormationModule, 
-        foreignKey:'FormationId'
-      });
-
       // Lien associatif à la table SECRETAIRE passant à travers la table FORMATION_SECRETAIRE
       Formation.belongsToMany(models.Secretaire, {
         through: models.FormationSecretaire, 
@@ -25,13 +18,23 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'groupeId', 
       });
 
+      // Lien associatif à la table MODULE_COURS passant à travers la table FORMATION_MODULE
+      Formation.belongsToMany(models.ModuleCours, {
+        through: models.FormationModule, 
+        foreignKey: 'formationId', 
+        otherKey: 'moduleId', 
+      });
+
       // Lien associatif à la table DIRECTEUR passant à travers la table FORMATION_DIRECTEUR
       Formation.belongsToMany(models.Directeur, {
-        through:models.FormationDirecteur, 
-        foreignKey:'formationId'
+        through: models.FormationDirecteur, 
+        foreignKey: 'formationId'
       });
       
-      Formation.hasMany(models.Eleve, {foreignKey: 'formationId',});
+      // Lien associatif à la table ELEVE
+      Formation.hasMany(models.Eleve, {
+        foreignKey: 'formationId',
+      });
     }
   }
 

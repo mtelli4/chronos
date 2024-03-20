@@ -4,16 +4,22 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class ModuleCours extends Model {
     static associate(models) {
-      ModuleCours.belongsTo(models.BlocCompetence, { foreignKey: 'blocCompetenceId', onDelete: 'SET NULL' });
-     
-      const { Formation,FormationModule } = models
-      ModuleCours.belongsToMany(Formation, {through:FormationModule, foreignKey:'ModuleCoursId'});
+      // Lien associatif à la table BLOC_COMPETENCE 
+      ModuleCours.belongsTo(models.BlocCompetence, { 
+        foreignKey: 'blocCompetenceId', 
+        onDelete: 'SET NULL' 
+      });
+
+      // Lien associatif à la table FORMATION passant à travers la table FORMATION_MODULE
+      ModuleCours.belongsToMany(models.Formation, {
+        through: models.FormationModule, 
+        foreignKey: 'moduleId', 
+        otherKey: 'formationId', 
+      });
 
       // Lien associatif à la table Professeur passant à travers la table PROFESSEUR_MODULE
       ModuleCours.belongsToMany(models.Professeur, {
-        through: {
-          model: models.ProfesseurModule,
-        },
+        through: models.ProfesseurModule,
         foreignKey: 'moduleId',
         otherKey: 'professeurId',
       });

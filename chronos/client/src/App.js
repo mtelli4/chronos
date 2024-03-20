@@ -12,9 +12,13 @@ import PagePasswordChange from './pages/pagePasswordChange';
 import CallForm from './pages/call';
 import JustifyAbsPage from './pages/justifyAbsences';
 import ValidationAbsPage from './pages/validateAbsences';
+import ProfessorList from './pages/professorPresences';
 import CSVExportPage from './pages/exportExample';
 import { PrivateRoute } from './routes/privateRoute';
 import { AdminPrivateRoute } from './routes/adminRoute';
+import { ProfessorPrivateRoute } from './routes/professorRoute';
+import { SecretaryPrivateRoute } from './routes/secretaryRoute';
+import { StudentPrivateRoute } from './routes/studentRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import TestAdmin from './pages/admin/test';
 import Unauthorized from './pages/error/Unauthorized';
@@ -93,23 +97,32 @@ function App() {
           <Route path="/importStudents" element={<PageImportEleves />} exact />
           <Route path="/users" element={<Users />} exact />
 
-          <Route path="/email" element={<EmailForm />} exact />
-          <Route path="/export-csv" element={<CSVExportPage />} exact />
-          <Route path="/notes" element={<PageNotes />} exact />
+            <Route exact path='/' element={<ProfessorPrivateRoute/>} >
+              <Route path="/call" element={<CallForm />} exact />
+              <Route path="/callNidal" element={<PageCall />} exact />
+            </Route>
+            <Route exact path='/' element={<SecretaryPrivateRoute/>} >
+              <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
+              <Route path="/validate" element={<PageValidate />} exact />
+              <Route path="/prof-pres" element={<ProfessorList />} exact />
+            </Route>
+            <Route exact path='/' element={<StudentPrivateRoute/>}>
+              <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
+              <Route path="/justify" element={<PageJustify />} exact />
+            </Route>
+            
+            
+            {/* -------------- ADMIN ROUTES -----------------*/}
+            <Route path='/admin/*' element={<AdminPrivateRoute/>}>
+              <Route index element={<AdminDashboard />} />
+              <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
+            </Route>
 
-          {/* Pages absences Kyrian */}
-          <Route path="/callNidal" element={<PageCall />} exact />
-          <Route path="/call" element={<CallForm />} exact />
-
-          <Route path="/justify" element={<PageJustify />} exact />
-          <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
-
-          <Route path="/validate" element={<PageValidate />} exact />
-          <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
-
-          <Route path="/emailLaura" element={<EmailForm />} exact />
-          <Route path="/email" element={<PageEmail />} exact />
-          <Route path="/export-csv" element={<CSVExportPage />} exact />
+            <Route path="/email" element={<EmailForm />} exact />
+            <Route path="/export-csv" element={<CSVExportPage />} exact />
+            <Route path="/notes" element={<PageNotes />} exact />
+            {/* <Route path="/email" element={<PageEmail />} exact /> */}
+            <Route path="/export-csv" element={<CSVExportPage />} exact />
 
           <Route path='/admin/*' element={<AdminPrivateRoute />}>
             <Route index element={<AdminDashboard />} />
