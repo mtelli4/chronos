@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { authService } from "../services/authService";
+import "../css/styleUsers.css"
+import ChronosInputSelect from '../components/ChronosInputSelect';
+import ChronosButton from '../components/ChronosButton';
 
 const UserList = ({setHeaderVisibility}) => {
   React.useEffect(() => {
@@ -150,34 +153,23 @@ const UserList = ({setHeaderVisibility}) => {
   };
 
   return (
-    <div>
-      <p>Ceci est votre role courant: {role}</p>
-      <div>
-      <label htmlFor="roleSelector">Sélecteur de role: </label>
-      <select id="roleSelector" value={role} onChange={handleRoleChange}>
-          {Object.keys(userRoles ?? {}).map((role) => (
-            <option key={role} value={role}>
-              {role}
-            </option>
-          ))}
-      </select>
-      </div>
-
-      <h1>Liste des utilisateurs</h1>
-      <div>
+    <div className='usersCont'>
+      <h1 className='usersTitle'>Liste des utilisateurs</h1>
+      <div className='usersForm'>
         <label htmlFor="view-select">Vue :</label>
         <select id="view-select" value={view} onChange={handleViewChange}>
-        {['ROLE_SUPERADMIN', 'ROLE_ADMIN'].includes(role) && <option value="Admin">Admin</option>}
-          <option value="prof">Professeurs</option>
-          <option value="eleves">Élèves</option>
+          {['ROLE_SUPERADMIN', 'ROLE_ADMIN'].includes(role) && <option value="Admin">Admin</option>}
+            <option value="prof">Professeurs</option>
+            <option value="eleves">Élèves</option>
           {['ROLE_SUPERADMIN', 'ROLE_ADMIN', 'ROLE_DIRECTOR', 'ROLE_DEPARTMENT_DIRECTOR'].includes(role) && <option value="secretaires">Secrétaires</option>}
         </select>
 
         {view === 'eleves' && (
-          <div>
+          <div >
             <label htmlFor="sort-by-formation">Trier par Formation:</label>
             <select id="sort-by-formation" onChange={handleSortByFormation}>
               <option value="none">Aucun</option>
+              
               {formations.map(formation => (
                 <option key={formation.id} value={formation.id}>{formation.libelle}</option>
               ))}
@@ -185,7 +177,8 @@ const UserList = ({setHeaderVisibility}) => {
           </div>
         )}
       </div>
-      <table>
+
+      <table className='usersTable'>
         <thead>
           <tr>
             <th>id</th>
@@ -197,7 +190,6 @@ const UserList = ({setHeaderVisibility}) => {
             {view === 'eleves' && <th>Tiers temps</th>}
             {view === 'eleves' && <th>Délégué</th>}
             {view === 'eleves' && <th>Formation</th>}
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -212,10 +204,6 @@ const UserList = ({setHeaderVisibility}) => {
               {view === 'eleves' && <td>{user.tiersTemps ? 'Oui' : 'Non'}</td>}
               {view === 'eleves' && <td>{user.delegue ? 'Oui' : 'Non'}</td>}
               {view === 'eleves' && <td>{user.Formation.libelle ?? ''}</td>}
-              <td>
-                <button onClick={() => updateUser(user.id)}>Éditer</button>
-                <button onClick={() => deleteUser(user.id)}>Supprimer</button>
-              </td>
             </tr>
           ))}
         </tbody>

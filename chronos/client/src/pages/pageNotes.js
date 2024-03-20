@@ -23,6 +23,7 @@ const PageNotes = ({setHeaderVisibility}) => {
     React.useEffect(() => {
         setHeaderVisibility();
       });
+      
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
     const [notesDetails, setNotesDetails] = useState({})
     const [formations, setFormations] = useState([])
@@ -533,7 +534,6 @@ const PageNotes = ({setHeaderVisibility}) => {
                             //         return (<></>);
                             //     })}
                             // </>
-
                             return <StudentNoteCard />
                         }
                         )

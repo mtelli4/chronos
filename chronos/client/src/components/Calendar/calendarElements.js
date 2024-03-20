@@ -57,7 +57,7 @@ export const CalendarHour = styled.span`
         background-color: #000;
         opacity: 0.15;
         width: 85%;
-        transform: translateX(55%);
+        transform: translateX(60%);
         z-index: -1;
     }
 `;
