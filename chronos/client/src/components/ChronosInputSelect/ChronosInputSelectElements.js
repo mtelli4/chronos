@@ -3,16 +3,16 @@ import styled from "styled-components";
 
 export const ChronosInputSelectCont = styled.div`
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column;
     width: fit-content;
     gap: 5px;
-    align-items: center;
+    align-items: flex-start;
 
     
 `;
 
 export const ChronosInputSelectLabel = styled.label`
-    padding-left: 10px;
+
 `;
 
 export const ChronosInputSelectErrorMessage = styled(ErrorMessage)``;

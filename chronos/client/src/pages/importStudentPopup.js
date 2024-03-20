@@ -7,24 +7,29 @@ import * as Yup from "yup";
 import "../css/styleImportStudent.css"
 import ChronosInputSelect from '../components/ChronosInputSelect';
 import ChronosInputFile from '../components/ChronosInputFile';
+import ChronosButton from '../components/ChronosButton';
 
 const ImportStudentPopup = ({ initialValues, validationSchemaStudent, formations, handleFileChange, handleImport }) => {
+  
   return (
     <>
         <div className='importStudentCont'>
             <h3 className='importStudentTitle'>Importer des élèves</h3>
-
+            
             <Formik initialValues={initialValues} validationSchema={validationSchemaStudent}>
               <Form className="importStudentFormCont">
                 {/* Compo select */}
                 <h4 className='importStudentSubTitle'>Formation</h4>
-                <ChronosInputSelect name={"name"} label={"Veuillez renseigner la formation ..."} options={[{id : 1, libelle : "oui"}]} />
+                <ChronosInputSelect id="formationSelect" name={"name"} label={"Veuillez renseigner la formation ..."} options={formations} />
+                <a className='importStudentLink' href="/import_eleve_vierge.xlsx" download>
+                  Modèle d'import élève
+                </a>
 
                 {/* compo file */}
                 <h4 className='importStudentSubTitle'>Liste</h4>
                 <ChronosInputFile name="test" accept={".csv, .xls, .xlsx"} handleFileChange={handleFileChange} />
                 
-                <button id="importStudents" type="submit" onClick={() => handleImport(1)}>Importer</button>
+                <ChronosButton id="importStudents" text="Importer" type="submit" action={() => handleImport(1)} />
               </Form>
             </Formik>
         </div>

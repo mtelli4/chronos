@@ -14,6 +14,7 @@ export const ChronosButtonCont = styled.button`
     border: 2px solid #000;
     cursor: pointer;
     transition: all 0.25s;
+    font-size: ${props => props.font};
 
     &:hover {   
         border: 2px solid #AD6DFF;

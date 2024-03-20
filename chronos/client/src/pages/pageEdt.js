@@ -6,145 +6,30 @@ import "../css/stylePageEdt.css";
 
 const PageEdt = () => {
   const [userEmail, setUserEmail] = useState();
-  const [userRoles, setUserRoles] = useState();
-  const [currentRole, setCurrentRole] = useState();
-  const [currentWeek, setCurrentWeek] = useState([]);
-
-  const handleRoleChange = (event) => {
-    const selectedRole = event.target.value;
-
-    // Mettre à jour le local storage avec le nouveau rôle sélectionné
-    authService.setCurrentRole(selectedRole);
-    setCurrentRole(selectedRole);
-
-    authService.setCurrentRoleId(userRoles[selectedRole]);
-  };
+  const [organizedCourses, setOrganizedCourses] = useState([])
+  const role = authService.getCurrentRole();
+  const roleId = authService.getCurrentRoleId();
+  const [year, setYear] = useState((new Date()).getFullYear())
 
   useEffect(() => {
-    const roles = authService.getUserRoles()
-    setUserRoles(roles)
-
-    const currentRole = authService.getCurrentRole()
-    setCurrentRole(currentRole)
-
     const email = authService.getUserEmail()
     setUserEmail(email)
   }, []);
 
-  let weekLst = 
-  [
-    {
-      day: "Lundi",
-      classes: [
-        {
-          title: "Maintenance applicative", // Recup depuis la bdd
-          room: "IUC - Blaise Pascal", // Recup depuis la bdd
-          // autres infos
-          startHour: "13h30", // Recup depuis la bdd
-          duration: 4, // en heures
-          color: "#2D8F4E",
-        },
-      ],
-    },
-    {
-      day: "Mardi",
-      classes: [
-        {
-          title: "Virtualisation avancée", // Recup depuis la bdd
-          room: "IUC - 255/256", // Recup depuis la bdd
-          // autres infos
-          startHour: "08h15", // Recup depuis la bdd
-          duration: 4, // en heures
-          color: "#BD2727",
-        },
-        {
-          title: "Communication : organisation et diffusion de l'information", // Recup depuis la bdd
-          room: "IUC - 203", // Recup depuis la bdd
-          // autres infos
-          startHour: "13h30", // Recup depuis la bdd
-          duration: 2, // en heures
-          color: "#000000",
-        },
-        {
-          title: "Projet personnel et professionnel", // Recup depuis la bdd
-          room: "IUC - 203", // Recup depuis la bdd
-          // autres infos
-          startHour: "15h45", // Recup depuis la bdd
-          duration: 2, // en heures
-          color: "#7D3099",
-        },
-      ],
-    },
-    {
-      day: "Mercredi",
-      classes: [
-        {
-          title: "Virtualisation avancée", // Recup depuis la bdd
-          room: "IUC - 255/256", // Recup depuis la bdd
-          // autres infos
-          startHour: "08h15", // Recup depuis la bdd
-          duration: 4, // en heures
-          color: "#BD2727",
-        },
-        {
-          title: "Initialisation à l'entrepreunariat", // Recup depuis la bdd
-          room: "IUC - 255/256", // Recup depuis la bdd
-          // autres infos
-          startHour: "13h30", // Recup depuis la bdd
-          duration: 4, // en heures
-          color: "#3275B0",
-        },
-      ],
-    },
-    {
-      day: "Jeudi",
-      classes: [
-        {
-          title: "Virtualisation avancée", // Recup depuis la bdd
-          room: "IUC - 255/256", // Recup depuis la bdd
-          // autres infos
-          startHour: "08h15", // Recup depuis la bdd
-          duration: 4, // en heures
-          color: "#BD2727",
-        },
-        {
-          title: "Droit du numérique et de la propriété intellectuelle", // Recup depuis la bdd
-          room: "IUC - 255/256", // Recup depuis la bdd
-          // autres infos
-          startHour: "13h30", // Recup depuis la bdd
-          duration: 4, // en heures
-          color: "#192C6D",
-        },
-      ],
-    },
-    {
-      day: "Vendredi",
-      classes: [
-        {
-          title: "SAE : Soutenance - Développement avancé suivi", // Recup depuis la bdd
-          room: "IUC - 161", // Recup depuis la bdd
-          // autres infos
-          startHour: "10h30", // Recup depuis la bdd
-          duration: 2, // en heures
-          color: "#CA630E",
-        },
-      ],
-    },
-  ];
-  
-  //setCurrentWeek(weekLst);
 
   function handleWeekChange(type) {
     console.log("%c" + type, "color: red; font-size: 40px;");
   }
 
-  const [listCours, setListCours] = useState([]);
-
   useEffect(() => {
-    axios.get("http://localhost:5000/eleves/1/cours").then((response) => { //si tu veux voir tout les cours --> http://localhost:5000/cours
-      setListCours(response.data)
-    })
-  }, []);
+    axios.get(`http://localhost:5000/cours/${role}/${roleId}/${year}`)
+      .then((response) => { //si tu veux voir tout les cours --> http://localhost:5000/cours
+        console.log("DATA: " + JSON.stringify(response.data))
+        setOrganizedCourses(organizeCoursesByDate(response.data))
+      }).catch(error => {
+        console.log("error while loading courses")
+      });
+  }, [year]);
 
   // Fonction pour obtenir le libellé du jour de la semaine
   function getDayLabel(dateTimeString) {
@@ -166,60 +51,96 @@ const PageEdt = () => {
 
   // Fonction pour obtenir le label du mois à partir d'une date (Janvier, Février, etc...)
   Date.prototype.getMonthLabel = function () {
-    const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    // const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
     return monthNames[this.getMonth()];
   };
 
+  Date.prototype.getMonthNumber = function () {
+    return this.getMonth() + 1;
+  };
 
   // Fonction pour organiser les cours dans une structure hiérarchique
   function organizeCoursesByDate(courses) {
     const organizedData = {};
 
-    // On parcours chaque cours de la BDD
-    courses.forEach(cours => {
-      const date = new Date(cours.debutCours);
-      const year = date.getFullYear();
-      const month = date.getMonthLabel();
-      const week = date.getWeekNumber();
-      const day = getDayLabel(cours.debutCours);
+    // Process courses and populate data structure
 
-      // Initialiser les champs de la structure s'ils n'existent pas déjà
+    // Add years without courses and populate empty months and weeks
+    const yearsWithNoCourses = Array.from(new Set(courses.map(cours => new Date(cours.debutCours).getFullYear())));
+    yearsWithNoCourses.forEach(year => {
       if (!organizedData[year]) organizedData[year] = {};
-      if (!organizedData[year][month]) organizedData[year][month] = {};
-      if (!organizedData[year][month][week]) organizedData[year][month][week] = {};
-      if (!organizedData[year][month][week][day]) organizedData[year][month][week][day] = [];
-      
-      organizedData[year][month][week][day].push({
-        title: cours.libelle,
-        room: 169, //il faut qu'on ajoute le numéro de la salle dans la BDD
-        startHour: cours.debutCours,
-        duration: cours.duree,
-        color: cours.color,
+
+      const allMonths = Array.from({ length: 12 }, (_, i) => new Date(year, i).getMonthNumber());
+      allMonths.forEach(month => {
+        if (!organizedData[year][month]) organizedData[year][month] = {};
+
+        const weeksInMonth = getWeeksInMonth(year, month);
+
+        for (let i = 0; i < weeksInMonth.length; i++) {
+          if (!organizedData[year][month][weeksInMonth[i]]) {
+            organizedData[year][month][weeksInMonth[i]] = {};
+          }
+          // Add days from Monday to Saturday for the week
+          const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+          daysOfWeek.forEach(day => {
+            if (!organizedData[year][month][weeksInMonth[i]][day]) {
+              organizedData[year][month][weeksInMonth[i]][day] = [];
+            }
+          });
+        }
       });
     });
 
+    courses.forEach(cours => {
+      const date = new Date(cours.debutCours);
+      const year = date.getFullYear();
+      const month = date.getMonthNumber();
+      const week = date.getWeekNumber();
+      const day = getDayLabel(cours.debutCours); // Assuming getDayLabel exists and returns day label
+
+      // Initialize data structure
+      if (!organizedData[year]) organizedData[year] = {};
+      if (!organizedData[year][month]) organizedData[year][month] = {};
+      if (!organizedData[year][month][week]) organizedData[year][month][week] = {};
+      organizedData[year][month][week][day] = organizedData[year][month][week][day] || [];
+      console.log("COURS: " + JSON.stringify(cours))
+      organizedData[year][month][week][day].push({
+        title: cours.libelle,
+        room: 169, // Replace with actual room number
+        startHour: cours.debutCours,
+        duration: cours.duree,
+        color: cours.color,
+        professors: cours.Professeurs,
+        moduleId: cours.moduleId,
+      });
+    });
     return organizedData;
   }
-  const organizedCourses = organizeCoursesByDate(listCours);
 
+
+  function getWeeksInMonth(year, month) {
+    const firstDate = new Date(year, month - 1, 1);
+    const lastDate = new Date(year, month, 0);
+    const weeks = [];
+    for (let i = firstDate.getDate(); i <= lastDate.getDate(); i++) {
+      const date = new Date(year, month - 1, i);
+      const weekNumber = date.getWeekNumber();
+      weeks.push(weekNumber);
+    }
+    const data = weeks.filter((element, index) => weeks.indexOf(element) === index);;
+    return data;
+  }
   return (
-      <>
-          {/* <div className='MonthSelector'></div> */}
-          <p>Ceci est votre role courrant: {currentRole}</p>
-          <div>
-          <label htmlFor="roleSelector">Sélecteur de role: </label>
-          <select id="roleSelector" value={currentRole} onChange={handleRoleChange}>
-              {Object.keys(userRoles ?? {}).map((role) => (
-                <option key={role} value={role}>
-                  {role}
-                </option>
-              ))}
-          </select>
-        </div>
-          <div className='calendarCont'>
-            <Calendar weekdata={weekLst} onWeekChange={handleWeekChange} />
-          </div>
-      </>
+    <>
+      {/* <div className='MonthSelector'></div> */}
+      <div className='calendarCont'>
+        <Calendar weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
+      </div>
+    </>
   )
 }
 

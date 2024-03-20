@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'groupeId',
         timestamps: false
       });
+
+      
+      Eleve.hasMany(models.Absence, { 
+        foreignKey: 'eleveId', 
+        onDelete: 'SET NULL' 
+      });
     }
   }
 
@@ -31,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     numeroEtudiant: DataTypes.STRING,
     trombinoscope: DataTypes.STRING,
     tiersTemps: DataTypes.BOOLEAN,
+    delegue: DataTypes.BOOLEAN,
     formationId: {
       type: DataTypes.INTEGER,
       references: {

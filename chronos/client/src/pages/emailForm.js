@@ -13,8 +13,7 @@ const EmailForm = () => {
         subject: subject,
         message: message,
       });
-
-      console.log(response.data);
+      
       // Handle success, e.g., show a success message to the user
     } catch (error) {
       console.error(error);

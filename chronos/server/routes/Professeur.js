@@ -1,12 +1,29 @@
 const express = require('express');
 const router = express.Router();
+const { Op } = require('sequelize');
+
 
 const { Professeur, Utilisateur, UtilisateurRole } = require('../models')
 
 router.get("/", async (req, res) => {
-    const listProfs = await Professeur.findAll()
+    var listProfs;
+  
+     const includes = [];
+  
+     if (req.query.joinUsers === "true") {
+       includes.push({ model: Utilisateur });
+     }
+
+     const whereClause = { utilisateurId: { [Op.not]: null } };
+  
+     if (includes.length > 0) {
+       listProfs = await Professeur.findAll({ include: includes, where: whereClause });
+     } else {
+       listProfs = await Professeur.findAll();
+     }
+  
     res.json(listProfs);
- })
+  });
 
 router.post("/insertListProfs", async (req, res) => {
     function validateArrayPattern(obj) {
@@ -35,6 +52,8 @@ router.post("/insertListProfs", async (req, res) => {
 
         // Creating user array
         const utilisateur = {
+            nom: prof.nom,
+            prenom: prof.prenom,
             email: prof.email,
         }
 
@@ -64,23 +83,27 @@ router.post("/insertListProfs", async (req, res) => {
         
         const vacataire = ['1', 'true', 'yes', 'on', 'oui'].includes(String(prof.vacataire).toLowerCase());
         prof.vacataire = vacataire;
-        prof.utilisateurId = user.id;
 
         if (user) {
+            const profToInsert = {
+                vacataire: prof.vacataire,
+                utilisateurId: user.id
+            }
+
             // Update or create student
             await Professeur
             .findOne({where: {utilisateurId: user.id}})
             .then(async function (foundItem) {
                 if (!foundItem) {
                     // Item not found, create a new one
-                    await Professeur.create(prof);
+                    await Professeur.create(profToInsert);
                 } else {
                     // Found an item, update it
-                    await Professeur.update(prof, {where: {utilisateurId: user.id}});
+                    await Professeur.update(profToInsert, {where: {utilisateurId: user.id}});
                 }
             });
         } else {
-            await Professeur.create(prof);
+            await Professeur.create(profToInsert);
         }
     }
     res.json(errors)

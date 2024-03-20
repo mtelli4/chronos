@@ -1,7 +1,10 @@
 import React from 'react'
 import ChronosInput from '../ChronosInput'
+import { ChronosCallCardSubTitle, ChronosCallCardStatus, ChronosCallCardTextCont, ChronosCallCardCont, ChronosCallCardImg, ChronosCallCardText } from './ChronosCallCardElements';
+import { useState } from 'react'
+import test from "../../images/test.jpg"
 
-const ChronosCallCard = () => {
+const ChronosCallCard = ({ Student, absentList, setAbsentList, setLateList }) => {
     // Etat local pour enregistrer si l'élève est absent ou présent
     const [isAbsent, setIsAbsent] = useState(false);
     // État local pour stocker le temps de retard
@@ -54,13 +57,23 @@ const ChronosCallCard = () => {
     };
 
   return (
-    <ChronosCallCardCont>
-        <ChronosCallCardImg />
-        <ChronosCallCardText>
-            Idrissi Nidal
-        </ChronosCallCardText>
+    <ChronosCallCardCont isAbsent={isAbsent} onClick={() => handleClick()}>
+        <ChronosCallCardImg src={`http://localhost:5000/uploads/${Student.trombinoscope}`} />
+        <ChronosCallCardTextCont>
+          <ChronosCallCardText>
+              {(Student.Utilisateur.nom).toUpperCase() + " "  + Student.Utilisateur.prenom}
+          </ChronosCallCardText>
 
-        <ChronosInput onChange={(e) => handleInputChange(e)} type={"number"} name="lateTime"  />
+          <ChronosCallCardStatus isAbsent={isAbsent}>
+              {isAbsent ? "Absent" : "Présent"}
+          </ChronosCallCardStatus>
+
+          {
+            isAbsent && <><ChronosCallCardSubTitle>Retard (minutes)</ChronosCallCardSubTitle>
+            <ChronosInput width={"75px"} height="30px" onChange={(e) => handleInputChange(e)} type={"number"} name="lateTime"  /></>
+          }
+          
+        </ChronosCallCardTextCont>
     </ChronosCallCardCont>
   )
 }
