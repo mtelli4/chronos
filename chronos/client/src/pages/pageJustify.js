@@ -1,7 +1,8 @@
 import "../css/styleCall.css"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ChronosJustifyCard from '../components/ChronosJustifyCard'
+import ChronosJustifyCard from '../components/ChronosJustifyCard';
+import { authService } from '../services/authService';
 
 const PageJustify = ({ setHeaderVisibility}) => {
 
@@ -15,12 +16,13 @@ const PageJustify = ({ setHeaderVisibility}) => {
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/eleve_absence/9/0"); // 9 correspond à l'id de l'utilisateur et 0 pour signifier que l'on cherche les absences non justifiées
+            const response = await axios.get(`http://localhost:5000/eleve_absence/${authService.getUserId()}/0`); 
+            console.log(response);
             // Rempli la liste des absences
             setAbsencesList(response.data);
         } catch (error) {
             console.log(error);
-        } finally {
+        } finally { 
             setIsLoading(false);
         }
         };
@@ -49,15 +51,6 @@ const PageJustify = ({ setHeaderVisibility}) => {
                 {absences.map((absence) => (
                     <ChronosJustifyCard key={absence.id} userId={absence.eleveId} idList={absence.id} Absence={absence} onRemove={handleRemoveAbsence} />
                 ))}
-
-                {/* Test pour voir la grille dans tt sa beauté */}
-                {/* {absences.map((absence) => (
-                    <ChronosJustifyCard key={absence.id} userId={absence.eleveId} idList={absence.id} Absence={absence} onRemove={handleRemoveAbsence} />
-                ))}
-
-                {absences.map((absence) => (
-                    <ChronosJustifyCard key={absence.id} userId={absence.eleveId} idList={absence.id} Absence={absence} onRemove={handleRemoveAbsence} />
-                ))} */}
             </div>
         </div>
         

@@ -3,10 +3,10 @@ import { authService } from '../services/authService';
 import axios from 'axios';
 
 // Import des sous composants
-import FormationList from '../components/FormationList';
+import ProfessorPresencesList from '../components/ProfessorPresencesList';
 
 
-const ValidationAbsPage = () => {
+const ProfessorList = () => {
   const [formations, setFormationsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
@@ -14,7 +14,7 @@ const ValidationAbsPage = () => {
     const fetchData = async () => {
       try {
         // Requête récupérant les élèves des formations assigné à la secrétaire
-        const response = await axios.get(`http://localhost:5000/secretary_formation/${authService.getUserId()}`);
+        const response = await axios.get(`http://localhost:5000/secretary_professor/${authService.getUserId()}`);
         // Rempli la liste avec les élèves et leurs formations
         setFormationsList(response.data.Secretaire.Formations);
         console.log(response.data);
@@ -32,12 +32,17 @@ const ValidationAbsPage = () => {
 
   return (
     <div>
-      <h1>Liste des absences</h1>
-      {formations.map((formation) => ( 
-        <FormationList key={formation.id} Formation={formation} />
+      <h1>Présences professeurs</h1>
+      {formations.map((formation) => (
+        formation.ModuleCours.length > 0 && formation.ModuleCours.map((module) => (
+          module.Professeurs.length > 0 && module.Professeurs.map((professor) => (
+            <ProfessorPresencesList key={professor.id} Professor={professor}  />
+            // console.log(professor)
+          ))
+        ))
       ))}
     </div>
   );
 };
 
-export default ValidationAbsPage;
+export default ProfessorList;

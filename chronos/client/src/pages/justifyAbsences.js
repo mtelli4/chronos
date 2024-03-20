@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { authService } from '../services/authService';
 import axios from 'axios';
 
 // Import des sous composants
@@ -12,7 +13,7 @@ const JustifyAbsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/eleve_absence/9/0"); // 9 correspond à l'id de l'utilisateur et 0 pour signifier que l'on cherche les absences non justifiées
+        const response = await axios.get(`http://localhost:5000/eleve_absence/${authService.getUserId()}/0`); 
         // Rempli la liste des absences
         setAbsencesList(response.data);
       } catch (error) {

@@ -101,7 +101,14 @@ app.use("/secretary_formation", getFormationsSecretaryRouter)
 const setValidAbsenceRouter = require('./routes/setValidAbsence') 
 app.use("/set_valid_absence", setValidAbsenceRouter)
 
-// Redirection/route pour backend setValidAbsence (valider l'absence d'un élève)
+// Redirection/route pour backend getProfessorsSecretary (récupère les professeurs liés à la secrétaire)
+const getProfessorsSecretaryRouter = require('./routes/getProfessorsSecretary') 
+app.use("/secretary_professor", getProfessorsSecretaryRouter)
+
+// Redirection/route pour backend getProfessorPresences (récupère le nombre d'heures de présences aux cours d'un professeur)
+const getProfessorPresencesRouter = require('./routes/getProfessorPresences') 
+app.use("/professor_presences", getProfessorPresencesRouter)
+
 const apiRouter = require('./routes/api') 
 app.use("/api", apiRouter)
 

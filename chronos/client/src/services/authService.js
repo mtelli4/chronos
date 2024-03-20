@@ -56,8 +56,7 @@ const isLoggedIn = () => {
 
 const logOut = ()=> {
     localStorage.clear();
- }
-
+}
 
 const setCurrentRole = (role) => {
     localStorage.setItem('currentRole', role);
@@ -74,6 +73,5 @@ const setCurrentRoleId = (roleId) => {
 const getCurrentRoleId = () => {
     return parseInt(localStorage.getItem('currentRoleId'));
 }
-
 
 export  const authService = { getUserId, logOut, getToken, setToken, login, getUserEmail, getUserRoles, isLoggedIn, setCurrentRole, getCurrentRole, setCurrentRoleId, getCurrentRoleId};

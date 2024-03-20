@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../css/styleCall.css";
-import FormationList from '../components/FormationList';
+import { authService } from '../services/authService';
 import ChronosValidateCard from '../components/ChronosValidateCard';
 
 const PageValidate = ({setHeaderVisibility}) => {
@@ -16,12 +16,12 @@ const PageValidate = ({setHeaderVisibility}) => {
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/secretary_formation/1"); // 1 correspond à l'id de la secrétaire
+            const response = await axios.get(`http://localhost:5000/secretary_formation/${authService.getUserId()}`);
             // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
-            setFormationsList(response.data.Formations);
+            setFormationsList(response.data.Secretaire.Formations);
         } catch (error) {
             console.log(error);
-        } finally {
+        } finally { 
             setIsLoading(false);
         }
         };

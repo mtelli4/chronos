@@ -1,13 +1,13 @@
 import React from 'react'
 import ChronosCallCard from '../components/ChronosCallCard'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import StudentAbsList from '../components/StudentAbsList';
 import "../css/styleCall.css";
 import ChronosButton from '../components/ChronosButton';
+import { setFormattedDate } from '../js/utils';
 
 // Variables d'initialisation du formik
 const validationSchema = Yup.object({});
@@ -24,19 +24,24 @@ const PageCall = ({setHeaderVisibility}) => {
     const [studentList, setStudentList] = useState([]);
     const [absentList, setAbsentList] = useState([]);
     const [lateList, setLateList] = useState([]);
+    const [date, setDate] = useState([]);
+    const [libelle, setLibelle] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
     useEffect(() => { 
         const fetchData = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/eleve_cours/1"); // 1 correspond à l'id du cours envoyé
-            console.log(response);
+            const response = await axios.get("http://localhost:5000/eleve_cours/1");
             // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
             setStudentList(
-            response.data.Groupes.reduce((accumulator, currentList) => {
-                return accumulator.concat(currentList.Eleves);
-            }, [])
+                response.data.Groupes.reduce((accumulator, currentList) => {
+                    return accumulator.concat(currentList.Eleves);
+                }, [])
             );
+            // Set la date du cours
+            setDate(response.data.debutCours);
+            // Set le libellé du cours
+            setLibelle(response.data.libelle);
         } catch (error) {
             console.log(error);
         } finally {
@@ -69,8 +74,8 @@ const PageCall = ({setHeaderVisibility}) => {
         >
             <div className='callWrap'>
             <div className='callTitle'>
-                <h3>Méthode d’optimisation</h3>
-                <h4>16 decembre 2024</h4>
+                <h3>{libelle}</h3>
+                <h4>{setFormattedDate(date)}</h4>
             </div>
             <Form className='callForm'>
                 {studentList
@@ -79,10 +84,7 @@ const PageCall = ({setHeaderVisibility}) => {
                     <ChronosCallCard Student={student} absentList={absentList} setAbsentList={setAbsentList} setLateList={setLateList} />
                 ))
                 }
-
-
                 <ChronosButton width="200px" type="submit" text={"Valider l'appel"} />
-
             </Form>
             </div>
         </Formik>
