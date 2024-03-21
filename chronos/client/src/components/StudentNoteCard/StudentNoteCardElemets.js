@@ -1,4 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const appearAnim = keyframes`
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(100%);
+    }
+`;
 
 export const StudentNoteCardCont = styled.div`
     border: 5px solid #eee;
@@ -10,6 +20,9 @@ export const StudentNoteCardCont = styled.div`
     padding-bottom: 20px;
     gap: 20px;
     overflow: hidden;
+    transform: scale(0);
+    background: #fff;
+    animation: ${appearAnim} 0.75s cubic-bezier(.76,1.65,0,1) forwards ${props => props.num * 0.1}s;
 
     &:hover {
         box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;

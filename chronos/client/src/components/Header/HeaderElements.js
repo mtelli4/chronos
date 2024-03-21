@@ -160,3 +160,8 @@ export const HeaderWrap = styled.div`
     overflow: hidden;
     z-index: 999;
 `;
+
+export const HeaderBurgerWrap = styled.div`
+    height: 100%;
+    width: 50px;
+`;

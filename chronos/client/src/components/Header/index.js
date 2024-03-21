@@ -1,12 +1,13 @@
 import React, {isValidElement, useState} from 'react'
 import { useNavigate } from "react-router-dom"
 import ChronosLogo from '../ChronosLogo';
-import { HeaderSelect, HeaderWrap, HeaderBurger, HeaderCont, HeaderLink, HeaderLinkBorder, HeaderLinkText, HeaderLinks, HeaderProfile, HeaderNav, HeaderScreen } from "./HeaderElements.js";
+import { HeaderBurgerWrap, HeaderSelect, HeaderWrap, HeaderBurger, HeaderCont, HeaderLink, HeaderLinkBorder, HeaderLinkText, HeaderLinks, HeaderProfile, HeaderNav, HeaderScreen } from "./HeaderElements.js";
 import ProfilePic from '../ProfilePic/index.js';
 import { authService } from "../../services/authService";
-import pic from "../../images/test.jpg";
+import pic from "../../images/default-pp.svg";
 import ChronosButton from "../ChronosButton"
 import grid from "../../images/la-grille.png";
+import HeaderButton from '../HeaderButon/index.js';
  
 const Header = ({ links, isVisible }) => { // links = [{title : string, to : string}]
   const navigate = useNavigate();
@@ -48,7 +49,11 @@ const Header = ({ links, isVisible }) => { // links = [{title : string, to : str
         <HeaderCont isVisible={isVisible}>
           <ChronosLogo fontsize={2.25} />
 
-          <HeaderBurger src={grid} onClick={() => setIsActive(true)} />
+          {/* <HeaderBurger src={grid} onClick={() => setIsActive(true)} /> */}
+
+          <HeaderBurgerWrap>
+            <HeaderButton actionOnClick={() => setIsActive(true)} />
+          </HeaderBurgerWrap> 
         </HeaderCont>
 
         <HeaderNav isActive={isActive}>
@@ -79,7 +84,7 @@ const Header = ({ links, isVisible }) => { // links = [{title : string, to : str
 
 
         <HeaderScreen isActive={isActive} onClick={() => setIsActive(false)}></HeaderScreen>
-    </HeaderWrap>
+      </HeaderWrap>
   </>
   )
 }

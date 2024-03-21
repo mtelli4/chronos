@@ -8,13 +8,13 @@ export const ButtonToggleCont = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.25s;
+    transition: all 0.25s cubic-bezier(.76,1.65,0,1), background 0s linear;
     cursor: pointer;
     outline: none;
     border: none;
 
     &:hover {
-        transform: scale(1.1);
+        transform: scale(1.1) rotate(20deg);
         background: ${props => props.color ? props.color : "linear-gradient(180deg, #AD6DFF, #8734DB)"};
     }
 

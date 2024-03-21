@@ -1,11 +1,11 @@
 import React from 'react'
 import { StudentNoteCardTitleMoy, StudentNoteCardTitleCont, StudentNoteCardTitle, StudentNoteCardCont, StudentNoteCardContent, StudentNoteCardContentSection, StudentNoteCardContentSectionNote, StudentNoteCardContentSectionTitle } from './StudentNoteCardElemets'
 
-const StudentNoteCard= ({ notes, module }) => {
+const StudentNoteCard= ({ num, notes, module }) => {
 
 
   return (
-    <StudentNoteCardCont>
+    <StudentNoteCardCont num={num}>
         <StudentNoteCardTitleCont>
             <StudentNoteCardTitle>
                 {module.libelle}

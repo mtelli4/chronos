@@ -22,6 +22,8 @@ import Popup from '../Popup';
 import ClassDetails from '../../pages/classDetails';
 import next from "../../images/next.png";
 import prev from "../../images/prev.png";
+import "../../css/styleCalendar.css";
+import chronosC from "../../images/chronos-c.svg";
 
 const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
   const [isActive, setIsActive] = useState(false);
@@ -200,26 +202,34 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
       </CalendarSelector>
 
       <CalendarCont>
-          {weekdata && weekdata[year] && weekdata[year][currentMonthIndex] && weekdata[year][currentMonthIndex][currentWeekIndex] ? (
+          {
+          weekdata && 
+          
+          weekdata[year] && weekdata[year][currentMonthIndex] && weekdata[year][currentMonthIndex][currentWeekIndex] ? (
             <>
-            <CalendarWeek>
-              <CalendarButton onClick={() => handleNav("prev")} type={"prev"} src={buttonPrev} weekIndex={currentWeekIndex}/>
-              <CalendarDays>
-                {days.map((item) => (
-                  <CalendarDay dayssize={days.length} key={item.id}>{item} {getDayNumberByLabel(item, currentWeekIndex, year)}</CalendarDay>
-                ))}
-              </CalendarDays>
-              <CalendarButton onClick={() => handleNav("next")} type={"after"} src={buttonAft} weekIndex={currentWeekIndex} />
-            </CalendarWeek>
+              <CalendarWeek>
+                <CalendarButton onClick={() => handleNav("prev")} type={"prev"} src={buttonPrev} weekIndex={currentWeekIndex}/>
+                <CalendarDays>
+                  {days.map((item) => (
+                    <CalendarDay dayssize={days.length} key={item.id}>{item} {getDayNumberByLabel(item, currentWeekIndex, year)}</CalendarDay>
+                  ))}
+                </CalendarDays>
+                <CalendarButton onClick={() => handleNav("next")} type={"after"} src={buttonAft} weekIndex={currentWeekIndex} />
+              </CalendarWeek>
             </>
-          ) : <p>loading</p>}
+
+          ) : ""
+
+          }
+
           {hours.length !== 0 ? (
             <CalendarHours id="calendarhours">
               {hours.map((item) => (
                 <CalendarHour hourssize={hours.length} key={item.id}>{item}</CalendarHour>
               ))}
             </CalendarHours>
-          ) : <p>loading</p>}
+          ) : "" }
+          
           <CalendarMain id="calendarmain">
             {weekdata && weekdata[year] && weekdata[year][currentMonthIndex] ? (
               <>
@@ -241,7 +251,11 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
                     </CalendarMainCol>
                 ))}
               </>
-            ) : <p>Loading...</p>}
+            ) : 
+            
+            <div className='loadingCont'>
+              <img src={chronosC} />
+            </div>}
           </CalendarMain>
           {selectedSquare.id != "" && selectedSquare.moduleId && <Popup html={<ClassDetails coursId={selectedSquare.id} color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />}
           <Popup html={<ClassDetails coursId={selectedSquare.id} color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />

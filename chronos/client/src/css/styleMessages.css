@@ -1,0 +1,65 @@
+.messageViewCont {
+    border-radius: 10px;
+    width: 90%;
+    padding: 10px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: none;
+}
+
+.messageViewCont::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.messageViewCont li {
+    list-style: none;
+    width: fit-content;
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    overflow-wrap: break-word;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.messageInput {
+    width: 90%;
+    margin-top: 20px;
+    background: none;
+    border-radius: 5px;
+    height: 40px;
+    padding: 0px 20px;
+    outline: none;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.75);
+    border: 2px solid rgba(255, 255, 255, 0.75);
+}
+
+.messageInput::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+}
+
+.messageViewContTitle {
+    font-weight: normal;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.messageViewContMessage {
+    font-size: 0.75rem;
+    font-style: italic;
+}
+
+
+@media (max-width: 450px) {
+    .messageViewContTitle {
+        font-size: 0.75rem;
+    }
+
+    .messageViewContMessage {
+        font-size: 0.6rem;
+    }
+}

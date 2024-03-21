@@ -165,7 +165,7 @@ const UserList = ({setHeaderVisibility}) => {
         </select>
 
         {view === 'eleves' && (
-          <div >
+          <>
             <label htmlFor="sort-by-formation">Trier par Formation:</label>
             <select id="sort-by-formation" onChange={handleSortByFormation}>
               <option value="none">Aucun</option>
@@ -174,7 +174,7 @@ const UserList = ({setHeaderVisibility}) => {
                 <option key={formation.id} value={formation.id}>{formation.libelle}</option>
               ))}
             </select>
-          </div>
+          </>
         )}
       </div>
 

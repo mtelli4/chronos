@@ -507,15 +507,15 @@ const PageNotes = ({setHeaderVisibility}) => {
                     {/* Formulaire de recherche de notes */}
                     <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
                         <Form className='notesFormulaireRecherche'>
-                        <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
-                        <ChronosButton action={() => setShowTable("user")} text="Chercher" type="submit" id="searchNote" />
+                            <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
+                            <ChronosButton action={() => setShowTable("user")} text="Chercher" type="submit" id="searchNote" />
                             <FormObserver />
                         </Form>
                     </Formik>
                     <div className='justifyCardCont'>
                         {/* Affichage des notes pour chaque évaluation triées par modules  */}
-                        {notes.modules.map((module) => {
-                            return <StudentNoteCard key={"NomModule" + module.id} notes={notes} module={module} />
+                        {notes.modules.map((module, index) => {
+                            return <StudentNoteCard num={index} key={"NomModule" + module.id} notes={notes} module={module} />
                         }
                         )
                         }

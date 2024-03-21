@@ -7,6 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    animation: appearAnim 0.5s;
 }
 
 .notesSelectCont {
@@ -85,5 +86,15 @@
         font-weight: normal;
         font-size: 2rem;
         margin-top: 60px;
+    }
+}
+
+@keyframes appearAnim {
+    0% {
+        background: #fff;
+    }
+
+    100% {
+        background: #ddd;
     }
 }
