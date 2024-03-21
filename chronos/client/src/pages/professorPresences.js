@@ -8,6 +8,7 @@ import ProfessorPresencesList from '../components/ProfessorPresencesList';
 
 const ProfessorList = () => {
   const [professors, setProfessorsList] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
   useEffect(() => {
