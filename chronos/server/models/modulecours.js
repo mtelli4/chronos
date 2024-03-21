@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // Lien associatif à la table FORMATION passant à travers la table FORMATION_MODULE
       ModuleCours.belongsToMany(models.Formation, {
         through: models.FormationModule, 
-        foreignKey: 'moduleId', 
+        foreignKey: 'moduleCoursId', 
         otherKey: 'formationId', 
       });
 

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Lien associatif à la table MODULE_COURS
       FormationModule.belongsTo(models.ModuleCours, {
-        foreignKey: 'moduleId',
+        foreignKey: 'moduleCoursId',
         onDelete: 'CASCADE', 
       });
     }
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    moduleId: {
+    moduleCoursId: {
       type : DataTypes.INTEGER,
       primaryKey: true,
       references:{
