@@ -121,6 +121,7 @@ const PageEdt = ({setHeaderVisibility}) => {
         color: cours.color,
         professors: cours.Professeurs,
         moduleId: cours.moduleId,
+        color: cours.ModuleCour.couleur
       });
     });
     return organizedData;
