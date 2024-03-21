@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { authService } from "../services/authService";
 
 
-function Notes() {
+function Notes() { 
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
     const [notesDetails, setNotesDetails] = useState({})
     const [formations, setFormations] = useState([])

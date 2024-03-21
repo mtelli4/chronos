@@ -8,7 +8,11 @@ import {
   CalendarHour,
   CalendarMainCol,
   CalendarButton,
-  CalendarWeek
+  CalendarWeek,
+  CalendarMonth,
+  CalendarSelector,
+  CalendarYearButton,
+  CalendarYearText
 } from './calendarElements';
 import ClassSquare from '../ClassSquare';
 import { createDaysLst, createHoursLst, trouverHeuresExtremes, ajouterDuree } from '../../js/calendar_script';
@@ -16,6 +20,10 @@ import buttonPrev from "../../images/buttonPrev.svg";
 import buttonAft from "../../images/buttonAft.svg";
 import Popup from '../Popup';
 import ClassDetails from '../../pages/classDetails';
+import next from "../../images/next.png";
+import prev from "../../images/prev.png";
+import "../../css/styleCalendar.css";
+import chronosC from "../../images/chronos-c.svg";
 
 const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
   const [isActive, setIsActive] = useState(false);
@@ -180,66 +188,77 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
   
   return (
     <>
-    <div>
-      <button onClick={()=>setYear(year-1)}>
-        {year-1}
-      </button>
-    {
-      months.map((mois, index)=>{
-        return <span style={{color: index==currentMonthIndex-1?"red":"black"}} onClick={()=>changeMonth(index+1)}> {mois} </span>
-      })
-    }
-    <button onClick={()=>setYear(year+1)}>
-      {year+1}
-    </button>
-    </div>
-    <CalendarCont>
-      {weekdata && weekdata[year] && weekdata[year][currentMonthIndex] && weekdata[year][currentMonthIndex][currentWeekIndex] ? (
-        <>
-        <CalendarWeek>
-          <CalendarButton onClick={() => handleNav("prev")} type={"prev"} src={buttonPrev} weekIndex={currentWeekIndex}/>
-          <CalendarDays>
-            {days.map((item) => (
-              <CalendarDay dayssize={days.length} key={item.id}>{item} {getDayNumberByLabel(item, currentWeekIndex, year)}</CalendarDay>
-            ))}
-          </CalendarDays>
-          <CalendarButton onClick={() => handleNav("next")} type={"after"} src={buttonAft} weekIndex={currentWeekIndex} />
-        </CalendarWeek>
-        </>
-      ) : <p>loading</p>}
-      {hours.length !== 0 ? (
-        <CalendarHours id="calendarhours">
-          {hours.map((item) => (
-            <CalendarHour hourssize={hours.length} key={item.id}>{item}</CalendarHour>
-          ))}
-        </CalendarHours>
-      ) : <p>loading</p>}
-      <CalendarMain id="calendarmain">
-        {weekdata && weekdata[year] && weekdata[year][currentMonthIndex] ? (
-          <>
-            {Object.keys(weekdata[year][currentMonthIndex][currentWeekIndex]).map(jour => (
+      <CalendarYearText>{ year }</CalendarYearText>
+      <CalendarSelector>
+        <CalendarYearButton src={prev} onClick={()=>setYear(year - 1)} />
 
-              <CalendarMainCol dayssize={days.length}>
-                {weekdata[year][currentMonthIndex][currentWeekIndex][jour].map((classData) => (                  
-                  <ClassSquare
-                    key={classData.id}
-                    title={classData.title}
-                    room={classData.room}
-                    color="#fe4455"
-                    duration={classData.duration/60 * (100 / hours.length)}
-                    startTopPercent={getStartTop(classData.startHour)}
-                    professors={classData.professors}
-                    onSelect={() => handleClick(classData)}
-                  />
+        {
+          months.map((mois, index)=>{
+            return <CalendarMonth onClick={()=>changeMonth(index+1)} selected={index == currentMonthIndex-1}> {mois} </CalendarMonth>
+          })
+        }
+
+        <CalendarYearButton  src={next} onClick={()=>setYear(year + 1)} />
+      </CalendarSelector>
+
+      <CalendarCont>
+          {
+          weekdata && 
+          
+          weekdata[year] && weekdata[year][currentMonthIndex] && weekdata[year][currentMonthIndex][currentWeekIndex] ? (
+            <>
+              <CalendarWeek>
+                <CalendarButton onClick={() => handleNav("prev")} type={"prev"} src={buttonPrev} weekIndex={currentWeekIndex}/>
+                <CalendarDays>
+                  {days.map((item) => (
+                    <CalendarDay dayssize={days.length} key={item.id}>{item} {getDayNumberByLabel(item, currentWeekIndex, year)}</CalendarDay>
+                  ))}
+                </CalendarDays>
+                <CalendarButton onClick={() => handleNav("next")} type={"after"} src={buttonAft} weekIndex={currentWeekIndex} />
+              </CalendarWeek>
+            </>
+
+          ) : ""
+
+          }
+
+          {hours.length !== 0 ? (
+            <CalendarHours id="calendarhours">
+              {hours.map((item) => (
+                <CalendarHour hourssize={hours.length} key={item.id}>{item}</CalendarHour>
+              ))}
+            </CalendarHours>
+          ) : "" }
+          
+          <CalendarMain id="calendarmain">
+            {weekdata && weekdata[year] && weekdata[year][currentMonthIndex] ? (
+              <>
+                {Object.keys(weekdata[year][currentMonthIndex][currentWeekIndex]).map(jour => (
+
+                  <CalendarMainCol dayssize={days.length}>
+                    {weekdata[year][currentMonthIndex][currentWeekIndex][jour].map((classData) => (                  
+                      <ClassSquare
+                        key={classData.id}
+                        title={classData.title}
+                        room={classData.room}
+                        color={classData.color}
+                        duration={classData.duration/60 * (100 / hours.length)}
+                        startTopPercent={getStartTop(classData.startHour)}
+                        professors={classData.professors}
+                        onSelect={() => handleClick(classData)}
+                      />
+                    ))}
+                    </CalendarMainCol>
                 ))}
-                </CalendarMainCol>
-            ))}
-          </>
-        ) : <p>Loading...</p>}
-      </CalendarMain>
-      {selectedSquare.id != "" && selectedSquare.moduleId && <Popup html={<ClassDetails coursId={selectedSquare.id} color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />}
-      <Popup html={<ClassDetails coursId={selectedSquare.id} color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
-    </CalendarCont>
+              </>
+            ) : 
+            
+            <div className='loadingCont'>
+              <img src={chronosC} />
+            </div>}
+          </CalendarMain>
+          {selectedSquare.id != "" && selectedSquare.moduleId && <Popup html={<ClassDetails coursId={selectedSquare.id} color={selectedSquare.color} title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />}
+        </CalendarCont>
     </>
   );
 };

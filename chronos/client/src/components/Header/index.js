@@ -1,14 +1,15 @@
 import React, {isValidElement, useState} from 'react'
 import { useNavigate } from "react-router-dom"
 import ChronosLogo from '../ChronosLogo';
-import { HeaderSelect, HeaderWrap, HeaderBurger, HeaderCont, HeaderLink, HeaderLinkBorder, HeaderLinkText, HeaderLinks, HeaderProfile, HeaderNav, HeaderScreen } from "./HeaderElements.js";
+import { HeaderBurgerWrap, HeaderSelect, HeaderWrap, HeaderBurger, HeaderCont, HeaderLink, HeaderLinkBorder, HeaderLinkText, HeaderLinks, HeaderProfile, HeaderNav, HeaderScreen } from "./HeaderElements.js";
 import ProfilePic from '../ProfilePic/index.js';
 import { authService } from "../../services/authService";
-import pic from "../../images/test.jpg";
+import pic from "../../images/default-pp.svg";
 import ChronosButton from "../ChronosButton"
 import grid from "../../images/la-grille.png";
+import HeaderButton from '../HeaderButon/index.js';
  
-const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : string, to : string}]
+const Header = ({ links, isVisible }) => { // links = [{title : string, to : string}]
   const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -22,6 +23,7 @@ const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : s
 
   const logout = ()=> {
     authService.logOut();
+    setIsActive(false)
     navigate('/login');
   } 
 
@@ -36,14 +38,22 @@ const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : s
     window.location.reload();
   };
 
+  
+
   return (
     <>
-      <div style={{height: "15vh"}}></div>
-      <HeaderWrap isActive={isActive}>
+      {
+        isVisible &&  <div style={{height: "11vh"}}></div>
+      }
+      <HeaderWrap isVisible={isVisible} isActive={isActive}>
         <HeaderCont isVisible={isVisible}>
           <ChronosLogo fontsize={2.25} />
 
-          <HeaderBurger src={grid} onClick={() => setIsActive(true)} />
+          {/* <HeaderBurger src={grid} onClick={() => setIsActive(true)} /> */}
+
+          <HeaderBurgerWrap>
+            <HeaderButton actionOnClick={() => setIsActive(true)} />
+          </HeaderBurgerWrap> 
         </HeaderCont>
 
         <HeaderNav isActive={isActive}>
@@ -74,7 +84,7 @@ const Header = ({ setNavVisible, links, isVisible }) => { // links = [{title : s
 
 
         <HeaderScreen isActive={isActive} onClick={() => setIsActive(false)}></HeaderScreen>
-    </HeaderWrap>
+      </HeaderWrap>
   </>
   )
 }

@@ -3,7 +3,12 @@ import {Formik, Form, Field, ErrorMessage} from "formik"
 import * as Yup from "yup";
 import axios from 'axios';
 
-function CreateCourse() {
+function CreateCourse({setHeaderVisibility}) {
+
+    React.useEffect(() => {
+        setHeaderVisibility();
+      });
+
     const initialValues = {
         libelle:"",
         debutCours:"",

@@ -15,8 +15,15 @@ import PopupAddEval from './PopupAddEval.js';
 import PopupModifyEval from './PopupModifyEval.js';
 import PopupModifyGrade from './popupModifyGrade.js';
 import { CSVLink } from 'react-csv';
+import StudentNoteCard from '../components/StudentNoteCard/index.js';
+import "../css/styleCall.css";
 
-const PageNotes = () => {
+const PageNotes = ({setHeaderVisibility}) => {
+
+    React.useEffect(() => {
+        setHeaderVisibility();
+      });
+      
     const [notes, setNotes] = useState({ "eleves": [], "evaluations": [], "modules": [] })
     const [notesDetails, setNotesDetails] = useState({})
     const [formations, setFormations] = useState([])
@@ -243,6 +250,8 @@ const PageNotes = () => {
                 }
                 console.log(error.config);
             });
+
+        window.scrollTo({ top: 1000, behavior: "smooth" });
     }
 
     useEffect(() => {
@@ -309,7 +318,7 @@ const PageNotes = () => {
                 setShowChangeGrade(false);
                 setSelectedGrade({ evalName: "", eleveName: "", evalId: "", eleveId: "", maxGradeEval: "", currentGrade: "", currentStatusId: "" });
                 onSubmitSearch(formRef.current.values)
-                alert("Suppression réussie");
+                // alert("Suppression réussie");
             }
         })
             .catch(function (error) {
@@ -329,7 +338,7 @@ const PageNotes = () => {
                     console.log('Error', error.message);
                 }
                 console.log(error.config);
-                alert("UpsertError");
+                // alert("UpsertError");
             });
     }
 
@@ -350,7 +359,7 @@ const PageNotes = () => {
                 setShowChangeGrade(false);
                 setSelectedGrade({ evalName: "", eleveName: "", evalId: "", eleveId: "", maxGradeEval: "", currentGrade: "", currentStatusId: "" });
                 onSubmitSearch(formRef.current.values)
-                alert("Upsert réussi");
+                // alert("Upsert réussi");
             })
                 .catch(function (error) {
                     if (error.response) {
@@ -369,7 +378,7 @@ const PageNotes = () => {
                         console.log('Error', error.message);
                     }
                     console.log(error.config);
-                    alert("UpsertError");
+                    // alert("UpsertError");
                 });
 
         }
@@ -421,8 +430,8 @@ const PageNotes = () => {
                         showTable == "secretary" &&
                         
                             <div className='contentContNotes'>
-                                <CSVLink style={{ textDecoration: 'none' }} data={csvData.data} headers={csvData.headers} filename={'example.csv'}>
-                                    <ChronosButton action={() => { }} text="Exporter en CSV" type="button" id="exportCSV" />
+                                <CSVLink style={{ textDecoration: 'none', width: "fit-content" }} data={csvData.data} headers={csvData.headers} filename={'example.csv'}>
+                                    <ChronosButton width="200px" action={() => { }} text="Exporter en CSV" type="button" id="exportCSV" />
                                 </CSVLink>
                                 <div className='notesTableCont'>
                                     <ChronosTable width={100} correspondance={notes} columns={notes.modules} rows={notes.eleves} showColumnAdditionalInfo={false} actionOpenDetails={getModulesDetails} />
@@ -435,6 +444,7 @@ const PageNotes = () => {
                         notesDetails.hasOwnProperty("evaluations") && notesDetails.hasOwnProperty("eleves") &&
                         (
                             <div className='contentContNotes'>
+                                <h3 className='notesDetailTitle'>Détail du module</h3>
                                 <div className='notesTableCont'>
                                     <ChronosTable modifiable={false} width={100} correspondance={notesDetails} columns={notesDetails.evaluations} rows={notesDetails.eleves} showColumnAdditionalInfo={true} />
                                 </div>
@@ -486,6 +496,30 @@ const PageNotes = () => {
                     }
 
 
+                </>
+            }
+
+
+            {/* Affichage de la page pour les élèves */}
+            {
+                role.includes('ROLE_USER') &&
+                <>
+                    {/* Formulaire de recherche de notes */}
+                    <Formik initialValues={initialValuesSearch} onSubmit={onSubmitSearch} validationSchema={validationSchema} innerRef={formRef}>
+                        <Form className='notesFormulaireRecherche'>
+                            <ChronosInputSelect defaultLabel="Période" name="periodeId" label="" options={periodes} />
+                            <ChronosButton action={() => setShowTable("user")} text="Chercher" type="submit" id="searchNote" />
+                            <FormObserver />
+                        </Form>
+                    </Formik>
+                    <div className='justifyCardCont'>
+                        {/* Affichage des notes pour chaque évaluation triées par modules  */}
+                        {notes.modules.map((module, index) => {
+                            return <StudentNoteCard num={index} key={"NomModule" + module.id} notes={notes} module={module} />
+                        }
+                        )
+                        }
+                    </div>
                 </>
             }
         </>

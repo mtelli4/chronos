@@ -9,7 +9,7 @@ import "../css/styleLogin.css";
 import { Link } from 'react-router-dom';
 import { authService } from "../services/authService";
 
-const PageLogin = () => {
+const PageLogin = ({ setHeaderVisibility }) => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
 
@@ -57,6 +57,10 @@ const PageLogin = () => {
     }
 }
 
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
+
   return (
 
     <>
@@ -81,9 +85,7 @@ const PageLogin = () => {
             </Form>
             
           </Formik>
-          <button>
-              <Link to="/forgotPassword">Mot de passe oublié ou première connexion ?</Link>
-          </button>
+          <Link className='loginLink' to="/forgotPassword">Mot de passe oublié ou première connexion ?</Link>
         </div>
       </div>
     </>

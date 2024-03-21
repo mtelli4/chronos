@@ -4,8 +4,13 @@ import ChronosInput from '../components/ChronosInput';
 import * as Yup from 'yup';
 import "../css/styleLogin.css";
 import axios from 'axios';
+import ChronosButton from '../components/ChronosButton';
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage = ({setHeaderVisibility}) => {
+
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
 
   const initialValues = {
     email: '',
@@ -34,9 +39,9 @@ const ForgotPasswordPage = () => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}>
 
-      <Form className='LoginFormCont'>   
-        <ChronosInput width="100%" title="Email :" type="email" component="div" name="email" />
-        <button type="submit" className='LoginConfirmButton'>Recevoir un code par mail</button>
+      <Form className='forgotCont'>  
+        <ChronosInput width="100%" title="Entrez votre email ..." type="email" component="div" name="email" />
+        <ChronosButton type="submit" text="Recevoir un code par mail" width={"200px"} />
       </Form>
       
     </Formik>

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { authService } from '../services/authService';
+import "../css/styleMessages.css"
+import { ChronosInputField } from '../components/ChronosInput/ChronosInputElements';
+import ChronosInput from '../components/ChronosInput';
 
 const MessageForm = ({ onMessageSubmit }) => {
   const [content, setContent] = useState('');
@@ -15,20 +18,24 @@ const MessageForm = ({ onMessageSubmit }) => {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
+        className='messageInput'
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Type your message..."
+        placeholder="Quelque chose d'interressant ..."
       />
-      <button type="submit">Send</button>
+      <button hidden type="submit">Send</button>
     </form>
   );
 };
 
 const MessageList = ({ messages }) => (
-  <ul>
+  <ul className='messageViewCont'>
     {messages.map((message) => (
       <li key={message.id}>
-        <strong>{message.Utilisateur.nom} {message.Utilisateur.prenom}</strong>: {message.content}
+        <div className='messageViewContTitle'>{message.Utilisateur.nom} {message.Utilisateur.prenom}</div>
+        <div className='messageViewContMessage'>
+          {message.content}
+        </div>
       </li>
     ))}
   </ul>
@@ -36,8 +43,8 @@ const MessageList = ({ messages }) => (
 
 const MessageApp = ({coursId ,moduleId }) => {
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [canSendMessage, setCanSendMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [canSendMessage, setCanSendMessage] = useState(true);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -80,16 +87,16 @@ const MessageApp = ({coursId ,moduleId }) => {
   };
 
   return (
-    <div>
+    <>
       {loading ? (
-        <p>Loading messages...</p>
+        <p>Chargement des messages ...</p>
       ) : (
         <>
           <MessageList messages={messages} />
           {canSendMessage && <MessageForm onMessageSubmit={handleSendMessage} />}
         </>
       )}
-    </div>
+    </>
   );
 };
 

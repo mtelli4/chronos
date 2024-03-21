@@ -4,7 +4,12 @@ import "../css/styleCall.css";
 import { authService } from '../services/authService';
 import ChronosValidateCard from '../components/ChronosValidateCard';
 
-const PageValidate = () => {
+const PageValidate = ({setHeaderVisibility}) => {
+
+    React.useEffect(() => {
+        setHeaderVisibility();
+      });
+      
     const [formations, setFormationsList] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-function AdminDashboard() {
+function AdminDashboard({setHeaderVisibility}) {
+
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
 
   return (<>
     <div>

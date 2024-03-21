@@ -1,6 +1,10 @@
 import React from 'react';
-import { ChronosTableHeader, ChronosTableBody, ChronosTableCell, ChronosTableCont, ChronosTableH, ChronosTableHead, ChronosTableRow, ChronosTableWrapper } from './chronosTableElements';
+import { ChronosTableButtonCont, ChronosTableHeader, ChronosTableBody, ChronosTableCell, ChronosTableCont, ChronosTableH, ChronosTableHead, ChronosTableRow, ChronosTableWrapper } from './chronosTableElements';
 import ChronosButton from "../ChronosButton/index.js"
+import ToggleButton from '../ToggleButton/index.js';
+import pen from "../../images/crayon.png";
+import dot from "../../images/trois-petits-points.png";
+
 
 const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, modifiable, actionOnModifyColumn, actionOpenDetails, showColumnAdditionalInfo }) => { // width : en %, correspondance : {rowID : {columnID : val, columnID: val, ...}, rowID : {...}}
     // Content = liste de string. Chaque string est une clé de ce que je dois afficher
@@ -24,12 +28,14 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                                     <ChronosTableH rowCell={false} centered={true} key={index} rightCorner={index == columns.length - 1}>
                                         <p>{column.libelle}</p>
                                         {column.hasOwnProperty("codeApogee") && <p>{column.codeApogee}</p>}
+                                        {column.hasOwnProperty("coefficient") && <p> Coefficient : {column.coefficient}</p>}
+                                        {column.hasOwnProperty("noteMaximale") && <p> Notée sur : {column.noteMaximale}</p>}
+                                        {column.hasOwnProperty("nombreNote") && <p> Notes saisies : {column.nombreNote}/{rows.length}</p>}
 
-                                        {column.hasOwnProperty("coefficient") && <p> Coefficient: {column.coefficient}</p>}
-                                        {column.hasOwnProperty("noteMaximale") && <p> Notée sur: {column.noteMaximale}</p>}
-                                        {column.hasOwnProperty("nombreNote") && <p> Notes saisies: {column.nombreNote}/{rows.length}</p>}
-                                        {modifiable && actionOnModifyColumn!=undefined && <ChronosButton width="100%" height="25px" action={() => actionOnModifyColumn(column)} text={"Modifier"} type="" />}
-                                        {actionOpenDetails!=undefined && <ChronosButton width="100%" height="25px" action={() => actionOpenDetails(column.id)} text={"Accéder aux détails"} type="" />}
+                                        <ChronosTableButtonCont>
+                                            {modifiable && actionOnModifyColumn!=undefined && <ToggleButton color={"#000"} src={pen} action={() => actionOnModifyColumn(column)} text={"Modifier"} />}
+                                            {actionOpenDetails!=undefined && <ToggleButton color={"#000"} src={dot} action={() => actionOpenDetails(column.id)} text={"Accéder aux détails"} />}
+                                        </ChronosTableButtonCont>
                                         {/* à remplacer par column.val */}
                                     </ChronosTableH>
                                 )
@@ -61,7 +67,7 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                                         return (
                                             <ChronosTableCell leftCorner={index == 0 && jndex == 0} num={index}>
                                                 {
-                                                    <ChronosButton width="100%" height="25px" action={() => actionOnModify(row.Utilisateur.nom + " " + row.Utilisateur.prenom, column.libelle, row.id, column.id, column.noteMaximale)} id={jndex} text={val} type="" />
+                                                    <ChronosButton border="2px solid #ddd" width="100%" height="25px" action={() => actionOnModify(row.Utilisateur.nom + " " + row.Utilisateur.prenom, column.libelle, row.id, column.id, column.noteMaximale)} id={jndex} text={val} type="" />
                                                 }
                                             </ChronosTableCell>
                                         )

@@ -1,0 +1,70 @@
+.usersCont {
+    width: 90%;
+    margin: 0 auto;
+    overflow-x: auto;
+    position: relative;
+}
+
+.usersForm {
+    position: sticky;
+    top: 0;
+    left: 0;
+    margin: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    width: fit-content;
+}
+
+.usersForm select {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 2px solid #000;
+}
+
+.usersForm select:hover {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid #AD6DFF;
+}
+
+.usersTitle {
+    position: sticky;
+    top: 0;
+    left: 0;
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 0px;
+    margin-top: 20px;
+}
+
+.usersTable {
+    border-spacing: 0px;
+    background: #eee;
+    padding: 0px 0px;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+.usersTable thead {
+    position: sticky;
+    top: 0;
+    color: #fff;
+    padding: 20px 30px;
+    background: linear-gradient(#AD6DFF, #8734DB);
+}
+
+.usersTable td {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.usersTable th {
+    padding: 20px 30px;
+}

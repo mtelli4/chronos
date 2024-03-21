@@ -31,19 +31,32 @@ export const ChronosTableHeader = styled.tr`
     background: linear-gradient(90deg, #AD6DFF, #8734DB);
 `;
 
+export const ChronosTableButtonCont = styled.div`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+`;
+
 export const ChronosTableH = styled.th`
     padding: 15px 15px;
     background: none;
-    min-width: 100px;
+    width: fit-content;
+    min-width: 200px;
     color: #fff;
     font-weight: normal;
-    position: ${props => props.sticky ? "sticky" : ""};
+    position: ${props => props.sticky ? "sticky" : "relative"};
     left : ${props => props.sticky ? "0" : ""};
     background: ${props => props.rowCell ? "linear-gradient(270deg, #AD6DFF, #8734DB);" : "none"};
 
-    text-align: ${props => props.centered ? "center" : "left"};
+    /* text-align: ${props => props.centered ? "center" : "left"}; */
+    text-align: left;
     border-top-right-radius: ${props => props.rightCorner ? "10px" : "0px"};
     border-top-left-radius: ${props => props.leftCorner ? "10px" : "0px"};
+
+    @media screen and (max-width : 500px) {
+        font-size: 0.60rem;
+        min-width: 175px;
+    }
 `;
 
 export const ChronosTableRow = styled.tr`

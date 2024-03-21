@@ -29,7 +29,7 @@ export const HeaderCont = styled.div`
     padding: 15px 40px;
     border-radius: 15px;
     align-items: center;
-    display: ${props => props.isVisible ? "flex" : "none"};
+    display: ${props => !props.isVisible ? "none" : "flex"};
     justify-content: space-between;
     transform-origin: center;
 `;
@@ -155,8 +155,13 @@ export const HeaderWrap = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: ${props => props.isActive ? "100vh" : "11vh"};
+    height: ${props => !props.isVisible ? "0" : props.isActive ? "100vh" : "11vh"};
     transition: all ${props => props.isActive ? " 0s linear 0s" : " 0s linear 0.25s"};
     overflow: hidden;
     z-index: 999;
+`;
+
+export const HeaderBurgerWrap = styled.div`
+    height: 100%;
+    width: 50px;
 `;
