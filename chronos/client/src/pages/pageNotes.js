@@ -318,7 +318,7 @@ const PageNotes = ({setHeaderVisibility}) => {
                 setShowChangeGrade(false);
                 setSelectedGrade({ evalName: "", eleveName: "", evalId: "", eleveId: "", maxGradeEval: "", currentGrade: "", currentStatusId: "" });
                 onSubmitSearch(formRef.current.values)
-                alert("Suppression réussie");
+                // alert("Suppression réussie");
             }
         })
             .catch(function (error) {
@@ -338,7 +338,7 @@ const PageNotes = ({setHeaderVisibility}) => {
                     console.log('Error', error.message);
                 }
                 console.log(error.config);
-                alert("UpsertError");
+                // alert("UpsertError");
             });
     }
 
@@ -359,7 +359,7 @@ const PageNotes = ({setHeaderVisibility}) => {
                 setShowChangeGrade(false);
                 setSelectedGrade({ evalName: "", eleveName: "", evalId: "", eleveId: "", maxGradeEval: "", currentGrade: "", currentStatusId: "" });
                 onSubmitSearch(formRef.current.values)
-                alert("Upsert réussi");
+                // alert("Upsert réussi");
             })
                 .catch(function (error) {
                     if (error.response) {
@@ -378,7 +378,7 @@ const PageNotes = ({setHeaderVisibility}) => {
                         console.log('Error', error.message);
                     }
                     console.log(error.config);
-                    alert("UpsertError");
+                    // alert("UpsertError");
                 });
 
         }
