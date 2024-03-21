@@ -5,6 +5,7 @@ import { ajouterDuree, ajouterDureeDate } from "../js/calendar_script"
 import MessageApp from './messages';
 import ToggleButton from '../components/ToggleButton';
 import ChronosButton from '../components/ChronosButton';
+import { authService } from '../services/authService';
 
 // Content de la popup calendar
 const ClassDetails = ({ alreadyCalled, coursId, title, professors, heureDebut, duree, informations, color, moduleId }) => {
@@ -154,7 +155,7 @@ const ClassDetails = ({ alreadyCalled, coursId, title, professors, heureDebut, d
                 <MessageApp coursId={coursId} moduleId={moduleId} />
             </div>
 
-            { !alreadyCalled && 
+            { authService.getCurrentRole().includes("ROLE_PROFESSOR") && !alreadyCalled && 
                 <div className='callButtonCont'>
                     <ChronosButton width="fit-content" text="Faire l'appel" action={() => handleFaireAppel()} />
                 </div>
