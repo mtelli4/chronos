@@ -111,13 +111,6 @@ function App() {
               <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
               <Route path="/justify" element={<PageJustify setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
             </Route>
-            
-            
-            {/* -------------- ADMIN ROUTES -----------------*/}
-            <Route path='/admin/*' element={<AdminPrivateRoute/>}>
-              <Route index element={<AdminDashboard />} />
-              <Route path='test' element={<TestAdmin />} />{/* pour une URL de type /admin/test */}
-            </Route>
 
             <Route path="/email" element={<EmailForm />} exact />
             <Route path="/export-csv" element={<CSVExportPage setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
