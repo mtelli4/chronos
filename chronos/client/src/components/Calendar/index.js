@@ -241,7 +241,7 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
                         key={classData.id}
                         title={classData.title}
                         room={classData.room}
-                        color="#fe4455"
+                        color={classData.color}
                         duration={classData.duration/60 * (100 / hours.length)}
                         startTopPercent={getStartTop(classData.startHour)}
                         professors={classData.professors}
@@ -257,9 +257,8 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
               <img src={chronosC} />
             </div>}
           </CalendarMain>
-          {selectedSquare.id != "" && selectedSquare.moduleId && <Popup html={<ClassDetails coursId={selectedSquare.id} color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />}
-          <Popup html={<ClassDetails coursId={selectedSquare.id} color="#fe4455" title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />
-      </CalendarCont>
+          {selectedSquare.id != "" && selectedSquare.moduleId && <Popup html={<ClassDetails coursId={selectedSquare.id} color={selectedSquare.color} title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />}
+        </CalendarCont>
     </>
   );
 };

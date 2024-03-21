@@ -28,7 +28,7 @@ const PopupModifyGrade = ({ eleveName, evalName, currentGrade, currentStatusId, 
         <Form className='addEvalForm'>
           <div>
             <h4 className='addEvalSubTitle'>Note /{maxGradeEval}</h4>
-            <ChronosInput width={"45%"} type={"number"} name={"grade"} title="" component="div" />
+            <ChronosInput width={"45%"} type={"number"} step="0.01" name={"grade"} title="" component="div" />
           </div>
           <div>
             <h4 className='addEvalSubTitle'>Statut</h4>
