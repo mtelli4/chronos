@@ -52,8 +52,13 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 30px;
     margin-top: 30px;
+}
+
+.gridElemTitle {
+    text-align: center;
 }
 
 .gridElem {
@@ -126,7 +131,7 @@
     
 }
 
-@media (max-width : 675px) {
+@media (max-width : 880px) {
     .typeLstGrid{
         width: 100%;
         display: flex;

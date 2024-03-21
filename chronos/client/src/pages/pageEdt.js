@@ -3,6 +3,8 @@ import axios from 'axios';
 import { authService } from '../services/authService';
 import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
+import PageIndexSecr from './PageIndexSecr';
+import PageIndexAdm from './PageIndexAdm';
 
 const PageEdt = ({onStartCall, setHeaderVisibility}) => {
   
@@ -146,9 +148,22 @@ const PageEdt = ({onStartCall, setHeaderVisibility}) => {
   return (
     <>
       {/* <div className='MonthSelector'></div> */}
-      <div className='calendarCont'>
-        <Calendar onStartCall={onStartCall} weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
-      </div>
+
+      {(role == "ROLE_USER" || role == "ROLE_PROFESSOR")  &&
+        <div className='calendarCont'>
+          <Calendar onStartCall={onStartCall} weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
+        </div>
+      }
+
+
+      {role == "ROLE_SECRETARY"  &&
+        <PageIndexSecr />
+      }
+
+
+      {(role == "ROLE_ADMIN" || role == "ROLE_SUPERADMIN" || role == "ROLE_DIRECTOR")  &&
+        <PageIndexAdm />
+      }
     </>
   )
 }
