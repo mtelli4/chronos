@@ -67,7 +67,7 @@ const ChronosTable = ({ actionOnModify, width, columns, rows, correspondance, mo
                                         return (
                                             <ChronosTableCell leftCorner={index == 0 && jndex == 0} num={index}>
                                                 {
-                                                    <ChronosButton width="100%" height="25px" action={() => actionOnModify(row.Utilisateur.nom + " " + row.Utilisateur.prenom, column.libelle, row.id, column.id, column.noteMaximale)} id={jndex} text={val} type="" />
+                                                    <ChronosButton border="2px solid #ddd" width="100%" height="25px" action={() => actionOnModify(row.Utilisateur.nom + " " + row.Utilisateur.prenom, column.libelle, row.id, column.id, column.noteMaximale)} id={jndex} text={val} type="" />
                                                 }
                                             </ChronosTableCell>
                                         )

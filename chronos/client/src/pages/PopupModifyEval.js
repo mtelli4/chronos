@@ -38,10 +38,8 @@ const PopupModifyEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval,
             </div>
 
             <div className='addEvalButtonCont'>
-              <ChronosButton width={"150px"} height={"40px"} id="insertEvaluation" text="Confirmer" type="submit" />
-            </div>
-            <div className='addEvalButtonCont'>
-              <ChronosButton width={"150px"} height={"40px"} id="deleteEvaluation" text="Supprimer" action={onDelete} type="button" />
+              <ChronosButton width={"50%"} height={"40px"} id="insertEvaluation" text="Confirmer" type="submit" />
+              <ChronosButton width={"50%"} height={"40px"} id="deleteEvaluation" text="Supprimer" action={onDelete} type="button" />
             </div>
             <FormObserver />
           </Form>

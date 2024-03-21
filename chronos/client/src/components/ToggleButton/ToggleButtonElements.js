@@ -28,19 +28,19 @@ export const ButtonToggleImg = styled.img`
 `;
 
 export const ButtonToggleText = styled.div`
-    transition: all 0.5s ease;
     position: absolute;
     top: 50%;
     left: ${props => props.isVisible ? "125%" : "0"};
-    transform: translateY(-50%);
+    transform:  ${props => props.isVisible ? "translateY(-50%) scale(1)" : "translateY(-50%) scale(0)"};
     opacity: ${props => props.isVisible ? "1" : "0"};
     background: #000;
     color: #fff;
     padding: 5px 15px;
     border-radius: 5px;
     display: flex;
-    z-index: -999;
+    z-index: 999999;
     width: max-content;
+    transition: all 0.5s ease, z-index 0s linear 0s;
 `;
 
 export const ButtonToggleWrap = styled.div`

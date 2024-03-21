@@ -11,7 +11,7 @@ export const ChronosButtonCont = styled.button`
     background: #fff;
     color: #000;
     border-radius: 5px;
-    border: 2px solid #000;
+    border: ${props => props.border ? props.border : "2px solid #000"};
     cursor: pointer;
     transition: all 0.25s;
     font-size: ${props => props.font};

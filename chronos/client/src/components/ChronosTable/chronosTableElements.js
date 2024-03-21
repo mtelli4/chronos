@@ -40,7 +40,8 @@ export const ChronosTableButtonCont = styled.div`
 export const ChronosTableH = styled.th`
     padding: 15px 15px;
     background: none;
-    min-width: 300px;
+    width: fit-content;
+    min-width: 200px;
     color: #fff;
     font-weight: normal;
     position: ${props => props.sticky ? "sticky" : "relative"};
@@ -51,6 +52,11 @@ export const ChronosTableH = styled.th`
     text-align: left;
     border-top-right-radius: ${props => props.rightCorner ? "10px" : "0px"};
     border-top-left-radius: ${props => props.leftCorner ? "10px" : "0px"};
+
+    @media screen and (max-width : 500px) {
+        font-size: 0.60rem;
+        min-width: 175px;
+    }
 `;
 
 export const ChronosTableRow = styled.tr`
