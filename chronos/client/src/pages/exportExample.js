@@ -1,7 +1,11 @@
 import React from 'react';
 import { CSVLink } from 'react-csv';
 
-const CSVExportPage = () => {
+const CSVExportPage = ({setHeaderVisibility}) => {
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
+
   const data = [ // les lignes/data
     { name: 'John Doe', age: 30, email: 'john.doe@example.com' },
     { name: 'Jane Smith', age: 25, email: 'jane.smith@example.com' },

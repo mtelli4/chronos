@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Op } = require("sequelize");
 
-const { Cours, Groupe, Eleve, Formation, Professeur, Utilisateur, GroupeEleve, CoursGroupe, CoursProfesseur } = require('../models')
+const { Cours, Groupe, Eleve, Formation, Professeur, Utilisateur, GroupeEleve, CoursGroupe, CoursProfesseur, ModuleCours } = require('../models')
 
 router.get("/", async (req, res) => {
     const listCours = await Cours.findAll()
@@ -48,6 +48,10 @@ router.get("/:role/:idRole/:annee", async (req, res) => {
             ...parameters
           },
           include: [
+            {
+              model: ModuleCours,
+              attributes:['id','couleur'],
+            },
             {
               model: Professeur,
               attributes: ['id','vacataire','utilisateurId'],

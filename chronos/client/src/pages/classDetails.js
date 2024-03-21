@@ -139,10 +139,11 @@ const ClassDetails = ({ coursId, title, professors, heureDebut, duree, informati
                         <li>{item}</li>
                     ))}
                 </ul>
-                <div className='classDetailsChatCont'></div>
             </div>
-
-            <MessageApp coursId={coursId} moduleId={moduleId} />
+            
+            <div className='classDetailsChatCont'>
+                <MessageApp coursId={coursId} moduleId={moduleId} />
+            </div>
         </div>
     </>
   )

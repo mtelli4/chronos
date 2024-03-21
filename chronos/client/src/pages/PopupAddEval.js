@@ -38,7 +38,7 @@ const  PopupAddEval = ({ formRef, initialValuesInsertEval, onSubmitInsertEval, v
                     </div>
 
                     <div className='addEvalButtonCont'>
-                      <ChronosButton width={"150px"} height={"40px"} id="insertEvaluation" text="Confirmer" type="submit" />
+                      <ChronosButton width={"100%"} height={"40px"} id="insertEvaluation" text="Confirmer" type="submit" />
                     </div>
                     <FormObserver />
                 </Form>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-function Unauthorized() {
+function Unauthorized({setHeaderVisibility}) {
+
+  React.useEffect(() => {
+    setHeaderVisibility();
+  });
 
   return (<>
     <div>

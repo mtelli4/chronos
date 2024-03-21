@@ -28,17 +28,15 @@ const PopupModifyGrade = ({ eleveName, evalName, currentGrade, currentStatusId, 
         <Form className='addEvalForm'>
           <div>
             <h4 className='addEvalSubTitle'>Note /{maxGradeEval}</h4>
-            <ChronosInput width={"45%"} type={"number"} name={"grade"} title="" component="div" />
+            <ChronosInput width={"45%"} type={"number"} step="0.01" name={"grade"} title="" component="div" />
           </div>
           <div>
             <h4 className='addEvalSubTitle'>Statut</h4>
             <ChronosInputSelect defaultLabel="Sélectionner un statut" name="statusId" options={statusList} />
           </div>
           <div className='addEvalButtonCont'>
-            <ChronosButton width={"150px"} height={"40px"} id="insertGrade" text="Confirmer" type="submit" />
-          </div>
-          <div className='addEvalButtonCont'>
-            <ChronosButton width={"150px"} height={"40px"} id="deleteGrade" text="Réinitialiser" action={onDelete} type="button"/>
+            <ChronosButton width={"50%"} height={"40px"} id="insertGrade" text="Confirmer" type="submit" />
+            <ChronosButton width={"50%"} height={"40px"} id="deleteGrade" text="Réinitialiser" action={onDelete} type="button"/>
           </div>
         </Form>
       </Formik>

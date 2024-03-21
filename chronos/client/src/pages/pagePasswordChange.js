@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import ChronosInput from '../components/ChronosInput';
 import ChronosLogo from '../components/ChronosLogo';
 
-const PagePasswordChange = () => {
+const PagePasswordChange = ({setHeaderVisibility}) => {
+    React.useEffect(() => {
+      setHeaderVisibility();
+    });
     const navigate = useNavigate();
 
     const initialValues = {

@@ -11,7 +11,13 @@ import student from "../images/student-icon.png"
 import ImportStudentPopup from './importStudentPopup'
 import ImportProfPopup from './importProfPopup';
 
-const PageImportEleves = () => {
+const PageImportEleves = ({setHeaderVisibility}) => {
+
+    React.useEffect(() => {
+      setHeaderVisibility();
+    });
+
+
     const [isActive, setIsActive] = React.useState(false);
     const [popupToOpen, setPopupToOpen] = React.useState("");
 

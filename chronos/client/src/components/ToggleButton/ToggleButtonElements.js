@@ -8,18 +8,22 @@ export const ButtonToggleCont = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.25s;
+    transition: all 0.25s cubic-bezier(.76,1.65,0,1), background 0s linear;
     cursor: pointer;
     outline: none;
     border: none;
 
     &:hover {
-        transform: scale(1.1);
+        transform: scale(1.1) rotate(20deg);
         background: ${props => props.color ? props.color : "linear-gradient(180deg, #AD6DFF, #8734DB)"};
     }
 
     &:active {
         transform: scale(0.9);
+    }
+
+    @media screen and (max-width: 550px) {
+        width: 75%;
     }
 `;
 
@@ -28,19 +32,23 @@ export const ButtonToggleImg = styled.img`
 `;
 
 export const ButtonToggleText = styled.div`
-    transition: all 0.5s ease;
     position: absolute;
     top: 50%;
     left: ${props => props.isVisible ? "125%" : "0"};
-    transform: translateY(-50%);
+    transform:  ${props => props.isVisible ? "translateY(-50%) scale(1)" : "translateY(-50%) scale(0)"};
     opacity: ${props => props.isVisible ? "1" : "0"};
     background: #000;
     color: #fff;
     padding: 5px 15px;
     border-radius: 5px;
     display: flex;
-    z-index: -999;
+    z-index: 999999;
     width: max-content;
+    transition: all 0.5s ease, z-index 0s linear 0s;
+
+    @media screen and (max-width: 550px) {
+        left: ${props => props.isVisible ? "105%" : "0"};
+    }
 `;
 
 export const ButtonToggleWrap = styled.div`

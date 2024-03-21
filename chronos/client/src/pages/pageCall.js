@@ -14,7 +14,12 @@ const validationSchema = Yup.object({});
 const initialValues = {};
 
 
-const PageCall = () => {
+const PageCall = ({setHeaderVisibility}) => {
+
+    React.useEffect(() => {
+        setHeaderVisibility();
+      });
+
     const navigate = useNavigate();
     const [studentList, setStudentList] = useState([]);
     const [absentList, setAbsentList] = useState([]);

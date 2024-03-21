@@ -7,6 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    animation: appearAnim 0.5s;
 }
 
 .notesSelectCont {
@@ -30,17 +31,30 @@
     margin-top: 20px;
 }
 
+.notesDetailTitle {
+    font-weight: normal;
+    font-size: 3rem;
+    margin-top: 60px;
+}
+
 .addEvalForm {
-    width: 90%;
+    width: 87%;
     margin: 0 auto;
     margin-top: 20px;
     display: flex;
+    height: 70vh;
+    overflow-y: auto;
     flex-direction: column;
     gap: 15px;
 }
 
 .addEvalButtonCont {
     margin-top: 30px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
 }
 
 @media screen and (max-width : 800px) {
@@ -60,5 +74,27 @@
         display: flex;
         flex-direction: column;
         gap: 5px;
+    }
+}
+
+@media screen and (max-width : 550px) {
+    .contentContNotes {
+        width: 97%;
+    }
+
+    .notesDetailTitle {
+        font-weight: normal;
+        font-size: 2rem;
+        margin-top: 60px;
+    }
+}
+
+@keyframes appearAnim {
+    0% {
+        background: #fff;
+    }
+
+    100% {
+        background: #ddd;
     }
 }
