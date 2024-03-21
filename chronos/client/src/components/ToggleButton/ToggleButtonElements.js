@@ -21,6 +21,10 @@ export const ButtonToggleCont = styled.button`
     &:active {
         transform: scale(0.9);
     }
+
+    @media screen and (max-width: 550px) {
+        width: 75%;
+    }
 `;
 
 export const ButtonToggleImg = styled.img`
@@ -41,6 +45,10 @@ export const ButtonToggleText = styled.div`
     z-index: 999999;
     width: max-content;
     transition: all 0.5s ease, z-index 0s linear 0s;
+
+    @media screen and (max-width: 550px) {
+        left: ${props => props.isVisible ? "105%" : "0"};
+    }
 `;
 
 export const ButtonToggleWrap = styled.div`

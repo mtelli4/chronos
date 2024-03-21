@@ -30,6 +30,12 @@
     margin-top: 20px;
 }
 
+.notesDetailTitle {
+    font-weight: normal;
+    font-size: 3rem;
+    margin-top: 60px;
+}
+
 .addEvalForm {
     width: 87%;
     margin: 0 auto;
@@ -73,5 +79,11 @@
 @media screen and (max-width : 550px) {
     .contentContNotes {
         width: 97%;
+    }
+
+    .notesDetailTitle {
+        font-weight: normal;
+        font-size: 2rem;
+        margin-top: 60px;
     }
 }

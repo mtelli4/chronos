@@ -250,6 +250,8 @@ const PageNotes = ({setHeaderVisibility}) => {
                 }
                 console.log(error.config);
             });
+
+        window.scrollTo({ top: 1000, behavior: "smooth" });
     }
 
     useEffect(() => {
@@ -428,8 +430,8 @@ const PageNotes = ({setHeaderVisibility}) => {
                         showTable == "secretary" &&
                         
                             <div className='contentContNotes'>
-                                <CSVLink style={{ textDecoration: 'none' }} data={csvData.data} headers={csvData.headers} filename={'example.csv'}>
-                                    <ChronosButton action={() => { }} text="Exporter en CSV" type="button" id="exportCSV" />
+                                <CSVLink style={{ textDecoration: 'none', width: "fit-content" }} data={csvData.data} headers={csvData.headers} filename={'example.csv'}>
+                                    <ChronosButton width="200px" action={() => { }} text="Exporter en CSV" type="button" id="exportCSV" />
                                 </CSVLink>
                                 <div className='notesTableCont'>
                                     <ChronosTable width={100} correspondance={notes} columns={notes.modules} rows={notes.eleves} showColumnAdditionalInfo={false} actionOpenDetails={getModulesDetails} />
@@ -442,6 +444,7 @@ const PageNotes = ({setHeaderVisibility}) => {
                         notesDetails.hasOwnProperty("evaluations") && notesDetails.hasOwnProperty("eleves") &&
                         (
                             <div className='contentContNotes'>
+                                <h3 className='notesDetailTitle'>Détail du module</h3>
                                 <div className='notesTableCont'>
                                     <ChronosTable modifiable={false} width={100} correspondance={notesDetails} columns={notesDetails.evaluations} rows={notesDetails.eleves} showColumnAdditionalInfo={true} />
                                 </div>
