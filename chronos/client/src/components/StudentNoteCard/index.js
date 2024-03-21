@@ -12,7 +12,7 @@ const StudentNoteCard= ({ num, notes, module }) => {
             </StudentNoteCardTitle>
 
             <StudentNoteCardTitleMoy>
-                ( {module.moyenne} )
+                ( {module.additionalValue} )
             </StudentNoteCardTitleMoy>
         </StudentNoteCardTitleCont> 
 
@@ -22,11 +22,11 @@ const StudentNoteCard= ({ num, notes, module }) => {
                     return (
                 <StudentNoteCardContentSection>
                     <StudentNoteCardContentSectionTitle>
-                        {evaluation.libelle} (Moyenne : {evaluation.moyenne}/{evaluation.noteMaximale}) :
+                        {evaluation.libelle} (Moyenne : {evaluation.additionalValue}/{evaluation.noteMaximale}) :
                     </StudentNoteCardContentSectionTitle>
 
                     <StudentNoteCardContentSectionNote>
-                    {notes[module.id][evaluation.id].note}/{evaluation.noteMaximale}
+                    {notes[module.id][evaluation.id].note != null && <>{notes[module.id][evaluation.id].note}/{evaluation.noteMaximale}</>}
                     {notes[module.id][evaluation.id].hasOwnProperty("statut") && <> {notes[module.id][evaluation.id].statut}</>}
                     </StudentNoteCardContentSectionNote>
                 </StudentNoteCardContentSection> )}
