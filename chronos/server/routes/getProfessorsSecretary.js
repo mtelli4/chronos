@@ -44,7 +44,19 @@ router.get("/:id", async (req, res) => {
         }],
     });
 
+    // Récupération de la liste des professeurs liés à la secrétaire indiqué
+    let professors = [];
+    for (const formation of result.Secretaire.Formations) {
+        for (const module of formation.ModuleCours) {
+            for (const professor of module.Professeurs) {
+                if (!professors.some((prof) => prof.id === professor.id)) {
+                    professors.push(professor);
+                }
+            }
+        }
+    }
+
     // Renvoi du résultat (objet JSON)
-    res.json(result);
+    res.json(professors);
 })
 module.exports = router

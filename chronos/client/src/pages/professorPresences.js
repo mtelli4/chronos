@@ -7,7 +7,7 @@ import ProfessorPresencesList from '../components/ProfessorPresencesList';
 
 
 const ProfessorList = () => {
-  const [formations, setFormationsList] = useState([]);
+  const [professors, setProfessorsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
   useEffect(() => {
@@ -16,8 +16,7 @@ const ProfessorList = () => {
         // Requête récupérant les élèves des formations assigné à la secrétaire
         const response = await axios.get(`http://localhost:5000/secretary_professor/${authService.getUserId()}`);
         // Rempli la liste avec les élèves et leurs formations
-        setFormationsList(response.data.Secretaire.Formations);
-        console.log(response.data);
+        setProfessorsList(response.data);
       } catch (error) {
         console.log(error);
       } finally {
@@ -32,14 +31,9 @@ const ProfessorList = () => {
 
   return (
     <div>
-      <h1>Présences professeurs</h1>
-      {formations.map((formation) => (
-        formation.ModuleCours.length > 0 && formation.ModuleCours.map((module) => (
-          module.Professeurs.length > 0 && module.Professeurs.map((professor) => (
-            <ProfessorPresencesList key={professor.id} Professor={professor}  />
-            // console.log(professor)
-          ))
-        ))
+      <h1>Professeurs</h1>
+      {professors.map((professor) => (
+        <ProfessorPresencesList key={professor.id} Professor={professor}  />
       ))}
     </div>
   );

@@ -11,9 +11,10 @@ const ProfessorPresencesList = ({ Professor }) => {
     const [isVisible, setIsVisible] = useState(true); // État pour suivre la visibilité de la liste des absences
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async () => { 
             try {
                 const response = await axios.get(`http://localhost:5000/professor_presences/${Professor.id}`);
+                console.log(response.data);
                 // Rempli la liste des absences de l'étudiant
                 setCoursList(response.data);
             } catch (error) {
