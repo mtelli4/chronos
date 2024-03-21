@@ -25,12 +25,15 @@ import prev from "../../images/prev.png";
 import "../../css/styleCalendar.css";
 import chronosC from "../../images/chronos-c.svg";
 
-const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
+const Calendar = ({ onStartCall, weekdata, onWeekChange, setYear, year }) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedSquare, setSelectedSquare] = useState({ id: "",color: "#000000", title: "", duration: 0, startHour: "00h00", informations: [], moduleId :"" });
   const [currentMonthIndex, setCurrentMonthIndex] = useState((new Date()).getMonthNumber());
   const [currentWeekIndex, setCurrentWeekIndex] = useState((new Date()).getWeekNumber());
 
+
+  console.log("rrrrrrrrrrrrrrrr");
+  console.log(selectedSquare.id);
   // Fonction pour obtenir le numéro de la semaine à partir d'une date
   Date.prototype.getWeekNumber = function () {
     const date = new Date(this.getTime());
@@ -112,8 +115,9 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
     return differenceEnHeures * (100 / hours.length);
   }
 
-  function handleClick(item) {
+  function handleClick(item, coursId) {
     setIsActive(true);
+    onStartCall(coursId);
     setSelectedSquare(item);
   }
 
@@ -238,6 +242,7 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
                   <CalendarMainCol dayssize={days.length}>
                     {weekdata[year][currentMonthIndex][currentWeekIndex][jour].map((classData) => (                  
                       <ClassSquare
+                        coursId={classData.id}
                         key={classData.id}
                         title={classData.title}
                         room={classData.room}
@@ -245,7 +250,7 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
                         duration={classData.duration/60 * (100 / hours.length)}
                         startTopPercent={getStartTop(classData.startHour)}
                         professors={classData.professors}
-                        onSelect={() => handleClick(classData)}
+                        onSelect={() => handleClick(classData, classData.id)}
                       />
                     ))}
                     </CalendarMainCol>
@@ -257,7 +262,7 @@ const Calendar = ({ weekdata, onWeekChange, setYear, year }) => {
               <img src={chronosC} />
             </div>}
           </CalendarMain>
-          {selectedSquare.id != "" && selectedSquare.moduleId && <Popup html={<ClassDetails coursId={selectedSquare.id} color={selectedSquare.color} title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />}
+          {selectedSquare.id != "" && selectedSquare.moduleId && <Popup html={<ClassDetails alreadyCalled={selectedSquare.appel} coursId={selectedSquare.id} color={selectedSquare.color} title={selectedSquare.title} informations={[selectedSquare.room]} professors={selectedSquare.professors} heureDebut={new Date(selectedSquare.startHour)} duree={selectedSquare.duration} moduleId={selectedSquare.moduleId}/>} overflow={"hidden"} format={"landscape"} isActive={isActive} setIsActive={setIsActive} />}
         </CalendarCont>
     </>
   );

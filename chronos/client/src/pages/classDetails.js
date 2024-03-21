@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import "../css/styleClassDetails.css"
 import { ajouterDuree, ajouterDureeDate } from "../js/calendar_script"
 import MessageApp from './messages';
+import ToggleButton from '../components/ToggleButton';
+import ChronosButton from '../components/ChronosButton';
 
 // Content de la popup calendar
-const ClassDetails = ({ coursId, title, professors, heureDebut, duree, informations, color, moduleId }) => {
+const ClassDetails = ({ alreadyCalled, coursId, title, professors, heureDebut, duree, informations, color, moduleId }) => {
+    const navigate = useNavigate();
 
     function ajusterCouleur(hexCode, versChaud = true) {
         // Conversion du code hexadécimal en valeurs R, G, B
@@ -116,6 +120,11 @@ const ClassDetails = ({ coursId, title, professors, heureDebut, duree, informati
         return n < 10 ? '0' + n : '' + n;
     }
 
+
+    function handleFaireAppel() {
+        navigate("/call");
+    }
+
   return (
     <>
         <div style={{background : "linear-gradient(" + couleurChaud + "," + couleurFroid + ")"}} className='leftBorder'></div>
@@ -144,6 +153,12 @@ const ClassDetails = ({ coursId, title, professors, heureDebut, duree, informati
             <div className='classDetailsChatCont'>
                 <MessageApp coursId={coursId} moduleId={moduleId} />
             </div>
+
+            { !alreadyCalled && 
+                <div className='callButtonCont'>
+                    <ChronosButton width="fit-content" text="Faire l'appel" action={() => handleFaireAppel()} />
+                </div>
+            }
         </div>
     </>
   )

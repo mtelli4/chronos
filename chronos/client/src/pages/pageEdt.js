@@ -4,7 +4,7 @@ import { authService } from '../services/authService';
 import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
 
-const PageEdt = ({setHeaderVisibility}) => {
+const PageEdt = ({onStartCall, setHeaderVisibility}) => {
   
   React.useEffect(() => {
     setHeaderVisibility();
@@ -121,7 +121,9 @@ const PageEdt = ({setHeaderVisibility}) => {
         color: cours.color,
         professors: cours.Professeurs,
         moduleId: cours.moduleId,
-        color: cours.ModuleCour.couleur
+        color: cours.ModuleCour.couleur,
+        id : cours.id,
+        appel : cours.appel
       });
     });
     return organizedData;
@@ -145,7 +147,7 @@ const PageEdt = ({setHeaderVisibility}) => {
     <>
       {/* <div className='MonthSelector'></div> */}
       <div className='calendarCont'>
-        <Calendar weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
+        <Calendar onStartCall={onStartCall} weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
       </div>
     </>
   )

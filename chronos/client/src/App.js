@@ -62,6 +62,7 @@ function App() {
   const [userEmail, setUserEmail] = useState();
   const [userRoles, setUserRoles] = useState();
   const [currentWeek, setCurrentWeek] = useState([]);
+  const [coursIdForCall, setCoursIdForCall] = useState();
 
   const handleRoleChange = (event) => {
     const selectedRole = event.target.value;
@@ -92,13 +93,13 @@ function App() {
         <Route exact path='/' element={<PrivateRoute />}>
           {/* <Route path="/ade" element={<Agenda listCours={listCours} />} exact /> */}
           <Route path="/createcourse" element={<CreateCourse setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-          <Route path="/" element={<PageEdt setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+          <Route path="/" element={<PageEdt onStartCall={setCoursIdForCall} setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/importStudents" element={<PageImportEleves setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/users" element={<Users setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
 
             <Route exact path='/' element={<ProfessorPrivateRoute/>} >
-              <Route path="/call" element={<CallForm />} exact />
-              <Route path="/callNidal" element={<PageCall setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+              <Route path="/callTest" element={<CallForm />} exact />
+              <Route path="/call" element={<PageCall coursId={coursIdForCall} setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
             </Route>
 
             <Route exact path='/' element={<SecretaryPrivateRoute/>} >

@@ -53,5 +53,8 @@ router.post("/", async (req, res) => {
             where: { id: call.coursId } 
         }
     ); 
+
+    res.json("success");
 })
 module.exports = router
+

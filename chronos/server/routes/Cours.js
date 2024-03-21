@@ -37,7 +37,7 @@ router.get("/:role/:idRole/:annee", async (req, res) => {
 
         // Récupérer les cours en fonctions des paramètres passés avec l'ID spécifié, avec les cours associés
         const cours = await Cours.findAll({
-        attributes:['id','libelle','debutCours','duree','moduleId' ],
+        attributes:['id','libelle','debutCours','duree','moduleId', 'appel' ],
           where:{
             debutCours: {
               [Op.and]: [
