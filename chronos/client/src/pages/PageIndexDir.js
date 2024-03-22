@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../css/styleImportStudent.css";
-import coche from "../images/doublecoche.png";
+import prof from "../images/liste.png";
+import user from "../images/utilisateur_2.png";
 import student from "../images/student-icon.png";
-import list from "../images/liste.png";
 
-const PageIndexSecr = () => {
+const PageIndexDir = () => {
     const navigate = useNavigate()
   return (
     <>
@@ -15,19 +15,18 @@ const PageIndexSecr = () => {
             <h2 className='ImportTitle'>Bonjour ! Où allons nous ?</h2>
 
             <div className='typeLstGrid'>
-                <div className='gridElem' onClick={() => { navigate("/secretaire/notes") }}>
-                    <img src={list} className='gridImg' />
+                <div className='gridElem' onClick={() => { navigate("/directeur/notes") }}>
+                    <img src={prof} className='gridImg' />
                     <div className='gridElemTitle'>Notes</div>
                 </div>
-
-                <div className='gridElem' onClick={() => { navigate("/secretaire/validate") }}>
-                    <img src={coche} className='gridImg' />
-                    <div className='gridElemTitle'>Absences d'élèves</div>
+                <div className='gridElem' onClick={() => { navigate("/users") }}>
+                    <img src={user} className='gridImg' />
+                    <div className='gridElemTitle'>Liste des utilisateurs</div>
                 </div>
 
-                <div className='gridElem' onClick={() => { navigate("/secretaire/prof-pres") }}>
+                <div className='gridElem' onClick={() => { navigate("/importStudents") }}>
                     <img src={student} className='gridImg' />
-                    <div className='gridElemTitle'>Présences des professeurs</div>
+                    <div className='gridElemTitle'>Import d'élèves</div>
                 </div>
             </div>
         </div>
@@ -37,4 +36,4 @@ const PageIndexSecr = () => {
   )
 }
 
-export default PageIndexSecr
+export default PageIndexDir

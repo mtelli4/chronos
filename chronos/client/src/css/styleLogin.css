@@ -9,10 +9,19 @@
 
 .forgotCont {
     width: 60%;
+    max-width: 750px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.forgotWrap {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .loginLink {

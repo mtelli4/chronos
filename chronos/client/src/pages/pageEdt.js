@@ -5,6 +5,7 @@ import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
 import PageIndexSecr from './PageIndexSecr';
 import PageIndexAdm from './PageIndexAdm';
+import PageIndexDir from './PageIndexDir';
 
 const PageEdt = ({onStartCall, setHeaderVisibility}) => {
   
@@ -161,8 +162,12 @@ const PageEdt = ({onStartCall, setHeaderVisibility}) => {
       }
 
 
-      {(role == "ROLE_ADMIN" || role == "ROLE_SUPERADMIN" || role == "ROLE_DIRECTOR")  &&
+      {(role == "ROLE_ADMIN" || role == "ROLE_SUPERADMIN")  &&
         <PageIndexAdm />
+      }
+
+      {(role == "ROLE_DIRECTOR" ||role == "ROLE_DEPARTMENT_DIRECTOR")  &&
+        <PageIndexDir />
       }
     </>
   )

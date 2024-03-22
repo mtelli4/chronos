@@ -1,7 +1,8 @@
 import React from 'react'
 import ChronosInput from '../ChronosInput'
 import { ChronosCallCardSubTitle, ChronosCallCardStatus, ChronosCallCardTextCont, ChronosCallCardCont, ChronosCallCardImg, ChronosCallCardText } from './ChronosCallCardElements';
-import { useState } from 'react'
+import { useState } from 'react';
+import defaultPP from "../../images/default-pp.svg";
 
 const ChronosCallCard = ({ Student, absentList, setAbsentList, setLateList }) => {
     // Etat local pour enregistrer si l'élève est absent ou présent
@@ -57,7 +58,7 @@ const ChronosCallCard = ({ Student, absentList, setAbsentList, setLateList }) =>
 
   return (
     <ChronosCallCardCont isAbsent={isAbsent} onClick={() => handleClick()}>
-        <ChronosCallCardImg src={`http://localhost:5000/uploads/${Student.trombinoscope}`} />
+        <ChronosCallCardImg src={defaultPP} />
         <ChronosCallCardTextCont>
           <ChronosCallCardText>
               {(Student.Utilisateur.nom).toUpperCase() + " "  + Student.Utilisateur.prenom}

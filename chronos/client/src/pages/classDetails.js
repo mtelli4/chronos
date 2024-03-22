@@ -123,7 +123,7 @@ const ClassDetails = ({ alreadyCalled, coursId, title, professors, heureDebut, d
 
 
     function handleFaireAppel() {
-        navigate("/call");
+        navigate("/enseignant/call");
     }
 
   return (
