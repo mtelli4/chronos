@@ -86,7 +86,7 @@ function App() {
   return (
 
     <Router>
-      <Header isVisible={headerVisibility} links={[{ title: "Accueil", to: "/" }, { title: "notes", to: "/notes" }]} />
+      <Header currentRole={currentRole} isVisible={headerVisibility} links={[{ title: "Accueil", to: "/" }, { title: "notes", to: "/notes" }]} />
       { /* <Link to="/createcourse"> Créer un cours</Link>
       <Link to="/"> Accueil</Link> */ }
       <Routes>

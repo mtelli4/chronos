@@ -7,6 +7,7 @@ export const HeaderButtonCont = styled.div`
     grid-gap: 5px;
     grid-template-columns: repeat(2, 1fr);
     cursor: pointer;
+    padding: 5px;
 `;
 
 export const HeaderButtonSquare = styled.div`
