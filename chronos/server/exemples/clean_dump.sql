@@ -1,3 +1,12 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: Mar 24, 2024 at 07:29 PM
+-- Server version: 8.0.30
+-- PHP Version: 7.4.19
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -9,412 +18,412 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `ingrid`
+-- Database: `ingrid`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `absence`
+-- Table structure for table `absence`
 --
 
 CREATE TABLE `absence` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `valide` tinyint(1) DEFAULT NULL,
-  `justificatif` varchar(50) DEFAULT NULL,
-  `message` varchar(1000) DEFAULT NULL,
-  `eleveId` int(11) DEFAULT NULL,
-  `coursId` int(11) DEFAULT NULL,
+  `justificatif` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `message` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `eleveId` int DEFAULT NULL,
+  `coursId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `retard` int(11) DEFAULT NULL,
+  `retard` int DEFAULT NULL,
   `envoye` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `bloc_competence`
+-- Table structure for table `bloc_competence`
 --
 
 CREATE TABLE `bloc_competence` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(50) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cours`
+-- Table structure for table `cours`
 --
 
 CREATE TABLE `cours` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(50) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `debutCours` datetime DEFAULT NULL,
-  `duree` int(11) DEFAULT NULL,
-  `moduleId` int(11) DEFAULT NULL,
+  `duree` int DEFAULT NULL,
+  `moduleId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `appel` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `appel` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cours_groupe`
+-- Table structure for table `cours_groupe`
 --
 
 CREATE TABLE `cours_groupe` (
-  `coursId` int(11) NOT NULL,
-  `groupeId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `coursId` int NOT NULL,
+  `groupeId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cours_professeur`
+-- Table structure for table `cours_professeur`
 --
 
 CREATE TABLE `cours_professeur` (
-  `professeurId` int(11) NOT NULL,
-  `coursId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `professeurId` int NOT NULL,
+  `coursId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `directeur`
+-- Table structure for table `directeur`
 --
 
 CREATE TABLE `directeur` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `utilisateurId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `utilisateurId` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `eleve`
+-- Table structure for table `eleve`
 --
 
 CREATE TABLE `eleve` (
-  `id` int(11) NOT NULL,
-  `numeroEtudiant` varchar(50) DEFAULT NULL,
-  `trombinoscope` varchar(50) DEFAULT NULL,
+  `id` int NOT NULL,
+  `numeroEtudiant` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `trombinoscope` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tiersTemps` tinyint(1) DEFAULT NULL,
-  `formationId` int(11) DEFAULT NULL,
+  `formationId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `utilisateurId` int(11) DEFAULT NULL,
+  `utilisateurId` int DEFAULT NULL,
   `delegue` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `evaluation`
+-- Table structure for table `evaluation`
 --
 
 CREATE TABLE `evaluation` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(50) DEFAULT NULL,
-  `coefficient` int(11) DEFAULT NULL,
-  `moduleId` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `coefficient` int DEFAULT NULL,
+  `moduleId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `periodeId` int(11) DEFAULT NULL,
-  `noteMaximale` int(11) DEFAULT '20'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `periodeId` int DEFAULT NULL,
+  `noteMaximale` int DEFAULT '20'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `formation`
+-- Table structure for table `formation`
 --
 
 CREATE TABLE `formation` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(50) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `formation_directeur`
+-- Table structure for table `formation_directeur`
 --
 
 CREATE TABLE `formation_directeur` (
-  `directeurId` int(11) NOT NULL,
-  `formationId` int(11) NOT NULL,
+  `directeurId` int NOT NULL,
+  `formationId` int NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `formation_module`
+-- Table structure for table `formation_module`
 --
 
 CREATE TABLE `formation_module` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `FormationId` int(11) NOT NULL,
-  `ModuleCoursId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `FormationId` int NOT NULL,
+  `ModuleCoursId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `formation_secretaire`
+-- Table structure for table `formation_secretaire`
 --
 
 CREATE TABLE `formation_secretaire` (
-  `secretaireId` int(11) NOT NULL,
-  `formationId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `secretaireId` int NOT NULL,
+  `formationId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `groupe`
+-- Table structure for table `groupe`
 --
 
 CREATE TABLE `groupe` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(50) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `groupe_eleve`
+-- Table structure for table `groupe_eleve`
 --
 
 CREATE TABLE `groupe_eleve` (
-  `eleveId` int(11) NOT NULL,
-  `groupeId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `eleveId` int NOT NULL,
+  `groupeId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `groupe_formation`
+-- Table structure for table `groupe_formation`
 --
 
 CREATE TABLE `groupe_formation` (
-  `groupeId` int(11) NOT NULL,
-  `formationId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `groupeId` int NOT NULL,
+  `formationId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `message`
+-- Table structure for table `message`
 --
 
 CREATE TABLE `message` (
-  `id` int(11) NOT NULL,
-  `content` longtext NOT NULL,
-  `UtilisateurId` int(11) NOT NULL,
-  `ModuleId` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `content` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `UtilisateurId` int NOT NULL,
+  `ModuleId` int NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `module_cours`
+-- Table structure for table `module_cours`
 --
 
 CREATE TABLE `module_cours` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(50) DEFAULT NULL,
-  `codeApogee` varchar(50) DEFAULT NULL,
-  `blocCompetenceId` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `codeApogee` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `blocCompetenceId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `couleur` varchar(7) DEFAULT '#fe4455'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `couleur` varchar(7) COLLATE utf8mb4_general_ci DEFAULT '#fe4455'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `note`
+-- Table structure for table `note`
 --
 
 CREATE TABLE `note` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `note` decimal(15,2) DEFAULT NULL,
-  `eleveId` int(11) DEFAULT NULL,
-  `evaluationId` int(11) DEFAULT NULL,
+  `eleveId` int DEFAULT NULL,
+  `evaluationId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `statutId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `statutId` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `notification`
+-- Table structure for table `notification`
 --
 
 CREATE TABLE `notification` (
-  `id` int(11) NOT NULL,
-  `type` varchar(50) DEFAULT NULL,
-  `eleveId` int(11) DEFAULT NULL,
-  `absenceId` int(11) DEFAULT NULL,
-  `evaluationId` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `type` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `eleveId` int DEFAULT NULL,
+  `absenceId` int DEFAULT NULL,
+  `evaluationId` int DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `periode`
+-- Table structure for table `periode`
 --
 
 CREATE TABLE `periode` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `professeur`
+-- Table structure for table `professeur`
 --
 
 CREATE TABLE `professeur` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `vacataire` tinyint(1) DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `utilisateurId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `utilisateurId` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `professeur_module`
+-- Table structure for table `professeur_module`
 --
 
 CREATE TABLE `professeur_module` (
-  `professeurId` int(11) NOT NULL,
-  `moduleId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `professeurId` int NOT NULL,
+  `moduleId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `role`
+-- Table structure for table `role`
 --
 
 CREATE TABLE `role` (
-  `id` int(11) NOT NULL,
-  `label` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL,
+  `label` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `secretaire`
+-- Table structure for table `secretaire`
 --
 
 CREATE TABLE `secretaire` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `utilisateurId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `utilisateurId` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `sequelizemeta`
+-- Table structure for table `sequelizemeta`
 --
 
 CREATE TABLE `sequelizemeta` (
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `statut_note`
+-- Table structure for table `statut_note`
 --
 
 CREATE TABLE `statut_note` (
-  `id` int(11) NOT NULL,
-  `libelle` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL,
+  `libelle` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `utilisateur`
+-- Table structure for table `utilisateur`
 --
 
 CREATE TABLE `utilisateur` (
-  `id` int(11) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `mdp` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mdp` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `premiereConnexion` tinyint(1) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `nom` varchar(255) NOT NULL,
-  `prenom` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `nom` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `prenom` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `utilisateurs_eav`
+-- Table structure for table `utilisateurs_eav`
 --
 
 CREATE TABLE `utilisateurs_eav` (
-  `id` int(11) NOT NULL,
-  `utilisateurId` int(11) DEFAULT NULL,
-  `attribute` varchar(255) DEFAULT NULL,
-  `value` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL,
+  `utilisateurId` int DEFAULT NULL,
+  `attribute` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `value` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `createdAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `utilisateur_role`
+-- Table structure for table `utilisateur_role`
 --
 
 CREATE TABLE `utilisateur_role` (
-  `UtilisateurId` int(11) NOT NULL,
-  `RoleId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `UtilisateurId` int NOT NULL,
+  `RoleId` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `absence`
+-- Indexes for table `absence`
 --
 ALTER TABLE `absence`
   ADD PRIMARY KEY (`id`),
@@ -422,41 +431,41 @@ ALTER TABLE `absence`
   ADD KEY `coursId` (`coursId`);
 
 --
--- Index pour la table `bloc_competence`
+-- Indexes for table `bloc_competence`
 --
 ALTER TABLE `bloc_competence`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cours`
+-- Indexes for table `cours`
 --
 ALTER TABLE `cours`
   ADD PRIMARY KEY (`id`),
   ADD KEY `moduleId` (`moduleId`);
 
 --
--- Index pour la table `cours_groupe`
+-- Indexes for table `cours_groupe`
 --
 ALTER TABLE `cours_groupe`
   ADD PRIMARY KEY (`coursId`,`groupeId`),
   ADD KEY `groupeId` (`groupeId`);
 
 --
--- Index pour la table `cours_professeur`
+-- Indexes for table `cours_professeur`
 --
 ALTER TABLE `cours_professeur`
   ADD PRIMARY KEY (`professeurId`,`coursId`),
   ADD KEY `coursId` (`coursId`);
 
 --
--- Index pour la table `directeur`
+-- Indexes for table `directeur`
 --
 ALTER TABLE `directeur`
   ADD PRIMARY KEY (`id`),
   ADD KEY `utilisateurId` (`utilisateurId`);
 
 --
--- Index pour la table `eleve`
+-- Indexes for table `eleve`
 --
 ALTER TABLE `eleve`
   ADD PRIMARY KEY (`id`),
@@ -464,7 +473,7 @@ ALTER TABLE `eleve`
   ADD KEY `ELEVE_utilisateurId_foreign_idx` (`utilisateurId`);
 
 --
--- Index pour la table `evaluation`
+-- Indexes for table `evaluation`
 --
 ALTER TABLE `evaluation`
   ADD PRIMARY KEY (`id`),
@@ -472,53 +481,53 @@ ALTER TABLE `evaluation`
   ADD KEY `EVALUATION_periodeId_foreign_idx` (`periodeId`);
 
 --
--- Index pour la table `formation`
+-- Indexes for table `formation`
 --
 ALTER TABLE `formation`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `formation_directeur`
+-- Indexes for table `formation_directeur`
 --
 ALTER TABLE `formation_directeur`
   ADD PRIMARY KEY (`directeurId`,`formationId`),
   ADD KEY `formationId` (`formationId`);
 
 --
--- Index pour la table `formation_module`
+-- Indexes for table `formation_module`
 --
 ALTER TABLE `formation_module`
   ADD PRIMARY KEY (`FormationId`,`ModuleCoursId`);
 
 --
--- Index pour la table `formation_secretaire`
+-- Indexes for table `formation_secretaire`
 --
 ALTER TABLE `formation_secretaire`
   ADD PRIMARY KEY (`secretaireId`,`formationId`),
   ADD KEY `formationId` (`formationId`);
 
 --
--- Index pour la table `groupe`
+-- Indexes for table `groupe`
 --
 ALTER TABLE `groupe`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `groupe_eleve`
+-- Indexes for table `groupe_eleve`
 --
 ALTER TABLE `groupe_eleve`
   ADD PRIMARY KEY (`eleveId`,`groupeId`),
   ADD KEY `groupeId` (`groupeId`);
 
 --
--- Index pour la table `groupe_formation`
+-- Indexes for table `groupe_formation`
 --
 ALTER TABLE `groupe_formation`
   ADD PRIMARY KEY (`groupeId`,`formationId`),
   ADD KEY `formationId` (`formationId`);
 
 --
--- Index pour la table `message`
+-- Indexes for table `message`
 --
 ALTER TABLE `message`
   ADD PRIMARY KEY (`id`,`UtilisateurId`,`ModuleId`),
@@ -526,14 +535,14 @@ ALTER TABLE `message`
   ADD KEY `ModuleId` (`ModuleId`);
 
 --
--- Index pour la table `module_cours`
+-- Indexes for table `module_cours`
 --
 ALTER TABLE `module_cours`
   ADD PRIMARY KEY (`id`),
   ADD KEY `blocCompetenceId` (`blocCompetenceId`);
 
 --
--- Index pour la table `note`
+-- Indexes for table `note`
 --
 ALTER TABLE `note`
   ADD PRIMARY KEY (`id`),
@@ -542,7 +551,7 @@ ALTER TABLE `note`
   ADD KEY `NOTE_statutId_foreign_idx` (`statutId`);
 
 --
--- Index pour la table `notification`
+-- Indexes for table `notification`
 --
 ALTER TABLE `notification`
   ADD PRIMARY KEY (`id`),
@@ -551,291 +560,291 @@ ALTER TABLE `notification`
   ADD KEY `evaluationId` (`evaluationId`);
 
 --
--- Index pour la table `periode`
+-- Indexes for table `periode`
 --
 ALTER TABLE `periode`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `professeur`
+-- Indexes for table `professeur`
 --
 ALTER TABLE `professeur`
   ADD PRIMARY KEY (`id`),
   ADD KEY `PROFESSEUR_utilisateurId_foreign_idx` (`utilisateurId`);
 
 --
--- Index pour la table `professeur_module`
+-- Indexes for table `professeur_module`
 --
 ALTER TABLE `professeur_module`
   ADD PRIMARY KEY (`professeurId`,`moduleId`),
   ADD KEY `moduleId` (`moduleId`);
 
 --
--- Index pour la table `role`
+-- Indexes for table `role`
 --
 ALTER TABLE `role`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `secretaire`
+-- Indexes for table `secretaire`
 --
 ALTER TABLE `secretaire`
   ADD PRIMARY KEY (`id`),
   ADD KEY `SECRETAIRE_utilisateurId_foreign_idx` (`utilisateurId`);
 
 --
--- Index pour la table `sequelizemeta`
+-- Indexes for table `sequelizemeta`
 --
 ALTER TABLE `sequelizemeta`
   ADD PRIMARY KEY (`name`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Index pour la table `statut_note`
+-- Indexes for table `statut_note`
 --
 ALTER TABLE `statut_note`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `utilisateur`
+-- Indexes for table `utilisateur`
 --
 ALTER TABLE `utilisateur`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `utilisateurs_eav`
+-- Indexes for table `utilisateurs_eav`
 --
 ALTER TABLE `utilisateurs_eav`
   ADD PRIMARY KEY (`id`),
   ADD KEY `utilisateurId` (`utilisateurId`);
 
 --
--- Index pour la table `utilisateur_role`
+-- Indexes for table `utilisateur_role`
 --
 ALTER TABLE `utilisateur_role`
   ADD PRIMARY KEY (`UtilisateurId`,`RoleId`),
   ADD KEY `RoleId` (`RoleId`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `absence`
+-- AUTO_INCREMENT for table `absence`
 --
 ALTER TABLE `absence`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `bloc_competence`
+-- AUTO_INCREMENT for table `bloc_competence`
 --
 ALTER TABLE `bloc_competence`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `cours`
+-- AUTO_INCREMENT for table `cours`
 --
 ALTER TABLE `cours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `directeur`
+-- AUTO_INCREMENT for table `directeur`
 --
 ALTER TABLE `directeur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `eleve`
+-- AUTO_INCREMENT for table `eleve`
 --
 ALTER TABLE `eleve`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `evaluation`
+-- AUTO_INCREMENT for table `evaluation`
 --
 ALTER TABLE `evaluation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `formation`
+-- AUTO_INCREMENT for table `formation`
 --
 ALTER TABLE `formation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `groupe`
+-- AUTO_INCREMENT for table `groupe`
 --
 ALTER TABLE `groupe`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `message`
+-- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `module_cours`
+-- AUTO_INCREMENT for table `module_cours`
 --
 ALTER TABLE `module_cours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `note`
+-- AUTO_INCREMENT for table `note`
 --
 ALTER TABLE `note`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `notification`
+-- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `periode`
+-- AUTO_INCREMENT for table `periode`
 --
 ALTER TABLE `periode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `professeur`
+-- AUTO_INCREMENT for table `professeur`
 --
 ALTER TABLE `professeur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `role`
+-- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `secretaire`
+-- AUTO_INCREMENT for table `secretaire`
 --
 ALTER TABLE `secretaire`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `statut_note`
+-- AUTO_INCREMENT for table `statut_note`
 --
 ALTER TABLE `statut_note`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `utilisateur`
+-- AUTO_INCREMENT for table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `utilisateurs_eav`
+-- AUTO_INCREMENT for table `utilisateurs_eav`
 --
 ALTER TABLE `utilisateurs_eav`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `absence`
+-- Constraints for table `absence`
 --
 ALTER TABLE `absence`
   ADD CONSTRAINT `absence_ibfk_1` FOREIGN KEY (`eleveId`) REFERENCES `eleve` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `absence_ibfk_2` FOREIGN KEY (`coursId`) REFERENCES `cours` (`id`) ON DELETE SET NULL;
 
 --
--- Contraintes pour la table `cours`
+-- Constraints for table `cours`
 --
 ALTER TABLE `cours`
   ADD CONSTRAINT `cours_ibfk_1` FOREIGN KEY (`moduleId`) REFERENCES `module_cours` (`id`) ON DELETE SET NULL;
 
 --
--- Contraintes pour la table `cours_groupe`
+-- Constraints for table `cours_groupe`
 --
 ALTER TABLE `cours_groupe`
   ADD CONSTRAINT `cours_groupe_ibfk_1` FOREIGN KEY (`coursId`) REFERENCES `cours` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `cours_groupe_ibfk_2` FOREIGN KEY (`groupeId`) REFERENCES `groupe` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `cours_professeur`
+-- Constraints for table `cours_professeur`
 --
 ALTER TABLE `cours_professeur`
   ADD CONSTRAINT `cours_professeur_ibfk_1` FOREIGN KEY (`professeurId`) REFERENCES `professeur` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `cours_professeur_ibfk_2` FOREIGN KEY (`coursId`) REFERENCES `cours` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `directeur`
+-- Constraints for table `directeur`
 --
 ALTER TABLE `directeur`
   ADD CONSTRAINT `directeur_ibfk_1` FOREIGN KEY (`utilisateurId`) REFERENCES `utilisateur` (`id`);
 
 --
--- Contraintes pour la table `eleve`
+-- Constraints for table `eleve`
 --
 ALTER TABLE `eleve`
-  ADD CONSTRAINT `ELEVE_utilisateurId_foreign_idx` FOREIGN KEY (`utilisateurId`) REFERENCES `utilisateur` (`id`),
-  ADD CONSTRAINT `eleve_ibfk_1` FOREIGN KEY (`formationId`) REFERENCES `formation` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `eleve_ibfk_1` FOREIGN KEY (`formationId`) REFERENCES `formation` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `ELEVE_utilisateurId_foreign_idx` FOREIGN KEY (`utilisateurId`) REFERENCES `utilisateur` (`id`);
 
 --
--- Contraintes pour la table `evaluation`
+-- Constraints for table `evaluation`
 --
 ALTER TABLE `evaluation`
-  ADD CONSTRAINT `EVALUATION_periodeId_foreign_idx` FOREIGN KEY (`periodeId`) REFERENCES `periode` (`id`),
-  ADD CONSTRAINT `evaluation_ibfk_1` FOREIGN KEY (`moduleId`) REFERENCES `module_cours` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `evaluation_ibfk_1` FOREIGN KEY (`moduleId`) REFERENCES `module_cours` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `EVALUATION_periodeId_foreign_idx` FOREIGN KEY (`periodeId`) REFERENCES `periode` (`id`);
 
 --
--- Contraintes pour la table `formation_directeur`
+-- Constraints for table `formation_directeur`
 --
 ALTER TABLE `formation_directeur`
   ADD CONSTRAINT `formation_directeur_ibfk_1` FOREIGN KEY (`directeurId`) REFERENCES `directeur` (`id`),
   ADD CONSTRAINT `formation_directeur_ibfk_2` FOREIGN KEY (`formationId`) REFERENCES `formation` (`id`);
 
 --
--- Contraintes pour la table `formation_secretaire`
+-- Constraints for table `formation_secretaire`
 --
 ALTER TABLE `formation_secretaire`
   ADD CONSTRAINT `formation_secretaire_ibfk_1` FOREIGN KEY (`secretaireId`) REFERENCES `secretaire` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `formation_secretaire_ibfk_2` FOREIGN KEY (`formationId`) REFERENCES `formation` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `groupe_eleve`
+-- Constraints for table `groupe_eleve`
 --
 ALTER TABLE `groupe_eleve`
   ADD CONSTRAINT `groupe_eleve_ibfk_1` FOREIGN KEY (`eleveId`) REFERENCES `eleve` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `groupe_eleve_ibfk_2` FOREIGN KEY (`groupeId`) REFERENCES `groupe` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `groupe_formation`
+-- Constraints for table `groupe_formation`
 --
 ALTER TABLE `groupe_formation`
   ADD CONSTRAINT `groupe_formation_ibfk_1` FOREIGN KEY (`groupeId`) REFERENCES `groupe` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `groupe_formation_ibfk_2` FOREIGN KEY (`formationId`) REFERENCES `formation` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `message`
+-- Constraints for table `message`
 --
 ALTER TABLE `message`
   ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`UtilisateurId`) REFERENCES `utilisateur` (`id`),
   ADD CONSTRAINT `message_ibfk_2` FOREIGN KEY (`ModuleId`) REFERENCES `module_cours` (`id`);
 
 --
--- Contraintes pour la table `module_cours`
+-- Constraints for table `module_cours`
 --
 ALTER TABLE `module_cours`
   ADD CONSTRAINT `module_cours_ibfk_1` FOREIGN KEY (`blocCompetenceId`) REFERENCES `bloc_competence` (`id`) ON DELETE SET NULL;
 
 --
--- Contraintes pour la table `note`
+-- Constraints for table `note`
 --
 ALTER TABLE `note`
-  ADD CONSTRAINT `NOTE_statutId_foreign_idx` FOREIGN KEY (`statutId`) REFERENCES `statut_note` (`id`),
   ADD CONSTRAINT `note_ibfk_1` FOREIGN KEY (`eleveId`) REFERENCES `eleve` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `note_ibfk_2` FOREIGN KEY (`evaluationId`) REFERENCES `evaluation` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `note_ibfk_2` FOREIGN KEY (`evaluationId`) REFERENCES `evaluation` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `NOTE_statutId_foreign_idx` FOREIGN KEY (`statutId`) REFERENCES `statut_note` (`id`);
 
 --
--- Contraintes pour la table `notification`
+-- Constraints for table `notification`
 --
 ALTER TABLE `notification`
   ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`eleveId`) REFERENCES `eleve` (`id`) ON DELETE SET NULL,
@@ -843,32 +852,32 @@ ALTER TABLE `notification`
   ADD CONSTRAINT `notification_ibfk_3` FOREIGN KEY (`evaluationId`) REFERENCES `evaluation` (`id`) ON DELETE SET NULL;
 
 --
--- Contraintes pour la table `professeur`
+-- Constraints for table `professeur`
 --
 ALTER TABLE `professeur`
   ADD CONSTRAINT `PROFESSEUR_utilisateurId_foreign_idx` FOREIGN KEY (`utilisateurId`) REFERENCES `utilisateur` (`id`);
 
 --
--- Contraintes pour la table `professeur_module`
+-- Constraints for table `professeur_module`
 --
 ALTER TABLE `professeur_module`
   ADD CONSTRAINT `professeur_module_ibfk_1` FOREIGN KEY (`professeurId`) REFERENCES `professeur` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `professeur_module_ibfk_2` FOREIGN KEY (`moduleId`) REFERENCES `module_cours` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `secretaire`
+-- Constraints for table `secretaire`
 --
 ALTER TABLE `secretaire`
   ADD CONSTRAINT `SECRETAIRE_utilisateurId_foreign_idx` FOREIGN KEY (`utilisateurId`) REFERENCES `utilisateur` (`id`);
 
 --
--- Contraintes pour la table `utilisateurs_eav`
+-- Constraints for table `utilisateurs_eav`
 --
 ALTER TABLE `utilisateurs_eav`
   ADD CONSTRAINT `utilisateurs_eav_ibfk_1` FOREIGN KEY (`utilisateurId`) REFERENCES `utilisateur` (`id`);
 
 --
--- Contraintes pour la table `utilisateur_role`
+-- Constraints for table `utilisateur_role`
 --
 ALTER TABLE `utilisateur_role`
   ADD CONSTRAINT `utilisateur_role_ibfk_1` FOREIGN KEY (`UtilisateurId`) REFERENCES `utilisateur` (`id`),
