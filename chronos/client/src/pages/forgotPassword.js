@@ -34,17 +34,19 @@ const ForgotPasswordPage = ({setHeaderVisibility}) => {
   }
 
   return (
-    <Formik
+    <div className='forgotWrap'>
+      <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}>
 
-      <Form className='forgotCont'>  
-        <ChronosInput width="100%" title="Entrez votre email ..." type="email" component="div" name="email" />
-        <ChronosButton type="submit" text="Recevoir un code par mail" width={"200px"} />
-      </Form>
-      
-    </Formik>
+        <Form className='forgotCont'>  
+          <ChronosInput width="100%" title="Entrez votre email ..." type="email" component="div" name="email" />
+          <ChronosButton type="submit" text="Recevoir un code par mail" width={"200px"} />
+        </Form>
+        
+      </Formik>
+    </div>
   );
 };
 

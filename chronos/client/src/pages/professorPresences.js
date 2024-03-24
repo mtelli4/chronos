@@ -4,10 +4,12 @@ import axios from 'axios';
 
 // Import des sous composants
 import ProfessorPresencesList from '../components/ProfessorPresencesList';
+import ChronosProfPresCard from '../components/ChronosProfPresCard';
 
 
 const ProfessorList = () => {
   const [professors, setProfessorsList] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true); // État pour suivre l'état de chargement
 
   useEffect(() => {
@@ -30,12 +32,19 @@ const ProfessorList = () => {
   }, [isLoading]); // Déclenche le useEffect uniquement si isLoading passe à true à nouveau
 
   return (
-    <div>
-      <h1>Professeurs</h1>
-      {professors.map((professor) => (
-        <ProfessorPresencesList key={professor.id} Professor={professor}  />
-      ))}
-    </div>
+    <>
+      <div className='justifyCont'>
+        <div className='callTitle'>
+          <h3>Présence des professeurs</h3>
+        </div>
+
+        <div className='justifyCardCont'>
+          {professors.map((professor, index) => (
+            <ChronosProfPresCard key={index} Professor={professor} />
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

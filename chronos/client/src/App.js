@@ -19,6 +19,7 @@ import { AdminPrivateRoute } from './routes/adminRoute';
 import { ProfessorPrivateRoute } from './routes/professorRoute';
 import { SecretaryPrivateRoute } from './routes/secretaryRoute';
 import { StudentPrivateRoute } from './routes/studentRoute';
+import { DirectorPrivateRoute } from './routes/directorRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import TestAdmin from './pages/admin/test';
 import Unauthorized from './pages/error/Unauthorized';
@@ -32,6 +33,8 @@ import PageValidate from './pages/pageValidate';
 import Users from './pages/users';
 import { authService } from './services/authService';
 import ForgotPasswordPage from './pages/forgotPassword';
+import PageIndexSecr from './pages/PageIndexSecr';
+import PageIndexAdm from './pages/PageIndexAdm';
 
 import MessageApp from './pages/messages';
 import PageEmail from './pages/pageEmail';
@@ -47,21 +50,48 @@ function App() {
   const [headerVisibility, setHeaderVisibility] = useState(true);
 
   let headerRoutes = [
-    { title: "Calendrier", to: "/" },
-    { title: "Notes", to: "/notes" }
+    { title: "Accueil", to: "/" },
   ];
 
   const currentRole = authService.getCurrentRole();
 
   // Routes for admins/secretaires
-  if (['ROLE_SECRETARY', 'ROLE_ADMIN', 'ROLE_SUPERADMIN'].includes(currentRole)) {
-    headerRoutes.push({ title: "Imports", to: '/importStudents' });
-    headerRoutes.push({ title: "Utilisateurs", to: '/users' })
+  if (['ROLE_ADMIN', 'ROLE_SUPERADMIN'].includes(currentRole)) {
+    headerRoutes.push({ title: "Imports", to: '/admin/importStudents' });
+    headerRoutes.push({ title: "Utilisateurs", to: '/admin/users' })
+  }
+
+  if (['ROLE_SECRETARY'].includes(currentRole)) {
+    headerRoutes.push({ title: "Notes", to: "/secretaire/notes" })
+    headerRoutes.push({ title: "Absences", to: "/secretaire/validate" })
+    headerRoutes.push({ title: "Présences", to: "/secretaire/prof-pres" })
+    headerRoutes.push({ title: "Imports", to: '/secretaire/importStudents' });
+    headerRoutes.push({ title: "Utilisateurs", to: '/secretaire/users' })
+  }
+
+  if (['ROLE_USER'].includes(currentRole)) {
+    headerRoutes.push({ title: "Notes", to: "/eleve/notes" })
+    headerRoutes.push({ title: "Absences", to: "/eleve/justify" })
+  }
+
+  if (['ROLE_PROFESSOR'].includes(currentRole)) {
+    headerRoutes.push({ title: "Notes", to: "/enseignant/notes" })
+    headerRoutes.push({ title: "Absences", to: "/enseignant/validate" })
+    headerRoutes.push({ title: "Présences", to: "/enseignant/prof-pres" })
+    headerRoutes.push({ title: "Imports", to: '/secretaire/importStudents' });
+    headerRoutes.push({ title: "Utilisateurs", to: '/secretaire/users' })
+  }
+
+  if (['ROLE_DIRECTOR','ROLE_DEPARTMENT_DIRECTOR'].includes(currentRole)) {
+    headerRoutes.push({ title: "Notes", to: "/directeur/notes" })
+    headerRoutes.push({ title: "Utilisateurs", to: '/directeur/users' })
+    headerRoutes.push({ title: "Import", to: '/importStudents' })
   }
 
   const [userEmail, setUserEmail] = useState();
   const [userRoles, setUserRoles] = useState();
   const [currentWeek, setCurrentWeek] = useState([]);
+  const [coursIdForCall, setCoursIdForCall] = useState();
 
   const handleRoleChange = (event) => {
     const selectedRole = event.target.value;
@@ -85,37 +115,48 @@ function App() {
   return (
 
     <Router>
-      <Header isVisible={headerVisibility} links={[{ title: "Calendrier", to: "/" }, { title: "notes", to: "/notes" }]} />
-      { /* <Link to="/createcourse"> Créer un cours</Link>
-      <Link to="/"> Accueil</Link> */ }
+      <Header currentRole={currentRole} isVisible={headerVisibility} links={headerRoutes} />
       <Routes>
         <Route exact path='/' element={<PrivateRoute />}>
-          {/* <Route path="/ade" element={<Agenda listCours={listCours} />} exact /> */}
+          <Route path="/" element={<PageEdt onStartCall={setCoursIdForCall} setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+
           <Route path="/createcourse" element={<CreateCourse setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-          <Route path="/" element={<PageEdt setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/importStudents" element={<PageImportEleves setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
           <Route path="/users" element={<Users setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
 
-            <Route exact path='/' element={<ProfessorPrivateRoute/>} >
-              <Route path="/call" element={<CallForm />} exact />
-              <Route path="/callNidal" element={<PageCall setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-            </Route>
+          <Route exact path='/enseignant/*' element={<ProfessorPrivateRoute />} >
+            {/* <Route path="callTest" element={<CallForm />} exact /> */}
+            <Route path="call" element={<PageCall coursId={coursIdForCall} setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+            <Route path="notes" element={<PageNotes setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+          </Route>
 
-            <Route exact path='/' element={<SecretaryPrivateRoute/>} >
-              <Route path="/valid-abs" element={<ValidationAbsPage />} exact />
-              <Route path="/validate" element={<PageValidate setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-              <Route path="/prof-pres" element={<ProfessorList setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-            </Route>
+          <Route exact path='/directeur/*' element={<DirectorPrivateRoute />} >
+            <Route path="notes" element={<PageNotes setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+            <Route path="users" element={<Users setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
 
-            <Route exact path='/' element={<StudentPrivateRoute/>}>
-              <Route path="/justif-abs" element={<JustifyAbsPage />} exact />
-              <Route path="/justify" element={<PageJustify setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-            </Route>
+          </Route>
 
-            <Route path="/email" element={<EmailForm />} exact />
-            <Route path="/export-csv" element={<CSVExportPage setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-            <Route path="/notes" element={<PageNotes setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
-            {/* <Route path="/email" element={<PageEmail />} exact /> */}
+          <Route exact path='/secretaire/*' element={<SecretaryPrivateRoute />} >
+            <Route path="valid-abs" element={<ValidationAbsPage />} exact />
+            <Route path="validate" element={<PageValidate setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+            <Route path="prof-pres" element={<ProfessorList setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+            <Route path="notes" element={<PageNotes setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+
+            <Route path="importStudents" element={<PageImportEleves setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+            <Route path="users" element={<Users setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+
+          </Route>
+
+          <Route exact path='/eleve/*' element={<StudentPrivateRoute />}>
+            {/* <Route path="justif-abs" element={<JustifyAbsPage />} exact /> */}
+            <Route path="justify" element={<PageJustify setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+            <Route path="notes" element={<PageNotes setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+
+          </Route>
+
+          <Route path="/email" element={<EmailForm />} exact />
+          <Route path="/export-csv" element={<CSVExportPage setHeaderVisibility={() => setHeaderVisibility(true)} />} exact />
+          {/* <Route path="/email" element={<PageEmail />} exact /> */}
 
           <Route path='/admin/*' element={<AdminPrivateRoute />}>
             <Route index element={<AdminDashboard setHeaderVisibility={() => setHeaderVisibility(true)} />} />

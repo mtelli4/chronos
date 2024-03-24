@@ -14,7 +14,7 @@ const validationSchema = Yup.object({});
 const initialValues = {};
 
 
-const PageCall = ({setHeaderVisibility}) => {
+const PageCall = ({setHeaderVisibility, coursId}) => {
 
     React.useEffect(() => {
         setHeaderVisibility();
@@ -31,7 +31,7 @@ const PageCall = ({setHeaderVisibility}) => {
     useEffect(() => { 
         const fetchData = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/eleve_cours/1");
+            const response = await axios.get(`http://localhost:5000/eleve_cours/${coursId}`);
             // Rempli la liste des étudiants avec tous les étudiants du cours récupérés
             setStudentList(
                 response.data.Groupes.reduce((accumulator, currentList) => {
@@ -56,14 +56,19 @@ const PageCall = ({setHeaderVisibility}) => {
 
     const handleSubmit = (absences, lates) => {
         // Envoyer les données au serveur pour authentification
-        axios.post('http://localhost:5000/end_call',  { 'absences': absences, 'lates': lates, 'coursId': 1 })
+        axios.post('http://localhost:5000/end_call',  { 'absences': absences, 'lates': lates, 'coursId': coursId })
         .then(() => {
-        navigate('/'); // Redirige vers la page d'accueil (Calendrier)
+            console.log("zertyuiuytfdsfghjklhgfdf");
+            navigate('/'); // Redirige vers la page d'accueil (Calendrier)
         })
         .catch((error) => {
-        console.log(error);
+            console.log(error);
         })
     };
+
+    function handleClick() {
+        navigate("/");
+    }
 
   return (
     <>

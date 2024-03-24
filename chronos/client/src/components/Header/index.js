@@ -9,7 +9,7 @@ import ChronosButton from "../ChronosButton"
 import grid from "../../images/la-grille.png";
 import HeaderButton from '../HeaderButon/index.js';
  
-const Header = ({ links, isVisible }) => { // links = [{title : string, to : string}]
+const Header = ({ currentRole,links, isVisible }) => { // links = [{title : string, to : string}]
   const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -67,15 +67,18 @@ const Header = ({ links, isVisible }) => { // links = [{title : string, to : str
           </HeaderSelect>
 
           <HeaderLinks>
-            {links.map((item, index) => (
-                <HeaderLink key={item.id}>
-                  <HeaderLinkText selected={selected == index} to={item.to} onClick={() => handleClick(index)}>
-                    {item.title}
-                  </HeaderLinkText>
-
-                  <HeaderLinkBorder selected={selected == index}></HeaderLinkBorder>
-                </HeaderLink>
-            ))}
+            {links.map((item, index) => {
+              if ((item.title == "notes" && ["ROLE_USER", "ROLE_SECRETARY", "ROLE_PROFESSOR"].includes(currentRole)) || item.title != "notes") {
+                return (
+                  <HeaderLink key={item.id}>
+                    <HeaderLinkText selected={selected == index} to={item.to} onClick={() => handleClick(index)}>
+                      {item.title}
+                    </HeaderLinkText>
+  
+                    <HeaderLinkBorder selected={selected == index}></HeaderLinkBorder>
+                  </HeaderLink>
+                )
+              }})}
           </HeaderLinks>
 
             

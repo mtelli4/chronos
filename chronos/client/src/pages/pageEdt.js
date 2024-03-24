@@ -3,8 +3,11 @@ import axios from 'axios';
 import { authService } from '../services/authService';
 import Calendar from '../components/Calendar';
 import "../css/stylePageEdt.css";
+import PageIndexSecr from './PageIndexSecr';
+import PageIndexAdm from './PageIndexAdm';
+import PageIndexDir from './PageIndexDir';
 
-const PageEdt = ({setHeaderVisibility}) => {
+const PageEdt = ({onStartCall, setHeaderVisibility}) => {
   
   React.useEffect(() => {
     setHeaderVisibility();
@@ -121,7 +124,9 @@ const PageEdt = ({setHeaderVisibility}) => {
         color: cours.color,
         professors: cours.Professeurs,
         moduleId: cours.moduleId,
-        color: cours.ModuleCour.couleur
+        color: cours.ModuleCour.couleur,
+        id : cours.id,
+        appel : cours.appel
       });
     });
     return organizedData;
@@ -144,9 +149,26 @@ const PageEdt = ({setHeaderVisibility}) => {
   return (
     <>
       {/* <div className='MonthSelector'></div> */}
-      <div className='calendarCont'>
-        <Calendar weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
-      </div>
+
+      {(role == "ROLE_USER" || role == "ROLE_PROFESSOR")  &&
+        <div className='calendarCont'>
+          <Calendar onStartCall={onStartCall} weekdata={organizedCourses} onWeekChange={handleWeekChange} setYear={setYear} year={year} />
+        </div>
+      }
+
+
+      {role == "ROLE_SECRETARY"  &&
+        <PageIndexSecr />
+      }
+
+
+      {(role == "ROLE_ADMIN" || role == "ROLE_SUPERADMIN")  &&
+        <PageIndexAdm />
+      }
+
+      {(role == "ROLE_DIRECTOR" ||role == "ROLE_DEPARTMENT_DIRECTOR")  &&
+        <PageIndexDir />
+      }
     </>
   )
 }
