@@ -1,4 +1,4 @@
--------------------------------------------------Configuration du projet-----------------------------------------------------
+#Configuration du projet 
 Ce projet nécessite d'avoir npm et node.js installé pour pouvoir travailler dessus.
 Suivre les instructions suivantes:
 
@@ -30,12 +30,12 @@ En cas d'erreur "'react-scripts' is not recognized as an internal or external co
 Pour lancer le back: npm run dev --> j'ai défini la commande dans /server/package.json pour pouvoir utiliser nodemon
   --> sinon vous pouvez faire un npm run start classique
 
--------------------------------------------------Configuration dee la base de donnée-----------------------------------------------------
+#Configuration dee la base de donnée
 
 Le présent projet utilise une base de données MySQL. Une copie des dumps de la base de données se trouve dans le dossier /server/exemples.
 Le fichier clean_dump.sql contient la base de données complete vide sans aucune données afin de repartir de zéro.
 Le fichier seeded_dump.sql contient un jeu de données spécialement créé pour la soutenance du 22/04/2024. Il convient de noter que ces données sont uniquement valables pour la dernière version du projet à cette date. 
-Toute modification ultérieure du code ou de la base de données pourrait rendre ces données obsolètes. Il est donc recommandé de manipuler ce la structure de la base de données avec précaution.
+Toute modification ultérieure du code ou de la base de données pourrait rendre ces données obsolètes. Il est donc recommandé de manipuler la structure de la base de données avec précaution.
 
 Afin de relier la base de données à notre serveur NodeJs il convient de configurer certains fichiers.
 Dans un premier temps, le fichier /server/config/config.json: il faut impérativement lors du développement indiqué l'utilisateur et le mot de passe
