@@ -1,4 +1,4 @@
-#Configuration du projet 
+# Configuration du projet 
 Ce projet nécessite d'avoir npm et node.js installé pour pouvoir travailler dessus.
 Suivre les instructions suivantes:
 
@@ -30,7 +30,7 @@ En cas d'erreur "'react-scripts' is not recognized as an internal or external co
 Pour lancer le back: npm run dev --> j'ai défini la commande dans /server/package.json pour pouvoir utiliser nodemon
   --> sinon vous pouvez faire un npm run start classique
 
-#Configuration dee la base de donnée
+# Configuration dee la base de donnée
 
 Le présent projet utilise une base de données MySQL. Une copie des dumps de la base de données se trouve dans le dossier /server/exemples.
 Le fichier clean_dump.sql contient la base de données complete vide sans aucune données afin de repartir de zéro.
@@ -54,7 +54,7 @@ const sequelize = new Sequelize('nomdelabasededonnée', process.env.DATABASE_USE
   dialect: 'mysql',
 });
 
--------------------------------------------------Envoi d'email-----------------------------------------------------
+# Envoi d'email
 
 Il existe sur cette application une fonction permetant d'envoyer des emails. Cette fonction se trouve dans le fichier /server/mailer.js
 sendEmail({ recipient_email, subject, message }) prend en paramètre l'email de la personne a qui envoyer le mail, l'objet du mail et le corps du texte (souvent du HTML qui mettra en forme votre texte).
