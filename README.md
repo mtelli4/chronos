@@ -3,6 +3,7 @@ Ce projet nécessite d'avoir npm et node.js installé pour pouvoir travailler de
 Suivre les instructions suivantes:
 
 -Vérifier que npm et node ne sont pas déjà installés avec:
+    
     node -v
     npm -v
 
@@ -20,21 +21,29 @@ Vous pouvez trouver des librairies dans le côté /client et le côté /server. 
 
 Au cas ou cela n'aurait pas fonctionné lancer les commande suivante utiles pour notre développement:
 
-Si le fichier package.json n'existe pas : npm init -y
-npm i express --> permet d'installer express notre framework backend (API, routage, session, requête http)
-npm i nodemon -D --> Ce package fournit une fonctionnalité de redémarrage automatique de l'application pour voir les changement en temps "réel".
+Si le fichier package.json n'existe pas : 
+  
+    npm init -y
+    npm i express --> permet d'installer express notre framework backend (API, routage, session, requête http)
+  
+    npm i nodemon -D --> Ce package fournit une fonctionnalité de redémarrage automatique de l'application pour voir les changement en temps "réel".
 
-Pour lancer le front: npm start
+Pour lancer le front, se placer dans le répertoire /chronos/client/ et exécuter la commande : 
+    
+    npm start
+
 En cas d'erreur "'react-scripts' is not recognized as an internal or external command" faire la commande npm install react-scripts --save dans /client
 
-Pour lancer le back: npm run dev --> j'ai défini la commande dans /server/package.json pour pouvoir utiliser nodemon
+Pour lancer le back, se placer dans le répertoire /chronos/server/ et exécuter la commande : 
+
+    npm run dev --> j'ai défini la commande dans /server/package.json pour pouvoir utiliser nodemon
   --> sinon vous pouvez faire un npm run start classique
 
-# Configuration dee la base de donnée
+# Configuration de la base de donnée
 
 Le présent projet utilise une base de données MySQL. Une copie des dumps de la base de données se trouve dans le dossier /server/exemples.
-Le fichier clean_dump.sql contient la base de données complete vide sans aucune données afin de repartir de zéro.
-Le fichier seeded_dump.sql contient un jeu de données spécialement créé pour la soutenance du 22/04/2024. Il convient de noter que ces données sont uniquement valables pour la dernière version du projet à cette date. 
+Le fichier <i>clean_dump.sql</i> contient la base de données complete vide sans aucune données afin de repartir de zéro.
+Le fichier <i>seeded_dump.sql</i> contient un jeu de données spécialement créé pour la soutenance du 22/04/2024. Il convient de noter que ces données sont uniquement valables pour la dernière version du projet à cette date. 
 Toute modification ultérieure du code ou de la base de données pourrait rendre ces données obsolètes. Il est donc recommandé de manipuler la structure de la base de données avec précaution.
 
 Afin de relier la base de données à notre serveur NodeJs il convient de configurer certains fichiers.
@@ -45,6 +54,8 @@ Il n'est pas forcément nécessaire d'indiquer ces champs dans les autres objet 
 De même, il faut impérativement indiquer votre login et mot de passe de BDD dans le ichier .env dans le dossier /server (voir .env.test).
 DATABASE_USER="votre utilisateur bdd"
 DATABASE_PASSWORD="votre mot de passe associé"
+
+Il faut aussi supprimer l'extension ".test" du .env (.env.test -> .env)
 
 Bien évidemment, il faut que le serveur de base de données soit activé et accessible, tout du moins en localhost.
 Dans le cas ou ce serait un hôte distant il faut le changer dans l'initialisation de Sequelize dans le fichier /server/server.js.
