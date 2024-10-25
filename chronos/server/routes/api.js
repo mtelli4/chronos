@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { sendEmail } = require('../mailer');
+
 const { Utilisateur, UtilisateursEAV } = require('../models')
 
 router.post("/send", async (req, res) => {
@@ -23,7 +24,7 @@ router.post("/sendVerificationCode", async (req, res) => {
     })
 
     if (! utilisateur) {
-        res.status(404).send("Aucun utilisateur trouvé");
+        res.status(500).send("Aucun utilisateur trouvé");
         return;
     }
 
@@ -76,7 +77,6 @@ router.post("/sendVerificationCode", async (req, res) => {
         await sendEmail({ recipient_email, subject, message });
         res.status(200).send("Verification code sent successfully");
     } catch (error) {
-        console.error('Email sending error:', error);
         res.status(500).send(error.message);
     }
 });

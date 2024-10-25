@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const sequelize = new Sequelize('ingrid', process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
-  host: 'localhost',
+  host: '127.0.0.1',
   dialect: 'mysql',
 });
 
