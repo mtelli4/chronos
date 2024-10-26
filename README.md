@@ -42,20 +42,23 @@ Pour lancer le back, se placer dans le répertoire /chronos/server/ et exécuter
 # Configuration de la base de donnée
 
 Le présent projet utilise une base de données MySQL. Une copie des dumps de la base de données se trouve dans le dossier /server/exemples.
-Le fichier <i>clean_dump.sql</i> contient la base de données complete vide sans aucune données afin de repartir de zéro.
-Le fichier <i>seeded_dump.sql</i> contient un jeu de données spécialement créé pour la soutenance du 22/04/2024. Il convient de noter que ces données sont uniquement valables pour la dernière version du projet à cette date. 
+Le fichier <b>clean_dump.sql</b> contient la base de données complete vide sans aucune données afin de repartir de zéro.
+Le fichier <b>seeded_dump.sql</b> contient un jeu de données spécialement créé pour la soutenance du 22/04/2024. Il convient de noter que ces données sont uniquement valables pour la dernière version du projet à cette date. 
 Toute modification ultérieure du code ou de la base de données pourrait rendre ces données obsolètes. Il est donc recommandé de manipuler la structure de la base de données avec précaution.
 
 Afin de relier la base de données à notre serveur NodeJs il convient de configurer certains fichiers.
-Dans un premier temps, le fichier /server/config/config.json: il faut impérativement lors du développement indiqué l'utilisateur et le mot de passe
-de la base de données MySQL respectivement dans les champs "username" et "password" du moins dans l'objet "developpement".
-Il n'est pas forcément nécessaire d'indiquer ces champs dans les autres objet "test" et "production" du json durant la phase de dev, mais ils seront bien évidemment requis au besoin (mise en prod etC..).
 
-De même, il faut impérativement indiquer votre login et mot de passe de BDD dans le ichier .env dans le dossier /server (voir .env.test).
-DATABASE_USER="votre utilisateur bdd"
-DATABASE_PASSWORD="votre mot de passe associé"
+Dans un premier temps, créez dans le répertoire <b>/chronos/server/config/</b> un fichier <b>config.json</b> et insérez-y le contenu du fichier <b>config.example.json</b>, en complétant les champs <b>"username"</b> et <b>"password"</b> par votre nom d'utilisateur et mot de passe MySQL.
 
-Il faut aussi supprimer l'extension ".test" du .env (.env.test -> .env)
+Il faut aussi créer un fichier <b>.env</b> dans <b>chronos/server/</b> et y copier le contenu du fichier <b>.env.test</b> situé au même emplacement, mais
+en remplaçant les champs <b>"SENDER_EMAIL"</b>, <b>"APPLICATION_PASSWORD"</b>, <b>"DATABASE_USER"</b> et <b>"DATABASE_PASSWORD"</b>.
+
+<b>Demander à Mohamed pour obtenir le "SENDER_EMAIL" et l'"APPLICATION_PASSWORD".</b>
+
+Pour les champs <b>"DATABASE_USER"</b> et <b>"DATABASE_PASSWORD"</b> il faudra indiquer votre nom d'utilisateur et mot de passe de votre SGBD.
+
+    DATABASE_USER="votre utilisateur bdd"
+    DATABASE_PASSWORD="votre mot de passe associé"
 
 Bien évidemment, il faut que le serveur de base de données soit activé et accessible, tout du moins en localhost.
 Dans le cas ou ce serait un hôte distant il faut le changer dans l'initialisation de Sequelize dans le fichier /server/server.js.
